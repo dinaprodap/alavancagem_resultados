@@ -118,7 +118,3 @@ with tab2:
         use_container_width=True,
         hide_index=True
     )
-
-# Adicionar footer
-st.markdown("---")
-st.markdown("*Desenvolvido com ❤️ para otimização de resultados*")
