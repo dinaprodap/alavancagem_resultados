@@ -79,86 +79,81 @@ with tab1:
         agio_animal_magro = st.number_input("Ágio para Animal Magro (R$/cab)", min_value=0.0, value=4641.0, step=0.1)
 
 with tab2:
-    # Organização dos resultados em cards
-    st.header("📈 Análise de Resultados")
+    st.header("📈 Análise Comparativa", divider='rainbow')
     
-    col1, col2, col3 = st.columns(3)
-    
-    # Função para criar cards de métricas
+    # Função para criar cards de métricas mais compactos
     def metric_card(title, value, prefix="", suffix=""):
         return f"""
-        <div class="metric-card">
-            <h3>{title}</h3>
-            <div class="metric-value">{prefix}{value:.2f}{suffix}</div>
+        <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+            <div style="font-size: 0.9em; color: #666;">{title}</div>
+            <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+                {prefix}{value:.2f}{suffix}
+            </div>
         </div>
         """
-
-    # Função para calcular incremento lucro
-    def calcular_incremento_lucro(base, comparacao):
-        if base < 0:
-            return (comparacao/base - 1) * -1
-        return comparacao/base - 1
 
     # Valores base da Molécula 1
     base_arrobas = 7.49
     base_resultado = 903.27
     base_custo = 1644.10
 
-    # Resultados por molécula
+    # Grid de resultados
+    col1, col2, col3 = st.columns(3)
+    
+    # Dicionário para armazenar os resultados
+    resultados = {}
+    
+    # Calcular resultados para cada molécula
     for idx, molecula in enumerate(moleculas):
-        st.markdown(f"### Resultados para {molecula}")
-        cols = st.columns(3)
-        
         if idx == 0:  # Molécula 1
-            incremento_lucro = 0
-            arrobas_adicionais = 0
-            receita_adicional = 0
-            custo_adicional = 0
-            incremento_lucro_adicional = 0
-            custo_arroba_adicional = 0
-        elif idx == 1:  # Molécula 2
-            arrobas_adicionais = 8.30 - base_arrobas
+            resultados[molecula] = {
+                "incremento_lucro": 0,
+                "arrobas_adicionais": 0,
+                "receita_adicional": 0,
+                "custo_adicional": 0,
+                "incremento_lucro_adicional": 0,
+                "custo_arroba_adicional": 0
+            }
+        else:
+            arrobas = 8.30 if idx == 1 else 8.93
+            resultado = 1000.29 if idx == 1 else 1161.69
+            custo = 1820.09 if idx == 1 else 1874.33
+            
+            arrobas_adicionais = arrobas - base_arrobas
             receita_adicional = arrobas_adicionais * valor_venda_arroba
-            custo_adicional = 1820.09 - base_custo
-            incremento_lucro = calcular_incremento_lucro(base_resultado, 1000.29) * 100
-            incremento_lucro_adicional = 1000.29 - base_resultado
+            custo_adicional = custo - base_custo
+            incremento_lucro = ((resultado/base_resultado - 1) * 100) if base_resultado > 0 else 0
+            incremento_lucro_adicional = resultado - base_resultado
             custo_arroba_adicional = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
-        else:  # Molécula 3
-            arrobas_adicionais = 8.93 - base_arrobas
-            receita_adicional = arrobas_adicionais * valor_venda_arroba
-            custo_adicional = 1874.33 - base_custo
-            incremento_lucro = calcular_incremento_lucro(base_resultado, 1161.69) * 100
-            incremento_lucro_adicional = 1161.69 - base_resultado
-            custo_arroba_adicional = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
-        
-        with cols[0]:
-            st.markdown(metric_card("Incremento do Lucro", incremento_lucro, suffix="%"), unsafe_allow_html=True)
-        with cols[1]:
-            st.markdown(metric_card("Arrobas Adicionais", arrobas_adicionais, suffix=" @/cab"), unsafe_allow_html=True)
-        with cols[2]:
-            st.markdown(metric_card("Receita Adicional", receita_adicional, prefix="R$ "), unsafe_allow_html=True)
-        
-        # Métricas adicionais
-        cols2 = st.columns(3)
-        with cols2[0]:
-            st.markdown(metric_card("Custo Adicional", custo_adicional, prefix="R$ "), unsafe_allow_html=True)
-        with cols2[1]:
-            st.markdown(metric_card("Incremento Lucro Adicional", incremento_lucro_adicional, prefix="R$ "), unsafe_allow_html=True)
-        with cols2[2]:
-            st.markdown(metric_card("Custo da Arroba Adicional", custo_arroba_adicional, prefix="R$ "), unsafe_allow_html=True)
+            
+            resultados[molecula] = {
+                "incremento_lucro": incremento_lucro,
+                "arrobas_adicionais": arrobas_adicionais,
+                "receita_adicional": receita_adicional,
+                "custo_adicional": custo_adicional,
+                "incremento_lucro_adicional": incremento_lucro_adicional,
+                "custo_arroba_adicional": custo_arroba_adicional
+            }
 
-    # Tabela de resultados detalhados
-    st.subheader("📋 Detalhamento Completo")
-    dados = {
-        "Parâmetro": ["Consumo (%PV)", "GMD (kg/dia)", "Rendimento de Carcaça (%)", 
-                     "Custeio (R$/Cab/dia)", "Valor de Venda da arroba (R$/@)", 
-                     "Ágio Animal Magro (R$/cab)"],
-        "Valor": [consumo_pv, gmd, rendimento_carcaca, custeio, 
-                 valor_venda_arroba, agio_animal_magro]
-    }
-    df_resultado = pd.DataFrame(dados)
-    st.dataframe(
-        df_resultado,
-        use_container_width=True,
-        hide_index=True
-    )
+    # Exibir resultados em colunas
+    for idx, (molecula, res) in enumerate(resultados.items()):
+        with [col1, col2, col3][idx]:
+            st.markdown(f"#### {molecula}")
+            st.markdown(metric_card("Incremento do Lucro", res["incremento_lucro"], suffix="%"), unsafe_allow_html=True)
+            st.markdown(metric_card("Arrobas Adicionais", res["arrobas_adicionais"], suffix=" @/cab"), unsafe_allow_html=True)
+            st.markdown(metric_card("Receita Adicional", res["receita_adicional"], prefix="R$ "), unsafe_allow_html=True)
+            st.markdown(metric_card("Custo Adicional", res["custo_adicional"], prefix="R$ "), unsafe_allow_html=True)
+            st.markdown(metric_card("Incremento Lucro", res["incremento_lucro_adicional"], prefix="R$ "), unsafe_allow_html=True)
+            st.markdown(metric_card("Custo @Adicional", res["custo_arroba_adicional"], prefix="R$ "), unsafe_allow_html=True)
+
+    # Tabela compacta com principais parâmetros
+    st.markdown("---")
+    st.caption("Parâmetros Principais")
+    params_col1, params_col2, params_col3 = st.columns(3)
+    with params_col1:
+        st.metric("GMD (kg/dia)", f"{gmd:.3f}")
+    with params_col2:
+        st.metric("Rendimento Carcaça", f"{rendimento_carcaca:.2f}%")
+    with params_col3:
+        st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
