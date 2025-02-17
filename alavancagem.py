@@ -93,15 +93,43 @@ with tab2:
         </div>
         """
 
+    # Função para calcular incremento lucro
+    def calcular_incremento_lucro(base, comparacao):
+        if base < 0:
+            return (comparacao/base - 1) * -1
+        return comparacao/base - 1
+
+    # Valores base da Molécula 1
+    base_arrobas = 7.49
+    base_resultado = 903.27
+    base_custo = 1644.10
+
     # Resultados por molécula
-    for molecula in moleculas:
+    for idx, molecula in enumerate(moleculas):
         st.markdown(f"### Resultados para {molecula}")
         cols = st.columns(3)
         
-        # Exemplo de cálculos (substitua pelos seus cálculos reais)
-        incremento_lucro = 10.5  # Exemplo
-        arrobas_adicionais = 2.3  # Exemplo
-        receita_adicional = 450.0  # Exemplo
+        if idx == 0:  # Molécula 1
+            incremento_lucro = 0
+            arrobas_adicionais = 0
+            receita_adicional = 0
+            custo_adicional = 0
+            incremento_lucro_adicional = 0
+            custo_arroba_adicional = 0
+        elif idx == 1:  # Molécula 2
+            arrobas_adicionais = 8.30 - base_arrobas
+            receita_adicional = arrobas_adicionais * valor_venda_arroba
+            custo_adicional = 1820.09 - base_custo
+            incremento_lucro = calcular_incremento_lucro(base_resultado, 1000.29) * 100
+            incremento_lucro_adicional = 1000.29 - base_resultado
+            custo_arroba_adicional = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
+        else:  # Molécula 3
+            arrobas_adicionais = 8.93 - base_arrobas
+            receita_adicional = arrobas_adicionais * valor_venda_arroba
+            custo_adicional = 1874.33 - base_custo
+            incremento_lucro = calcular_incremento_lucro(base_resultado, 1161.69) * 100
+            incremento_lucro_adicional = 1161.69 - base_resultado
+            custo_arroba_adicional = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
         
         with cols[0]:
             st.markdown(metric_card("Incremento do Lucro", incremento_lucro, suffix="%"), unsafe_allow_html=True)
@@ -109,12 +137,24 @@ with tab2:
             st.markdown(metric_card("Arrobas Adicionais", arrobas_adicionais, suffix=" @/cab"), unsafe_allow_html=True)
         with cols[2]:
             st.markdown(metric_card("Receita Adicional", receita_adicional, prefix="R$ "), unsafe_allow_html=True)
+        
+        # Métricas adicionais
+        cols2 = st.columns(3)
+        with cols2[0]:
+            st.markdown(metric_card("Custo Adicional", custo_adicional, prefix="R$ "), unsafe_allow_html=True)
+        with cols2[1]:
+            st.markdown(metric_card("Incremento Lucro Adicional", incremento_lucro_adicional, prefix="R$ "), unsafe_allow_html=True)
+        with cols2[2]:
+            st.markdown(metric_card("Custo da Arroba Adicional", custo_arroba_adicional, prefix="R$ "), unsafe_allow_html=True)
 
     # Tabela de resultados detalhados
     st.subheader("📋 Detalhamento Completo")
     dados = {
-        "Parâmetro": ["Consumo (%PV)", "Consumo MS (Kg/Cab/dia)", "Peso Vivo Inicial", "Peso Vivo Final"],
-        "Valor": [consumo_pv, consumo_ms, pv_inicial, pv_final]
+        "Parâmetro": ["Consumo (%PV)", "GMD (kg/dia)", "Rendimento de Carcaça (%)", 
+                     "Custeio (R$/Cab/dia)", "Valor de Venda da arroba (R$/@)", 
+                     "Ágio Animal Magro (R$/cab)"],
+        "Valor": [consumo_pv, gmd, rendimento_carcaca, custeio, 
+                 valor_venda_arroba, agio_animal_magro]
     }
     df_resultado = pd.DataFrame(dados)
     st.dataframe(
