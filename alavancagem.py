@@ -149,64 +149,6 @@ for molecula in moleculas:
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-grid
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
 
-with col4:
-    diferenciais[molecula] = st.number_input(
-        f"Diferencial de {molecula}",
-        min_value=0.0,
-        value=0.0,
-        step=0.01,
-        key=f"diferencial_tabela_{molecula}",
-        label_visibility="collapsed"
-    )
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Fechando o container
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.write("### Valores por Produto")
-
-# Criar a estrutura de inputs dentro do contêiner
-for molecula in moleculas:
-    st.markdown('<div class="row">', unsafe_allow_html=True)
-    
-    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
-
-    with col1:
-        st.write(molecula)
-    with col2:
-        precos[molecula] = st.number_input(
-            f"Preço de {molecula}",
-            min_value=0.0,
-            value=5.0,
-            step=0.1,
-            key=f"preco_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col3:
-        consumos[molecula] = st.number_input(
-            f"Consumo de {molecula}",
-            min_value=0,
-            value=250,
-            step=1,
-            key=f"consumo_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col4:
-        diferenciais[molecula] = st.number_input(
-            f"Diferencial de {molecula}",
-            min_value=0.0,
-            value=0.0,
-            step=0.01,
-            key=f"diferencial_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-
-    st.markdown('</div>', unsafe_allow_html=True)  # Fechar a linha da tabela
-
-# Fechando o container
-st.markdown('</div>', unsafe_allow_html=True)
-
 # Dados do Animal
 col1, col2 = st.columns(2)
 
