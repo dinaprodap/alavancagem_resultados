@@ -41,12 +41,6 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    .produto-container {
-        background-color: #e2e8f0;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 10px 0;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -101,8 +95,13 @@ with tab1:
         st.subheader("Valores por Produto")
         precos = {}
         consumos = {}
+        
+        # Container cinza para valores por produto
         with st.container():
-            st.markdown('<div class="produto-container">', unsafe_allow_html=True)
+            st.markdown("""
+                <div style="background-color: #e2e8f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            """, unsafe_allow_html=True)
+            
             for molecula in moleculas:
                 st.markdown(f"### {molecula}")
                 col_preco, col_consumo = st.columns(2)
@@ -122,7 +121,8 @@ with tab1:
                         step=1,
                         key=f"consumo_{molecula}"
                     )
-            st.markdown('</div>', unsafe_allow_html=True)
+            
+            st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
         st.subheader("Dados do Animal")
