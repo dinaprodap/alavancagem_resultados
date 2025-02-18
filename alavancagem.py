@@ -41,45 +41,61 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
+    .custom-table {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .custom-table table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .custom-table th {
+        background-color: #e2e8f0;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        color: #2d3748;
+    }
+    .custom-table td {
+        padding: 12px;
+        background-color: white;
+        border-top: 1px solid #e2e8f0;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Tabela de referência no início
-st.markdown("""
-    <div style="display: flex; justify-content: center; margin: 20px 0;">
-        <table style="background-color: #e2e8f0; border-collapse: collapse; width: 80%;">
-            <tr style="background-color: #d1d5db;">
-                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: left;">Produto</th>
-                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Preço (R$/ton)</th>
-                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Consumo (g/cab/dia)</th>
-                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Custo (R$/cab/dia)</th>
-                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Diferencial Tecnológico (R$/cab/dia)</th>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 1</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 4,90</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">250</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,23</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">-</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 2</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 6,48</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">290</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,88</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 0,65</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 3</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 8,68</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">260</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 2,26</td>
-                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,03</td>
-            </tr>
-        </table>
-    </div>
-""", unsafe_allow_html=True)
+# Título da aplicação
+st.title("🚀 Calculadora de Alavancagem")
 
+# Tabela de entrada no início
+st.markdown('<div class="custom-table">', unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([3, 3, 3])
+
+# Dicionários para armazenar os valores
+precos = {}
+consumos = {}
+custos = {}
+
+# Molécula 1
+with col1:
+    st.subheader("Molécula 1")
+    precos["Molecula 1"] = st.number_input("Preço (R$/ton)", value=4.90, step=0.01, key="preco_1")
+    consumos["Molecula 1"] = st.number_input("Consumo (g/cab/dia)", value=250, step=1, key="consumo_1")
+    custos["Molecula 1"] = precos["Molecula 1"] * consumos["Molecula 1"] / 1000
+    st.metric("Custo (R$/cab/dia)", f"R$ {custos['Molecula 1']:.2f}")
+    st.metric("Diferencial Tecnológico", "-")
+
+# Molécula 2
+with col2:
+    st.subheader("Molécula 2")
+    precos["Molecula 2"] = st.number_input("Preço (R$/ton)", value=6.48, step=0.01, key="preco_2")
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
     <div style="background-color: white; padding: 10px; border-radius: 5px; 
