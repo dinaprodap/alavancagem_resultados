@@ -46,7 +46,7 @@ with tab1:
     
     with col1:
         st.subheader("Valores por Produto")
-        moleculas = ["Molecula 1", "Modelula 2", "Modelula 3"]
+        moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
         precos = {}
         consumos = {}
         for molecula in moleculas:
