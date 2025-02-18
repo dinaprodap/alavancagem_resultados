@@ -33,7 +33,6 @@ st.markdown("""
     }
     .metric-value {
         color: #2f855a;
-        font-size: 1.5rem;
         font-weight: bold;
     }
     div[data-testid="stVerticalBlock"] {
@@ -55,59 +54,6 @@ def metric_card(title, value, prefix="", suffix=""):
     </div>
     """
 
-# Título da aplicação
-st.title("🚀 Calculadora de Alavancagem")
-
-# Tabela de produtos centralizada
-st.markdown('<div class="produto-table">', unsafe_allow_html=True)
-st.subheader("Valores por Produto")
-
-# Dicionários para armazenar valores
-precos = {}
-consumos = {}
-custos = {}
-diferenciais = {}
-
-# Lista de moléculas
-moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
-
-# Criar linhas para cada molécula
-for molecula in moleculas:
-    st.markdown(f'<div class="produto-row">', unsafe_allow_html=True)
-    cols = st.columns([3, 3, 3, 3])
-    
-    with cols[0]:
-        st.markdown(f"### {molecula}")
-    
-    with cols[1]:
-        precos[molecula] = st.number_input(
-            "Preço (R$/ton)",
-            min_value=0.0,
-            value=5.0,
-            step=0.1,
-            key=f"preco_{molecula}"
-        )
-    
-    with cols[2]:
-        consumos[molecula] = st.number_input(
-            "Consumo (g/cab/dia)",
-            min_value=0,
-            value=250,
-            step=1,
-            key=f"consumo_{molecula}"
-        )
-    
-    with cols[3]:
-        # Cálculo do custo
-        custos[molecula] = (precos[molecula] * consumos[molecula]) / 1000
-        st.metric("Custo (R$/cab/dia)", f"R$ {custos[molecula]:.2f}")
-        
-        # Diferencial tecnológico (apenas para exibição)
-        if molecula == "Molecula 1":
-# Funções de cálculo existentes continuam aqui...
-def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
-    return consumo_pv * ((pv_inicial + pv_final) / 2)
-    
 # Funções de cálculo
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
@@ -130,12 +76,22 @@ def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
-# Organização em abas
-tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
-
 # Definir variáveis globais
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
+# Tabela de produtos centralizada
+st.markdown('<div class="produto-table">', unsafe_allow_html=True)
+st.subheader("Valores por Produto")
+
+# Dicionários para armazenar valores
+precos = {}
+consumos = {}
+custos = {}
+diferenciais = {}
+
+# Criar linhas para cada molécula
+for molecula in moleculas:
+    st.markdown(f'<div class="produto-row">', unsafe_allow_html=True)
 with tab1:
     # Entrada de dados em colunas
     col1, col2 = st.columns(2)
