@@ -18,30 +18,33 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    .produto-table {
-        background-color: #e2e8f0;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px auto;
-        max-width: 1000px;
-    }
-    .produto-row {
-        display: flex;
-        align-items: center;
-        background-color: white;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-    .produto-label {
-        width: 150px;
-        font-weight: bold;
-    }
-    .parametros-container {
+    .produto-container {
         background-color: #e2e8f0;
         border-radius: 15px;
         padding: 20px;
         margin: 20px 0;
+    }
+    .produto-header {
+        background-color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .produto-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 15px;
+        padding: 10px;
+    }
+    .produto-label {
+        font-weight: bold;
+        color: #333;
+        padding: 8px 0;
+    }
+    .input-field {
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -60,91 +63,68 @@ precos = {}
 consumos = {}
 diferenciais = {}
 
-# CSS atualizado para englobar toda a seção
-st.markdown(
-    """
-    <style>
-        .full-section {
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        .white-header {
-            background-color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .white-header h3 {
-            margin: 0;
-            color: #333;
-        }
-        .content-grid {
-            display: grid;
-            grid-template-columns: 200px repeat(3, 1fr);
-            gap: 20px;
-            padding: 10px;
-        }
-        .molecula-label {
-            color: #666;
-            font-size: 1rem;
-            padding: 8px 0;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Início da seção completa
-st.markdown('<div class="full-section">', unsafe_allow_html=True)
-
-# Cabeçalho branco
-st.markdown("""
-    <div class="white-header">
-        <h3>Valores por Produto</h3>
-    </div>
-""", unsafe_allow_html=True)
-
-# Grid de conteúdo
-st.markdown('<div class="content-grid">', unsafe_allow_html=True)
-
-# Criar a estrutura de inputs
-for molecula in moleculas:
-    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])  # Corrigido para 4 colunas
+# Container de Produtos
+with st.container():
+    # Container com estilo personalizado
+    st.markdown('<div class="produto-container">', unsafe_allow_html=True)
     
-    with col1:
-        st.write(molecula)
-    with col2:
-        precos[molecula] = st.number_input(
-            f"Preço de {molecula}",
-            min_value=0.0,
-            value=5.0,
-            step=0.1,
-            key=f"preco_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col3:
-        consumos[molecula] = st.number_input(
-            f"Consumo de {molecula}",
-            min_value=0,
-            value=250,
-            step=1,
-            key=f"consumo_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col4:  # Adicionada a quarta coluna
-        diferenciais[molecula] = st.number_input(
-            f"Diferencial de {molecula}",
-            min_value=0.0,
-            value=0.0,
-            step=0.01,
-            key=f"diferencial_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-
-st.markdown('</div>', unsafe_allow_html=True)  # Fecha content-grid
-st.markdown('</div>', unsafe_allow_html=True)  # Fecha full-section
+    # Cabeçalho
+    st.markdown("""
+        <div class="produto-header">
+            <h3 style="margin:0">Valores por Produto</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # Grid de inputs
+    st.markdown('<div class="produto-grid">', unsafe_allow_html=True)
+    
+    # Cabeçalhos das colunas
+    col_headers = st.columns([2, 1, 1, 1])
+    with col_headers[0]:
+        st.markdown('<div class="produto-label">Molécula</div>', unsafe_allow_html=True)
+    with col_headers[1]:
+        st.markdown('<div class="produto-label">Preço</div>', unsafe_allow_html=True)
+    with col_headers[2]:
+        st.markdown('<div class="produto-label">Consumo</div>', unsafe_allow_html=True)
+    with col_headers[3]:
+        st.markdown('<div class="produto-label">Diferencial</div>', unsafe_allow_html=True)
+    
+    # Inputs para cada molécula
+    for molecula in moleculas:
+        cols = st.columns([2, 1, 1, 1])
+        
+        with cols[0]:
+            st.markdown(f'<div class="input-field">{molecula}</div>', unsafe_allow_html=True)
+        with cols[1]:
+            precos[molecula] = st.number_input(
+                f"Preço de {molecula}",
+                min_value=0.0,
+                value=5.0,
+                step=0.1,
+                key=f"preco_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with cols[2]:
+            consumos[molecula] = st.number_input(
+                f"Consumo de {molecula}",
+                min_value=0,
+                value=250,
+                step=1,
+                key=f"consumo_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with cols[3]:
+            diferenciais[molecula] = st.number_input(
+                f"Diferencial de {molecula}",
+                min_value=0.0,
+                value=0.0,
+                step=0.01,
+                key=f"diferencial_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+    
+    st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
+    st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
 
 # Dados do Animal
 col1, col2 = st.columns(2)
