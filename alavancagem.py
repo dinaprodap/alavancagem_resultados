@@ -62,36 +62,82 @@ diferenciais = {}
 
 # CSS para o container arredondado e cinza ajustado corretamente
 # Aplicando o CSS para corrigir o layout
+# CSS atualizado para o container
 st.markdown(
     """
     <style>
-        .container {
-            background-color: #f0f0f0; /* Cinza claro */
-            padding: 15px;
+        .valores-container {
+            background-color: #f0f0f0;
+            padding: 20px;
             border-radius: 10px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin-bottom: 20px;
         }
-        .row {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin: 5px 0;
+        .valores-titulo {
+            color: #333;
+            margin-bottom: 15px;
         }
-        .row div {
-            flex: 1;
-            margin: 0 5px;
+        .valores-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .valores-label {
+            font-weight: 500;
+            color: #444;
         }
     </style>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# Início do contêiner estilizado
-st.markdown('<div class="container">', unsafe_allow_html=True)
+# Início do container com estrutura HTML melhorada
+st.markdown("""
+    <div class="valores-container">
+        <h3 class="valores-titulo">Valores por Produto</h3>
+""", unsafe_allow_html=True)
+
+# Criar a estrutura de inputs dentro do contêiner
+for molecula in moleculas:
+    st.markdown(f'<div class="valores-row">', unsafe_allow_html=True)
+    
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+
+    with col1:
+        st.write(f'<div class="valores-label">{molecula}</div>', unsafe_allow_html=True)
+    with col2:
+        precos[molecula] = st.number_input(
+            f"Preço de {molecula}",
+            min_value=0.0,
+            value=5.0,
+            step=0.1,
+            key=f"preco_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+    with col3:
+        consumos[molecula] = st.number_input(
+            f"Consumo de {molecula}",
+            min_value=0,
+            value=250,
+            step=1,
+            key=f"consumo_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+    with col4:
+        diferenciais[molecula] = st.number_input(
+            f"Diferencial de {molecula}",
+            min_value=0.0,
+            value=0.0,
+            step=0.01,
+            key=f"diferencial_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Fechando o container
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.write("### Valores por Produto")
 
