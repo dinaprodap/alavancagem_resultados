@@ -44,6 +44,42 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Tabela de referência no início
+st.markdown("""
+    <div style="display: flex; justify-content: center; margin: 20px 0;">
+        <table style="background-color: #e2e8f0; border-collapse: collapse; width: 80%;">
+            <tr style="background-color: #d1d5db;">
+                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: left;">Produto</th>
+                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Preço (R$/ton)</th>
+                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Consumo (g/cab/dia)</th>
+                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Custo (R$/cab/dia)</th>
+                <th style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">Diferencial Tecnológico (R$/cab/dia)</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 1</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 4,90</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">250</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,23</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">-</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 2</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 6,48</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">290</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,88</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 0,65</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #9ca3af;">Molécula 3</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 8,68</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">260</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 2,26</td>
+                <td style="padding: 10px; border: 1px solid #9ca3af; text-align: center;">R$ 1,03</td>
+            </tr>
+        </table>
+    </div>
+""", unsafe_allow_html=True)
+
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
     <div style="background-color: white; padding: 10px; border-radius: 5px; 
