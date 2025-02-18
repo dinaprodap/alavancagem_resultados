@@ -56,6 +56,62 @@ st.markdown("""
         padding: 20px;
         backdrop-filter: blur(10px);
     }
+
+    /* Ajustes para inputs e texto */
+    .stTextInput > div > div {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .stNumberInput > div > div {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .stSelectbox > div > div {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    /* Ajustes para labels e texto */
+    label {
+        color: white !important;
+    }
+
+    p {
+        color: white !important;
+    }
+
+    .stMarkdown {
+        color: white;
+    }
+
+    /* Ajustes para métricas */
+    [data-testid="stMetricValue"] {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 5px;
+        color: white !important;
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    /* Ajustes para tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 2px;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        background-color: transparent;
+        color: white;
+    }
+
+    .stTabs [data-baseweb="tab-highlight"] {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
     </style>
 """, unsafe_allow_html=True)
 
