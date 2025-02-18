@@ -61,24 +61,29 @@ consumos = {}
 diferenciais = {}
 
 # CSS para o container arredondado e cinza ajustado corretamente
+# Aplicando o CSS para corrigir o layout
 st.markdown(
     """
     <style>
         .container {
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* Cinza claro */
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 10px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .container div {
+        .row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            width: 100%;
+            margin: 5px 0;
         }
-        .input-box {
-            margin: 5px;
+        .row div {
+            flex: 1;
+            margin: 0 5px;
         }
     </style>
     """,
@@ -90,12 +95,15 @@ st.markdown('<div class="container">', unsafe_allow_html=True)
 
 st.write("### Valores por Produto")
 
+# Criar a estrutura de inputs dentro do contêiner
 for molecula in moleculas:
-    cols = st.columns([2, 1, 1, 1])
+    st.markdown('<div class="row">', unsafe_allow_html=True)
     
-    with cols[0]:
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+
+    with col1:
         st.write(molecula)
-    with cols[1]:
+    with col2:
         precos[molecula] = st.number_input(
             f"Preço de {molecula}",
             min_value=0.0,
@@ -104,7 +112,7 @@ for molecula in moleculas:
             key=f"preco_tabela_{molecula}",
             label_visibility="collapsed"
         )
-    with cols[2]:
+    with col3:
         consumos[molecula] = st.number_input(
             f"Consumo de {molecula}",
             min_value=0,
@@ -113,7 +121,7 @@ for molecula in moleculas:
             key=f"consumo_tabela_{molecula}",
             label_visibility="collapsed"
         )
-    with cols[3]:
+    with col4:
         diferenciais[molecula] = st.number_input(
             f"Diferencial de {molecula}",
             min_value=0.0,
@@ -123,7 +131,9 @@ for molecula in moleculas:
             label_visibility="collapsed"
         )
 
-# Fim do contêiner
+    st.markdown('</div>', unsafe_allow_html=True)  # Fechar a linha da tabela
+
+# Fechando o container
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Dados do Animal
