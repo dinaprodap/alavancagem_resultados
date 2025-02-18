@@ -34,6 +34,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+def metric_card(title, value, prefix="", suffix=""):
+    return f"""
+    <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+        <div style="font-size: 0.9em; color: #666;">{title}</div>
+        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+            {prefix}{value:.2f}{suffix}
+        </div>
+    </div>
+    """
+
+# Funções de cálculo existentes continuam aqui...
+def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
+    return consumo_pv * ((pv_inicial + pv_final) / 2)
+    
 # Funções de cálculo
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
