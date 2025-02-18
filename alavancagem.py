@@ -4,112 +4,45 @@ import pandas as pd
 # Configuração da página
 st.set_page_config(
     page_title="Calculadora de Alavancagem",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
 # CSS personalizado
 st.markdown("""
     <style>
-    /* Resetar cores de fundo */
-    .stApp {
-        background-color: #002A3B !important;
-    }
-    
     .main {
-        background-color: #002A3B !important;
-    }
-    
-    /* Container principal */
-    div[data-testid="stVerticalBlock"] {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: #f0f9ff;
         border-radius: 15px;
         padding: 20px;
-        backdrop-filter: blur(10px);
-        margin: 10px 0;
     }
-
-    /* Inputs e Selects */
-    .stTextInput > div > div, 
-    .stNumberInput > div > div,
-    .stSelectbox > div > div {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 5px !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
+    .stTitle {
+        color: #2c5282;
     }
-
-    /* Container para inputs */
-    .input-container {
-        background-color: rgba(255, 255, 255, 0.05);
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
+    .stHeader {
+        color: #234e52;
     }
-
-    /* Textos e Labels */
-    label, p, .stMarkdown {
-        color: white !important;
-    }
-
-    .stTitle, .stHeader {
-        color: white !important;
-    }
-
-    /* Métricas */
-    [data-testid="stMetricValue"] {
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 10px;
-        border-radius: 5px;
-        color: white !important;
-    }
-
-    [data-testid="stMetricLabel"] {
-        color: rgba(255, 255, 255, 0.8) !important;
-    }
-
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 2px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 5px;
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        background-color: transparent;
-        color: white;
-        border-radius: 5px;
-    }
-
-    .stTabs [data-baseweb="tab-highlight"] {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Containers uniformes */
-    .uniform-container {
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
+    .metric-card {
+        background-color: white;
         padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin: 10px 0;
-        border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    /* Ajuste para inputs dentro dos containers */
-    .uniform-container .stNumberInput,
-    .uniform-container .stTextInput {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 5px;
-        padding: 5px;
-        margin: 5px 0;
+    .metric-value {
+        color: #2f855a;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    div[data-testid="stVerticalBlock"] {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
-    <div class="uniform-container">
-        <div style="font-size: 0.9em; color: rgba(255,255,255,0.8);">{title}</div>
     <div style="background-color: white; padding: 10px; border-radius: 5px; 
                 box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
         <div style="font-size: 0.9em; color: #666;">{title}</div>
