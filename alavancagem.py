@@ -7,7 +7,6 @@ st.set_page_config(
     layout="wide"
 )
 
-
 st.markdown("""
     <style>
     /* Reset e configurações globais */
@@ -194,7 +193,7 @@ with tab1:
                     step=1,
                     key=f"consumo_{molecula}"
                 )
-        pass
+    
     with col2:
         st.subheader("Parâmetros Principais")
         consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
@@ -235,9 +234,8 @@ with insight_col3:
 
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
-    pass
-    st.markdown('</div>', unsafe_allow_html=True)
-    
+st.markdown('</div>', unsafe_allow_html=True)
+
 # Tab 2 - Resultados
 with tab2:
     st.markdown('<div class="input-container">', unsafe_allow_html=True)
@@ -320,4 +318,4 @@ with tab2:
     with params_col3:
         st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
 
-                st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
