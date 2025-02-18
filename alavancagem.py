@@ -15,8 +15,14 @@ st.markdown("""
     }
     .main {
         background-color: #f0f9ff;
+        padding: 20px;
+    }
+    .container-card {
+        background-color: rgba(255, 255, 255, 0.9);
         border-radius: 15px;
         padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .stTitle {
         color: #2c5282;
@@ -35,11 +41,6 @@ st.markdown("""
         color: #2f855a;
         font-size: 24px;
         font-weight: bold;
-    }
-    div[data-testid="stVerticalBlock"] {
-        background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -92,10 +93,12 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Valores por Produto")
-        precos = {}
-        consumos = {}
-        with st.container():
+        container_left = st.container()
+        with container_left:
+            st.markdown('<div class="container-card">', unsafe_allow_html=True)
+            st.subheader("Valores por Produto")
+            precos = {}
+            consumos = {}
             for molecula in moleculas:
                 st.markdown(f"### {molecula}")
                 col_preco, col_consumo = st.columns(2)
@@ -115,18 +118,23 @@ with tab1:
                         step=1,
                         key=f"consumo_{molecula}"
                     )
+            st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.subheader("Parâmetros Principais")
-        consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
-        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
-        pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
-        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
-        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-        custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
-        valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
-        agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
-        agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
+        container_right = st.container()
+        with container_right:
+            st.markdown('<div class="container-card">', unsafe_allow_html=True)
+            st.subheader("Parâmetros Principais")
+            consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
+            pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+            pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+            gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+            rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+            custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
+            valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+            agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
+            agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # Calcular valores base após entrada de dados
 base_arrobas = 7.49
