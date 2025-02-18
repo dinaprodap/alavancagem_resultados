@@ -37,6 +37,12 @@ st.markdown("""
         width: 150px;
         font-weight: bold;
     }
+    .parametros-container {
+        background-color: #e2e8f0;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -51,7 +57,7 @@ moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
 with tab1:
     # Tabela de produtos centralizada
-   
+    st.markdown('<div class="produto-table">', unsafe_allow_html=True)
     st.subheader("Valores por Produto")
 
     # Criar colunas para o cabeçalho
@@ -194,6 +200,7 @@ with tab1:
 
 # Parâmetros principais em container separado
 st.markdown("---")
+st.markdown('<div class="parametros-container">', unsafe_allow_html=True)
 st.subheader("Parâmetros Principais")
 params_col1, params_col2, params_col3, params_col4 = st.columns(4)
 
