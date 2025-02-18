@@ -31,8 +31,29 @@ st.markdown("""
         padding: 15px;
         margin: 10px 0;
     }
+    .metric-value {
+        color: #2f855a;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    div[data-testid="stVerticalBlock"] {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
+    }
     </style>
 """, unsafe_allow_html=True)
+
+def metric_card(title, value, prefix="", suffix=""):
+    return f"""
+    <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+        <div style="font-size: 0.9em; color: #666;">{title}</div>
+        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+            {prefix}{value:.2f}{suffix}
+        </div>
+    </div>
+    """
 
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
@@ -83,50 +104,6 @@ for molecula in moleculas:
         
         # Diferencial tecnológico (apenas para exibição)
         if molecula == "Molecula 1":
-            diferenciais[molecula] = "-"
-        elif molecula == "Molecula 2":
-            diferenciais[molecula] = "R$ 0.65"
-        else:
-            diferenciais[molecula] = "R$ 1.03"
-        st.metric("Diferencial Tecnológico", diferenciais[molecula])
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Organização em abas
-tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
-
-with tab1:
-    col1, col2 = st.columns(2)
-    
-    with col2:
-        st.subheader("Dados do Animal")
-        consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
-    .metric-value {
-        color: #2f855a;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    div[data-testid="stVerticalBlock"] {
-        background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-def metric_card(title, value, prefix="", suffix=""):
-    return f"""
-    <div style="background-color: white; padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
-        <div style="font-size: 0.9em; color: #666;">{title}</div>
-        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
-            {prefix}{value:.2f}{suffix}
-        </div>
-    </div>
-    """
-
 # Funções de cálculo existentes continuam aqui...
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
