@@ -61,51 +61,58 @@ consumos = {}
 diferenciais = {}
 
 
-# CSS atualizado
+ CSS atualizado para englobar toda a seção
 st.markdown(
     """
     <style>
-        .valores-section {
+        .full-section {
             background-color: #f0f0f0;
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
         }
-        .valores-header {
+        .white-header {
             background-color: white;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
-        .valores-grid {
+        .white-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        .content-grid {
             display: grid;
             grid-template-columns: 200px repeat(3, 1fr);
-            gap: 15px;
-            align-items: center;
+            gap: 20px;
+            padding: 10px;
         }
         .molecula-label {
             color: #666;
             font-size: 1rem;
+            padding: 8px 0;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Início da seção de valores
-st.markdown('<div class="valores-section">', unsafe_allow_html=True)
+# Início da seção completa
+st.markdown('<div class="full-section">', unsafe_allow_html=True)
 
-# Cabeçalho
-st.markdown('<div class="valores-header">', unsafe_allow_html=True)
-st.write("### Valores por Produto")
-st.markdown('</div>', unsafe_allow_html=True)
+# Cabeçalho branco
+st.markdown("""
+    <div class="white-header">
+        <h3>Valores por Produto</h3>
+    </div>
+""", unsafe_allow_html=True)
 
-# Grid de valores
-st.markdown('<div class="valores-grid">', unsafe_allow_html=True)
+# Grid de conteúdo
+st.markdown('<div class="content-grid">', unsafe_allow_html=True)
 
 # Criar a estrutura de inputs
 for molecula in moleculas:
-    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])  # Corrigido para 4 colunas
     
     with col1:
         st.write(molecula)
@@ -127,7 +134,7 @@ for molecula in moleculas:
             key=f"consumo_tabela_{molecula}",
             label_visibility="collapsed"
         )
-    with col4:
+    with col4:  # Adicionada a quarta coluna
         diferenciais[molecula] = st.number_input(
             f"Diferencial de {molecula}",
             min_value=0.0,
@@ -137,8 +144,9 @@ for molecula in moleculas:
             label_visibility="collapsed"
         )
 
-st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-grid
-st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-section
+st.markdown('</div>', unsafe_allow_html=True)  # Fecha content-grid
+st.markdown('</div>', unsafe_allow_html=True)  # Fecha full-section
+
 # Dados do Animal
 col1, col2 = st.columns(2)
 
