@@ -4,49 +4,67 @@ import pandas as pd
 # Configuração da página
 st.set_page_config(
     page_title="Calculadora de Alavancagem",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 # CSS personalizado
 st.markdown("""
     <style>
+    /* Resetar cores de fundo */
+    .stApp {
+        background-color: #002A3B !important;
+    }
+    
     .main {
-        background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
+        background-color: #002A3B !important;
     }
-    .stTitle {
-        color: #2c5282;
+    
+    section[data-testid="stSidebar"] {
+        background-color: #002A3B !important;
     }
-    .stHeader {
-        color: #234e52;
+    
+    div[data-testid="stToolbar"] {
+        background-color: #002A3B !important;
     }
+    
+    div[data-testid="stDecoration"] {
+        background-color: #002A3B !important;
+    }
+    
+    div[data-testid="stStatusWidget"] {
+        background-color: #002A3B !important;
+    }
+    
+    .stTitle, .stHeader {
+        color: white !important;
+    }
+    
     .metric-card {
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.1);
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         margin: 10px 0;
+        color: white;
+        backdrop-filter: blur(10px);
     }
-    .metric-value {
-        color: #2f855a;
-        font-size: 24px;
-        font-weight: bold;
-    }
+    
     div[data-testid="stVerticalBlock"] {
-        background-color: #f0f9ff;
+        background-color: rgba(255, 255, 255, 0.1);
         border-radius: 15px;
         padding: 20px;
+        backdrop-filter: blur(10px);
     }
     </style>
 """, unsafe_allow_html=True)
 
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
-    <div style="background-color: white; padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
-        <div style="font-size: 0.9em; color: #666;">{title}</div>
-        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+    <div style="background-color: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.2); margin: 5px 0; backdrop-filter: blur(10px);">
+        <div style="font-size: 0.9em; color: rgba(255,255,255,0.8);">{title}</div>
+        <div style="font-size: 1.1em; color: white; font-weight: bold;">
             {prefix}{value:.2f}{suffix}
         </div>
     </div>
