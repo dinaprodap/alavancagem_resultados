@@ -20,73 +20,43 @@ st.markdown("""
         background-color: #002A3B !important;
     }
     
-    section[data-testid="stSidebar"] {
-        background-color: #002A3B !important;
-    }
-    
-    div[data-testid="stToolbar"] {
-        background-color: #002A3B !important;
-    }
-    
-    div[data-testid="stDecoration"] {
-        background-color: #002A3B !important;
-    }
-    
-    div[data-testid="stStatusWidget"] {
-        background-color: #002A3B !important;
-    }
-    
-    .stTitle, .stHeader {
-        color: white !important;
-    }
-    
-    .metric-card {
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        margin: 10px 0;
-        color: white;
-        backdrop-filter: blur(10px);
-    }
-    
+    /* Container principal */
     div[data-testid="stVerticalBlock"] {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.05);
         border-radius: 15px;
         padding: 20px;
         backdrop-filter: blur(10px);
+        margin: 10px 0;
     }
 
-    /* Ajustes para inputs e texto */
-    .stTextInput > div > div {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
-    .stNumberInput > div > div {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
+    /* Inputs e Selects */
+    .stTextInput > div > div, 
+    .stNumberInput > div > div,
     .stSelectbox > div > div {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
-    /* Ajustes para labels e texto */
-    label {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 5px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
         color: white !important;
     }
 
-    p {
+    /* Container para inputs */
+    .input-container {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+
+    /* Textos e Labels */
+    label, p, .stMarkdown {
         color: white !important;
     }
 
-    .stMarkdown {
-        color: white;
+    .stTitle, .stHeader {
+        color: white !important;
     }
 
-    /* Ajustes para métricas */
+    /* Métricas */
     [data-testid="stMetricValue"] {
         background-color: rgba(255, 255, 255, 0.1);
         padding: 10px;
@@ -98,29 +68,52 @@ st.markdown("""
         color: rgba(255, 255, 255, 0.8) !important;
     }
 
-    /* Ajustes para tabs */
+    /* Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 2px;
         background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 5px;
     }
 
     .stTabs [data-baseweb="tab"] {
         background-color: transparent;
         color: white;
+        border-radius: 5px;
     }
 
     .stTabs [data-baseweb="tab-highlight"] {
         background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Containers uniformes */
+    .uniform-container {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Ajuste para inputs dentro dos containers */
+    .uniform-container .stNumberInput,
+    .uniform-container .stTextInput {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px 0;
     }
     </style>
 """, unsafe_allow_html=True)
 
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
-    <div style="background-color: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.2); margin: 5px 0; backdrop-filter: blur(10px);">
+    <div class="uniform-container">
         <div style="font-size: 0.9em; color: rgba(255,255,255,0.8);">{title}</div>
-        <div style="font-size: 1.1em; color: white; font-weight: bold;">
+    <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+        <div style="font-size: 0.9em; color: #666;">{title}</div>
+        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
             {prefix}{value:.2f}{suffix}
         </div>
     </div>
