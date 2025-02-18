@@ -10,23 +10,44 @@ st.set_page_config(
 # CSS personalizado
 st.markdown("""
     <style>
+    /* Resetar cores de fundo */
+    .stApp {
+        background-color: #002A3B !important;
+    }
+    
     .main {
-        background-color: #002A3B;
-        border-radius: 15px;
-        padding: 20px;
+        background-color: #002A3B !important;
     }
-    .stTitle {
-        color: #2c5282;
+    
+    section[data-testid="stSidebar"] {
+        background-color: #002A3B !important;
     }
-    .stHeader {
-        color: #234e52;
+    
+    div[data-testid="stToolbar"] {
+        background-color: #002A3B !important;
     }
+    
+    div[data-testid="stDecoration"] {
+        background-color: #002A3B !important;
+    }
+    
+    div[data-testid="stStatusWidget"] {
+        background-color: #002A3B !important;
+    }
+    
+    /* Resto do CSS permanece o mesmo */
+    .stTitle, .stHeader {
+        color: white !important;
+    }
+    
     .metric-card {
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.1);
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         margin: 10px 0;
+        color: white;
+        backdrop-filter: blur(10px);
     }
     .metric-value {
         color: #2f855a;
