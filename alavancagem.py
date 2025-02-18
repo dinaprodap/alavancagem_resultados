@@ -66,7 +66,6 @@ diferenciais = {}
 # Container de Produtos
 with st.container():
     # Container com estilo personalizado
-    st.markdown('<div class="produto-container">', unsafe_allow_html=True)
     
     # Cabeçalho
     st.markdown("""
