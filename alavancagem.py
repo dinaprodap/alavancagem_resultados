@@ -11,7 +11,7 @@ st.set_page_config(
 st.markdown("""
     <style>
     .main {
-        background-color: #f0f9ff;
+        background-color: #002A3B;
         border-radius: 15px;
         padding: 20px;
     }
