@@ -50,6 +50,112 @@ tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
 with tab1:
+    # Tabela de produtos centralizada
+    st.markdown('<div class="produto-table">', unsafe_allow_html=True)
+    st.subheader("Valores por Produto")
+
+    # Criar colunas para o cabeçalho
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+    
+    with col1:
+        st.write("Produto")
+    with col2:
+        st.write("Preço (R$/ton)")
+    with col3:
+        st.write("Consumo (g/cab/dia)")
+    with col4:
+        st.write("Diferencial Tecnológico")
+
+    # Dicionários para armazenar valores
+    precos = {}
+    consumos = {}
+    diferenciais = {}
+
+    # Criar linhas para cada molécula
+    for molecula in moleculas:
+        cols = st.columns([2, 1, 1, 1])
+        
+        with cols[0]:
+            st.write(molecula)
+        with cols[1]:
+            precos[molecula] = st.number_input(
+                f"Preço de {molecula}",
+                min_value=0.0,
+                value=5.0,
+                step=0.1,
+                key=f"preco_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with cols[2]:
+            consumos[molecula] = st.number_input(
+                f"Consumo de {molecula}",
+                min_value=0,
+                value=250,
+                step=1,
+                key=f"consumo_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with cols[3]:
+            diferenciais[molecula] = st.number_input(
+                f"Diferencial de {molecula}",
+                min_value=0.0,
+                value=0.0,
+                step=0.01,
+                key=f"diferencial_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Dados do Animal
+    col1, col2 = st.columns(2)
+    
+    with col2:
+        st.subheader("Dados do Animal")
+def metric_card(title, value, prefix="", suffix=""):
+    return f"""
+    <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+        <div style="font-size: 0.9em; color: #666;">{title}</div>
+        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+            {prefix}{value:.2f}{suffix}
+        </div>
+    </div>
+    """
+
+# Funções de cálculo existentes continuam aqui...
+def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
+    return consumo_pv * ((pv_inicial + pv_final) / 2)
+    
+# Funções de cálculo
+def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
+    return consumo_pv * ((pv_inicial + pv_final) / 2)
+
+def calcular_pv_final_arroba(peso_final, rendimento):
+    return (peso_final * rendimento/100) / 15
+
+def calcular_eficiencia_biologica(consumo_ms, dias_confinamento, arrobas_produzidas):
+    return (consumo_ms * dias_confinamento) / arrobas_produzidas
+
+def calcular_custeio(consumo_ms, consumo_ms_base, custeio_base):
+    return (consumo_ms / consumo_ms_base) * custeio_base
+
+def calcular_gdc(peso_final, rendimento_carcaca, peso_inicial, dias):
+    return (((peso_final * rendimento_carcaca/100)) - (peso_inicial/2))/dias
+
+def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
+    return ((peso_final * rendimento/100)/15) - (peso_inicial/30)
+
+# Título da aplicação
+st.title("🚀 Calculadora de Alavancagem")
+
+# Organização em abas
+tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
+
+# Definir variáveis globais
+moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
+
+with tab1:
     # Entrada de dados em colunas
     col1, col2 = st.columns(2)
     
