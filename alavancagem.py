@@ -7,45 +7,128 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado
+
 st.markdown("""
     <style>
+    /* Reset e configurações globais */
     .main {
-        background-color: #f0f9ff;
+        background-color: #003B4F !important;
+        color: white;
+        font-family: 'Inter', sans-serif;
     }
+    
+    /* Cabeçalho principal */
     .stTitle {
-        color: #2c5282;
+        font-size: 2.5rem !important;
+        font-weight: 600 !important;
+        color: white !important;
+        padding: 1.5rem 0 !important;
+        text-align: center;
     }
-    .stHeader {
-        color: #234e52;
+    
+    /* Container principal */
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
     }
-    .metric-card {
-        background-color: white;
+    
+    /* Estilo das tabs */
+    .stTabs {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
         padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin: 10px 0;
+        margin-top: 2rem;
     }
-    .metric-value {
-        color: #2f855a;
-        font-size: 24px;
-        font-weight: bold;
+    
+    .stTab {
+        color: white !important;
+        font-weight: 500;
+    }
+    
+    /* Cards de entrada de dados */
+    .input-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 15px 0;
+    }
+    
+    /* Campos de entrada */
+    .stNumberInput > div > div > input {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Cards de métricas */
+    .metric-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 10px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s;
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Insights principais */
+    .insight-container {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Divisores */
+    hr {
+        border-color: rgba(255, 255, 255, 0.1);
+        margin: 2rem 0;
+    }
+    
+    /* Labels e textos */
+    label, .stText {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-weight: 500;
+    }
+    
+    /* Botões */
+    .stButton > button {
+        background: linear-gradient(90deg, #00B4DB 0%, #0083B0 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 180, 219, 0.2);
     }
     </style>
 """, unsafe_allow_html=True)
 
+# Função atualizada para criar cards de métricas
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
-    <div style="background-color: white; padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
-        <div style="font-size: 0.9em; color: #666;">{title}</div>
-        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+    <div class="metric-card">
+        <div style="font-size: 0.9em; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">
+            {title}
+        </div>
+        <div style="font-size: 1.4em; color: white; font-weight: 600;">
             {prefix}{value:.2f}{suffix}
         </div>
     </div>
     """
 
-# Funções de cálculo existentes continuam aqui...
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
     
@@ -70,15 +153,24 @@ def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
 
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
+st.markdown('<div class="insight-container">', unsafe_allow_html=True)
+col1, col2, col3, col4 = st.columns(4)
 
-# Organização em abas
+with col1:
+    st.metric("Dias de Confinamento", "110", delta=None)
+with col2:
+    st.metric("GDC (KG/DIA)", f"{gdc:.3f}", delta=None)
+with col3:
+    st.metric("Arrobas Produzidas", f"{arrobas:.2f}", delta=None)
+with col4:
+    st.metric("Diferencial Tecnológico", "0.00", delta=None)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Tabs com novo estilo
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
-# Definir variáveis globais
-moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
-
 with tab1:
-    # Entrada de dados em colunas
+    st.markdown('<div class="input-container">', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     
     with col1:
@@ -102,7 +194,7 @@ with tab1:
                     step=1,
                     key=f"consumo_{molecula}"
                 )
-
+        pass
     with col2:
         st.subheader("Parâmetros Principais")
         consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
@@ -143,9 +235,12 @@ with insight_col3:
 
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
-
+    pass
+    st.markdown('</div>', unsafe_allow_html=True)
+    
 # Tab 2 - Resultados
 with tab2:
+    st.markdown('<div class="input-container">', unsafe_allow_html=True)
     st.header("📈 Análise Comparativa", divider='rainbow')
     
     # Grid de resultados
@@ -224,3 +319,5 @@ with tab2:
         st.metric("Rendimento Carcaça", f"{rendimento_carcaca:.2f}%")
     with params_col3:
         st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
+
+                st.markdown('</div>', unsafe_allow_html=True)
