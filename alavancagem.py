@@ -183,65 +183,63 @@ with tab2:
     resultados = {}
     
     # Calcular resultados para cada molécula
-    for idx, molecula in enumerate(moleculas):
-        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pv_final)
-        pv_final_arroba = calcular_pv_final_arroba(pv_final, rendimento_carcaca)
-        
-        base_resultados = {
-            "consumo_ms": consumo_ms,
-            "pv_final_arroba": pv_final_arroba,
-            "eficiencia_biologica": calcular_eficiencia_biologica(
-                consumo_ms,
-                110,
-                arrobas_values[molecula]
-            )
-        }
-        
-        if idx == 0:
-            resultados[molecula] = {
-                **base_resultados,
-                "incremento_lucro": 0,
-                "arrobas_adicionais": 0,
-                "receita_adicional": 0,
-                "custo_adicional": 0,
-                "incremento_lucro_adicional": 0,
-                "custo_arroba_adicional": 0
-            }
-        else:
-            custeio_atual = calcular_custeio(
-                consumo_ms,
-                resultados["Molecula 1"]["consumo_ms"],
-                custeio
-            )
-            
-            arrobas = 8.30 if idx == 1 else 8.93
-            resultado = 1000.29 if idx == 1 else 1161.69
-            custo = 1820.09 if idx == 1 else 1874.33
-            
-            resultados[molecula] = {
-                **base_resultados,
-                "incremento_lucro": ((resultado/base_resultado - 1) * 100),
-                "arrobas_adicionais": arrobas - base_arrobas,
-                "receita_adicional": (arrobas - base_arrobas) * valor_venda_arroba,
-                "custo_adicional": custo - base_custo,
-                "incremento_lucro_adicional": resultado - base_resultado,
-                "custo_arroba_adicional": (custo - base_custo) / (arrobas - base_arrobas)
-            }
+   # Calcular resultados para cada molécula
+for idx, molecula in enumerate(moleculas):
+    consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pv_final)
+    pv_final_arroba = calcular_pv_final_arroba(pv_final, rendimento_carcaca)
+    
+    # Valores específicos para cada molécula
+    if idx == 0:  # Molécula 1
+        diferencial_tecnologico = 0.0
+        peso_inicial_mol = pv_inicial
+        arrobas = arrobas_values[molecula]
+        valor_venda_mol = valor_venda_arroba
+    elif idx == 1:  # Molécula 2
+        diferencial_tecnologico = 1.60
+        peso_inicial_mol = pv_inicial
+        arrobas = 8.30
+        valor_venda_mol = valor_venda_arroba  # Mesmo valor da molécula 1
+    else:  # Molécula 3
+        diferencial_tecnologico = 2.09
+        peso_inicial_mol = pv_inicial
+        arrobas = 8.93
+        valor_venda_mol = valor_venda_arroba  # Mesmo valor da molécula 1
 
-    # Exibir resultados
-    for idx, (molecula, res) in enumerate(resultados.items()):
-        with [col1, col2, col3][idx]:
-            st.markdown(f"#### {molecula}")
-            st.markdown(metric_card("Incremento do Lucro", res["incremento_lucro"], suffix="%"), unsafe_allow_html=True)
-            st.markdown(metric_card("Arrobas Adicionais", res["arrobas_adicionais"], suffix=" @/cab"), unsafe_allow_html=True)
-            st.markdown(metric_card("Receita Adicional", res["receita_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Custo Adicional", res["custo_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Incremento Lucro", res["incremento_lucro_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Custo @Adicional", res["custo_arroba_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Consumo MS", res["consumo_ms"], suffix=" Kg/Cab/dia"), unsafe_allow_html=True)
-            st.markdown(metric_card("PV Final", res["pv_final_arroba"], suffix=" @/Cab"), unsafe_allow_html=True)
-            st.markdown(metric_card("Eficiência Biológica", res["eficiencia_biologica"], suffix=" kgMS/@"), unsafe_allow_html=True)
-
+    # Cálculos em sequência (células 22, 24, 29 e resultado final)
+    custeio_final = diferencial_tecnologico + custeio  # Célula 22 (B22, C22, D22)
+    custeio_periodo = custeio_final * 110  # Célula 24 (B24, C24, D24)
+    
+    # Cálculo do custo do animal magro (célula 29)
+    custo_animal_magro = (valor_venda_mol * (1 + agio_percentual/100)) * (peso_inicial_mol/30)
+    
+    # Cálculo do resultado final (B30, C30, D30)
+    resultado_final = (arrobas * valor_venda_mol) - custo_animal_magro - custeio_periodo
+    
+    # Armazenar resultado para uso no cálculo do incremento
+    resultados_agio[molecula] = resultado_final
+    
+    # Cálculo do incremento de lucro
+    resultado_base = resultados_agio["Molecula 1"]  # B30
+    resultado_atual = resultado_final              # C30 ou D30
+    
+    if resultado_base < 0:
+        incremento = (resultado_atual/resultado_base - 1) * -1
+    else:
+        incremento = resultado_atual/resultado_base - 1
+    
+    resultados[molecula] = {
+        **base_resultados,
+        "incremento_lucro": incremento * 100,
+        "arrobas_adicionais": arrobas - base_arrobas,
+        "receita_adicional": (arrobas - base_arrobas) * valor_venda_mol,
+        "custo_adicional": custeio_periodo - base_custo,
+        "incremento_lucro_adicional": resultado_final - base_resultado,
+        "custo_arroba_adicional": (custeio_periodo - base_custo) / (arrobas - base_arrobas) if (arrobas - base_arrobas) != 0 else 0,
+        "consumo_ms": consumo_ms,
+        "pv_final_arroba": pv_final_arroba,
+        "eficiencia_biologica": calcular_eficiencia_biologica(consumo_ms, 110, arrobas)
+    }
+    
     # Parâmetros principais
     st.markdown("---")
     st.caption("Parâmetros Principais")
