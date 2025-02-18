@@ -153,6 +153,11 @@ def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 st.markdown('<div class="insight-container">', unsafe_allow_html=True)
+
+# Inicializar as variáveis antes de usar
+gdc = 0
+arrobas = 0
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -176,6 +181,7 @@ with tab1:
         st.subheader("Valores por Produto")
         precos = {}
         consumos = {}
+        moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]  # Definindo a lista de moléculas
         for molecula in moleculas:
             with st.container():
                 st.markdown(f"### {molecula}")
