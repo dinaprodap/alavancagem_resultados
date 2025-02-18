@@ -60,8 +60,6 @@ precos = {}
 consumos = {}
 diferenciais = {}
 
-# CSS para o container arredondado e cinza ajustado corretamente
-# Aplicando o CSS para corrigir o layout
 # CSS atualizado para o container
 st.markdown(
     """
@@ -70,43 +68,54 @@ st.markdown(
             background-color: #f0f0f0;
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            width: 100%;
         }
         .valores-titulo {
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding-left: 10px;
         }
-        .valores-row {
+        .valores-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: 200px 1fr 1fr 1fr;
+            gap: 15px;
             align-items: center;
-            padding: 10px 0;
         }
-        .valores-label {
-            font-weight: 500;
-            color: #444;
+        .molecula-row {
+            display: contents;
+        }
+        .molecula-label {
+            color: #666;
+            font-size: 1rem;
+            padding-left: 10px;
+        }
+        .input-field {
+            background: white;
+            border-radius: 5px;
+            padding: 5px;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Início do container com estrutura HTML melhorada
-st.markdown("""
-    <div class="valores-container">
-        <h3 class="valores-titulo">Valores por Produto</h3>
-""", unsafe_allow_html=True)
+# Início do container com nova estrutura
+st.markdown('<div class="valores-container">', unsafe_allow_html=True)
+st.markdown('<h3 class="valores-titulo">Valores por Produto</h3>', unsafe_allow_html=True)
+st.markdown('<div class="valores-grid">', unsafe_allow_html=True)
 
 # Criar a estrutura de inputs dentro do contêiner
 for molecula in moleculas:
-    st.markdown(f'<div class="valores-row">', unsafe_allow_html=True)
+    st.markdown(f'<div class="molecula-row">', unsafe_allow_html=True)
     
-    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
-
+    # Label da molécula
+    st.markdown(f'<div class="molecula-label">{molecula}</div>', unsafe_allow_html=True)
+    
+    # Campos de input
+    col1, col2, col3 = st.columns(3)
+    
     with col1:
-        st.write(f'<div class="valores-label">{molecula}</div>', unsafe_allow_html=True)
-    with col2:
         precos[molecula] = st.number_input(
             f"Preço de {molecula}",
             min_value=0.0,
@@ -115,7 +124,7 @@ for molecula in moleculas:
             key=f"preco_tabela_{molecula}",
             label_visibility="collapsed"
         )
-    with col3:
+    with col2:
         consumos[molecula] = st.number_input(
             f"Consumo de {molecula}",
             min_value=0,
@@ -124,6 +133,22 @@ for molecula in moleculas:
             key=f"consumo_tabela_{molecula}",
             label_visibility="collapsed"
         )
+    with col3:
+        diferenciais[molecula] = st.number_input(
+            f"Diferencial de {molecula}",
+            min_value=0.0,
+            value=0.0,
+            step=0.01,
+            key=f"diferencial_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Fechando os containers
+st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-grid
+st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
+
     with col4:
         diferenciais[molecula] = st.number_input(
             f"Diferencial de {molecula}",
