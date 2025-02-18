@@ -18,29 +18,6 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    .stTitle {
-        color: #2c5282;
-    }
-    .stHeader {
-        color: #234e52;
-    }
-    .metric-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin: 10px 0;
-    }
-    .metric-value {
-        color: #2f855a;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    div[data-testid="stVerticalBlock"] {
-        background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
-    }
     .produto-container {
         background-color: #e2e8f0;
         border-radius: 15px;
@@ -72,31 +49,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-def metric_card(title, value, prefix="", suffix=""):
-    return f"""
-    <div style="background-color: white; padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
-        <div style="font-size: 0.9em; color: #666;">{title}</div>
-        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
-            {prefix}{value:.2f}{suffix}
-        </div>
-    </div>
-    """
+# Título da aplicação
+st.title("🚀 Calculadora de Alavancagem")
 
-def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
-    return consumo_pv * ((pv_inicial + pv_final) / 2)
+# Organização em abas
+tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
-def calcular_pv_final_arroba(peso_final, rendimento):
-    return (peso_final * rendimento/100) / 15
-
-def calcular_eficiencia_biologica(consumo_ms, dias_confinamento, arrobas_produzidas):
-    return (consumo_ms * dias_confinamento) / arrobas_produzidas
-
-def calcular_custeio(consumo_ms, consumo_ms_base, custeio_base):
-    return (consumo_ms / consumo_ms_base) * custeio_base
-
-def calcular_gdc(peso_final, rendimento_carcaca, peso_inicial, dias):
-    return (((peso_final * rendimento_carcaca/100)) - (peso_inicial/2))/dias
+# Definir variáveis globais
+moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
 # Dicionários para armazenar os valores
 precos = {}
