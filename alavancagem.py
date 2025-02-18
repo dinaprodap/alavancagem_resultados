@@ -33,7 +33,8 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-# Adicionar funções de cálculo no início do arquivo
+
+# Funções de cálculo
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
 
@@ -55,6 +56,61 @@ def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
+# Organização em abas
+tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
+
+# Definir variáveis globais
+moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
+
+with tab1:
+    # Entrada de dados em colunas
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Valores por Produto")
+        precos = {}
+        consumos = {}
+        for molecula in moleculas:
+            with st.container():
+                st.markdown(f"### {molecula}")
+                precos[molecula] = st.number_input(
+                    f"Preço de {molecula} (R$/ton)",
+                    min_value=0.0,
+                    value=5.0,
+                    step=0.1,
+                    key=f"preco_{molecula}"
+                )
+                consumos[molecula] = st.number_input(
+                    f"Consumo de {molecula} (g/cab/dia)",
+                    min_value=0,
+                    value=250,
+                    step=1,
+                    key=f"consumo_{molecula}"
+                )
+
+    with col2:
+        st.subheader("Parâmetros Principais")
+        consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
+        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+        pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+        custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
+        valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+        agio_animal_magro = st.number_input("Ágio para Animal Magro (R$/cab)", min_value=0.0, value=4641.0, step=0.1)
+
+# Calcular valores base após entrada de dados
+base_arrobas = 7.49
+base_resultado = 903.27
+base_custo = 1644.10
+
+# Calcular arrobas_values após ter todas as variáveis necessárias
+arrobas_values = {
+    "Molecula 1": calcular_arrobas_produzidas(pv_final, rendimento_carcaca, pv_inicial),
+    "Molecula 2": calcular_arrobas_produzidas(576.75, 55.38, pv_inicial),
+    "Molecula 3": calcular_arrobas_produzidas(583.86, 56.34, pv_inicial)
+}
+
 # Insights principais
 insight_col1, insight_col2, insight_col3, insight_col4 = st.columns(4)
 
@@ -72,12 +128,7 @@ with insight_col3:
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
 
-# Organização em abas
-tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
-
-with tab1:
-    # Entrada de dados em colunas
-    col1, col2 = st.columns(2)
+# Tab 2 - Resultados
 with tab2:
     st.header("📈 Análise Comparativa", divider='rainbow')
     
@@ -133,7 +184,7 @@ with tab2:
                 "custo_arroba_adicional": (custo - base_custo) / (arrobas - base_arrobas)
             }
 
-    # Exibir resultados em colunas
+    # Exibir resultados
     for idx, (molecula, res) in enumerate(resultados.items()):
         with [col1, col2, col3][idx]:
             st.markdown(f"#### {molecula}")
@@ -147,7 +198,7 @@ with tab2:
             st.markdown(metric_card("PV Final", res["pv_final_arroba"], suffix=" @/Cab"), unsafe_allow_html=True)
             st.markdown(metric_card("Eficiência Biológica", res["eficiencia_biologica"], suffix=" kgMS/@"), unsafe_allow_html=True)
 
-    # Tabela compacta com principais parâmetros
+    # Parâmetros principais
     st.markdown("---")
     st.caption("Parâmetros Principais")
     params_col1, params_col2, params_col3 = st.columns(3)
