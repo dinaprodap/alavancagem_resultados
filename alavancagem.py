@@ -7,14 +7,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado para alterar o fundo do Streamlit
+# CSS personalizado
 st.markdown("""
     <style>
     .stApp {
         background-color: #002A3B;
     }
     .main {
-        background-color: #002A3B;
+        background-color: #f0f9ff;
         border-radius: 15px;
         padding: 20px;
     }
@@ -37,12 +37,9 @@ st.markdown("""
         font-weight: bold;
     }
     div[data-testid="stVerticalBlock"] {
-        background-color: #002A3B;
+        background-color: #f0f9ff;
         border-radius: 15px;
         padding: 20px;
-    }
-    section[data-testid="stSidebar"] {
-        background-color: #002A3B;
     }
     </style>
 """, unsafe_allow_html=True)
