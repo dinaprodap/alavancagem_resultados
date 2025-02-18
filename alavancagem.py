@@ -164,33 +164,25 @@ with tab1:
         precos = {}
         consumos = {}
         
-        # Container cinza para valores por produto
-        with st.container():
-            st.markdown("""
-                <div style="background-color: #e2e8f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            """, unsafe_allow_html=True)
-            
-            for molecula in moleculas:
-                st.markdown(f"### {molecula}")
-                col_preco, col_consumo = st.columns(2)
-                with col_preco:
-                    precos[molecula] = st.number_input(
-                        f"Preço de {molecula} (R$/ton)",
-                        min_value=0.0,
-                        value=5.0,
-                        step=0.1,
-                        key=f"preco_{molecula}"
-                    )
-                with col_consumo:
-                    consumos[molecula] = st.number_input(
-                        f"Consumo de {molecula} (g/cab/dia)",
-                        min_value=0,
-                        value=250,
-                        step=1,
-                        key=f"consumo_{molecula}"
-                    )
-            
-            st.markdown("</div>", unsafe_allow_html=True)
+        for molecula in moleculas:
+            st.markdown(f"### {molecula}")
+            col_preco, col_consumo = st.columns(2)
+            with col_preco:
+                precos[molecula] = st.number_input(
+                    f"Preço de {molecula} (R$/ton)",
+                    min_value=0.0,
+                    value=5.0,
+                    step=0.1,
+                    key=f"preco_{molecula}"
+                )
+            with col_consumo:
+                consumos[molecula] = st.number_input(
+                    f"Consumo de {molecula} (g/cab/dia)",
+                    min_value=0,
+                    value=250,
+                    step=1,
+                    key=f"consumo_{molecula}"
+                )
 
     with col2:
         st.subheader("Dados do Animal")
