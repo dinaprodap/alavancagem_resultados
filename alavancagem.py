@@ -123,12 +123,6 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
 
-# Dados do Animal
-col1, col2 = st.columns(2)
-
-with col2:
-    st.subheader("Dados do Animal")
-
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
     <div style="background-color: white; padding: 10px; border-radius: 5px; 
