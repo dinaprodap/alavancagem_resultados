@@ -83,7 +83,7 @@ with tab1:
                 min_value=0.0,
                 value=5.0,
                 step=0.1,
-                key=f"preco_{molecula}",
+                key=f"preco_tabela_{molecula}",
                 label_visibility="collapsed"
             )
         with cols[2]:
@@ -92,7 +92,7 @@ with tab1:
                 min_value=0,
                 value=250,
                 step=1,
-                key=f"consumo_{molecula}",
+                key=f"consumo_tabela_{molecula}",
                 label_visibility="collapsed"
             )
         with cols[3]:
@@ -101,7 +101,7 @@ with tab1:
                 min_value=0.0,
                 value=0.0,
                 step=0.01,
-                key=f"diferencial_{molecula}",
+                key=f"diferencial_tabela_{molecula}",
                 label_visibility="collapsed"
             )
 
