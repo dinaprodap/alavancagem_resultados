@@ -55,7 +55,22 @@ def metric_card(title, value, prefix="", suffix=""):
     </div>
     """
 
-# Funções de cálculo existentes continuam aqui...
+def calcular_custo_animal_magro(valor_venda_arroba, agio_percentual, peso_inicial):
+    """Calcula o custo do animal magro (célula 29)"""
+    return (valor_venda_arroba * (1 + agio_percentual/100)) * (peso_inicial/30)
+
+def calcular_custeio_periodo(custeio_final, dias_confinamento):
+    """Calcula o custeio no período (célula 24)"""
+    return custeio_final * dias_confinamento
+
+def calcular_custeio_final(diferencial_tecnologico, custeio_base):
+    """Calcula o custeio final (célula 22)"""
+    return diferencial_tecnologico + custeio_base
+
+def calcular_resultado_final(arrobas_produzidas, valor_venda_arroba, custo_animal_magro, custeio_periodo):
+    """Calcula o resultado final (células B30, C30, D30)"""
+    return (arrobas_produzidas * valor_venda_arroba) - custo_animal_magro - custeio_periodo
+    
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
     
