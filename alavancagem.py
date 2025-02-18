@@ -104,15 +104,16 @@ with tab1:
                 )
 
     with col2:
-        st.subheader("Parâmetros Principais")
-        consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
-        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
-        pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
-        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
-        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-        custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
-        valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
-        agio_animal_magro = st.number_input("Ágio para Animal Magro (R$/cab)", min_value=0.0, value=4641.0, step=0.1)
+    st.subheader("Parâmetros Principais")
+    consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
+    pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+    pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+    gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+    rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+    custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
+    agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
 
 # Calcular valores base após entrada de dados
 base_arrobas = 7.49
