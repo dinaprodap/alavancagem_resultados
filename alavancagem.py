@@ -65,8 +65,6 @@ diferenciais = {}
 
 # Container de Produtos
 with st.container():
-    # Container com estilo personalizado
-    
     # Cabeçalho
     st.markdown("""
         <div class="produto-header">
@@ -174,31 +172,7 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Valores por Produto")
-        precos = {}
-        consumos = {}
-        
-        for molecula in moleculas:
-            st.markdown(f"### {molecula}")
-            col_preco, col_consumo = st.columns(2)
-            with col_preco:
-                precos[molecula] = st.number_input(
-                    f"Preço de {molecula} (R$/ton)",
-                    min_value=0.0,
-                    value=5.0,
-                    step=0.1,
-                    key=f"preco_{molecula}"
-                )
-            with col_consumo:
-                consumos[molecula] = st.number_input(
-                    f"Consumo de {molecula} (g/cab/dia)",
-                    min_value=0,
-                    value=250,
-                    step=1,
-                    key=f"consumo_{molecula}"
-                )
-
-    with col2:
+       
         st.subheader("Dados do Animal")
         consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
