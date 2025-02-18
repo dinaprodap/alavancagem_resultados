@@ -60,8 +60,7 @@ precos = {}
 consumos = {}
 diferenciais = {}
 
-
- CSS atualizado para englobar toda a seção
+# CSS atualizado para englobar toda a seção
 st.markdown(
     """
     <style>
