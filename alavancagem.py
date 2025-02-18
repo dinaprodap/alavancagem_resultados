@@ -149,17 +149,17 @@ for molecula in moleculas:
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-grid
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
 
-    with col4:
-        diferenciais[molecula] = st.number_input(
-            f"Diferencial de {molecula}",
-            min_value=0.0,
-            value=0.0,
-            step=0.01,
-            key=f"diferencial_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
+with col4:
+    diferenciais[molecula] = st.number_input(
+        f"Diferencial de {molecula}",
+        min_value=0.0,
+        value=0.0,
+        step=0.01,
+        key=f"diferencial_tabela_{molecula}",
+        label_visibility="collapsed"
+    )
 
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Fechando o container
 st.markdown('</div>', unsafe_allow_html=True)
