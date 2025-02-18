@@ -71,80 +71,77 @@ st.markdown(
             margin: 20px 0;
             width: 100%;
         }
-        .valores-titulo {
-            color: #333;
+        .valores-header {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
             margin-bottom: 20px;
-            padding-left: 10px;
         }
-        .valores-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr 1fr 1fr;
+        .valores-content {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
-            align-items: center;
         }
         .molecula-row {
-            display: contents;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
         .molecula-label {
             color: #666;
             font-size: 1rem;
-            padding-left: 10px;
-        }
-        .input-field {
-            background: white;
-            border-radius: 5px;
-            padding: 5px;
+            width: 150px;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Início do container com nova estrutura
-st.markdown('<div class="valores-container">', unsafe_allow_html=True)
-st.markdown('<h3 class="valores-titulo">Valores por Produto</h3>', unsafe_allow_html=True)
-st.markdown('<div class="valores-grid">', unsafe_allow_html=True)
-
-# Criar a estrutura de inputs dentro do contêiner
-for molecula in moleculas:
-    st.markdown(f'<div class="molecula-row">', unsafe_allow_html=True)
+# Container principal
+with st.container():
+    # Header em branco
+    st.markdown('<div class="valores-container">', unsafe_allow_html=True)
+    st.markdown('<div class="valores-header"><h3>Valores por Produto</h3></div>', unsafe_allow_html=True)
     
-    # Label da molécula
-    st.markdown(f'<div class="molecula-label">{molecula}</div>', unsafe_allow_html=True)
+    # Conteúdo
+    st.markdown('<div class="valores-content">', unsafe_allow_html=True)
     
-    # Campos de input
-    col1, col2, col3 = st.columns(3)
+    # Criar linhas para cada molécula
+    for molecula in moleculas:
+        col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+        
+        with col1:
+            st.write(molecula)
+        with col2:
+            precos[molecula] = st.number_input(
+                f"Preço de {molecula}",
+                min_value=0.0,
+                value=5.0,
+                step=0.1,
+                key=f"preco_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with col3:
+            consumos[molecula] = st.number_input(
+                f"Consumo de {molecula}",
+                min_value=0,
+                value=250,
+                step=1,
+                key=f"consumo_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
+        with col4:
+            diferenciais[molecula] = st.number_input(
+                f"Diferencial de {molecula}",
+                min_value=0.0,
+                value=0.0,
+                step=0.01,
+                key=f"diferencial_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
     
-    with col1:
-        precos[molecula] = st.number_input(
-            f"Preço de {molecula}",
-            min_value=0.0,
-            value=5.0,
-            step=0.1,
-            key=f"preco_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col2:
-        consumos[molecula] = st.number_input(
-            f"Consumo de {molecula}",
-            min_value=0,
-            value=250,
-            step=1,
-            key=f"consumo_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-    with col3:
-        diferenciais[molecula] = st.number_input(
-            f"Diferencial de {molecula}",
-            min_value=0.0,
-            value=0.0,
-            step=0.01,
-            key=f"diferencial_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-content
+    st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
 # Fechando os containers
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-grid
 st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
