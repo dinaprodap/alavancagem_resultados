@@ -7,6 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
+
 st.markdown("""
     <style>
     /* Reset e configurações globais */
@@ -153,11 +154,6 @@ def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 st.markdown('<div class="insight-container">', unsafe_allow_html=True)
-
-# Inicializar as variáveis antes de usar
-gdc = 0
-arrobas = 0
-
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -181,7 +177,6 @@ with tab1:
         st.subheader("Valores por Produto")
         precos = {}
         consumos = {}
-        moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]  # Definindo a lista de moléculas
         for molecula in moleculas:
             with st.container():
                 st.markdown(f"### {molecula}")
@@ -199,7 +194,7 @@ with tab1:
                     step=1,
                     key=f"consumo_{molecula}"
                 )
-    
+        pass
     with col2:
         st.subheader("Parâmetros Principais")
         consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
@@ -240,8 +235,9 @@ with insight_col3:
 
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
-st.markdown('</div>', unsafe_allow_html=True)
-
+    pass
+    st.markdown('</div>', unsafe_allow_html=True)
+    
 # Tab 2 - Resultados
 with tab2:
     st.markdown('<div class="input-container">', unsafe_allow_html=True)
@@ -324,4 +320,4 @@ with tab2:
     with params_col3:
         st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
 
-st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
