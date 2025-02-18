@@ -46,6 +46,13 @@ st.markdown("""
         padding: 10px;
         border-radius: 8px;
     }
+    .valores-container {
+        background-color: #e2e8f0;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -62,6 +69,9 @@ moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 precos = {}
 consumos = {}
 diferenciais = {}
+
+# Container de Valores por Produto
+st.markdown('<div class="valores-container">', unsafe_allow_html=True)
 
 # Container de Produtos
 with st.container():
@@ -121,7 +131,8 @@ with st.container():
             )
     
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
-    st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
+
+st.markdown('</div>', unsafe_allow_html=True)  # Fecha valores-container
 
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
