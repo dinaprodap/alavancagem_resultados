@@ -37,6 +37,35 @@ st.markdown("""
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
+# Criar uma linha de insights principais
+insight_col1, insight_col2, insight_col3, insight_col4, insight_col5 = st.columns(5)
+
+with insight_col1:
+    st.metric("Dias de Confinamento", "110")  # Valor fixo conforme imagem
+
+with insight_col2:
+    gdc_values = {
+        "Molecula 1": (((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/110,
+        "Molecula 2": (((576.75 * 55.38/100)) - (390/2))/110,
+        "Molecula 3": (((583.86 * 56.34/100)) - (390/2))/110
+    }
+    st.metric("GDC (KG/DIA)", f"{gdc_values['Molecula 1']:.3f}")
+
+with insight_col3:
+    arrobas_values = {
+        "Molecula 1": ((pv_final * rendimento_carcaca/100)/15) - (pv_inicial/30),
+        "Molecula 2": ((576.75 * 55.38/100)/15) - (390/30),
+        "Molecula 3": ((583.86 * 56.34/100)/15) - (390/30)
+    }
+    st.metric("Arrobas Produzidas (@/Cab)", f"{arrobas_values['Molecula 1']:.2f}")
+
+with insight_col4:
+    diferencial_values = {
+        "Molecula 2": 0.65,
+        "Molecula 3": 1.03
+    }
+    st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
+
 # Organização em abas
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
