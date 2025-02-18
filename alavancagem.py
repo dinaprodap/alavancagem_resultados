@@ -18,19 +18,91 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    .stTitle {
-        color: #2c5282;
-    }
-    .stHeader {
-        color: #234e52;
-    }
-    .metric-card {
-        background-color: white;
+    .produto-table {
+        background-color: #e2e8f0;
+        border-radius: 15px;
         padding: 20px;
+        margin: 20px auto;
+        max-width: 1000px;
+    }
+    .produto-row {
+        background-color: white;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 15px;
         margin: 10px 0;
     }
+    </style>
+""", unsafe_allow_html=True)
+
+# Título da aplicação
+st.title("🚀 Calculadora de Alavancagem")
+
+# Tabela de produtos centralizada
+st.markdown('<div class="produto-table">', unsafe_allow_html=True)
+st.subheader("Valores por Produto")
+
+# Dicionários para armazenar valores
+precos = {}
+consumos = {}
+custos = {}
+diferenciais = {}
+
+# Lista de moléculas
+moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
+
+# Criar linhas para cada molécula
+for molecula in moleculas:
+    st.markdown(f'<div class="produto-row">', unsafe_allow_html=True)
+    cols = st.columns([3, 3, 3, 3])
+    
+    with cols[0]:
+        st.markdown(f"### {molecula}")
+    
+    with cols[1]:
+        precos[molecula] = st.number_input(
+            "Preço (R$/ton)",
+            min_value=0.0,
+            value=5.0,
+            step=0.1,
+            key=f"preco_{molecula}"
+        )
+    
+    with cols[2]:
+        consumos[molecula] = st.number_input(
+            "Consumo (g/cab/dia)",
+            min_value=0,
+            value=250,
+            step=1,
+            key=f"consumo_{molecula}"
+        )
+    
+    with cols[3]:
+        # Cálculo do custo
+        custos[molecula] = (precos[molecula] * consumos[molecula]) / 1000
+        st.metric("Custo (R$/cab/dia)", f"R$ {custos[molecula]:.2f}")
+        
+        # Diferencial tecnológico (apenas para exibição)
+        if molecula == "Molecula 1":
+            diferenciais[molecula] = "-"
+        elif molecula == "Molecula 2":
+            diferenciais[molecula] = "R$ 0.65"
+        else:
+            diferenciais[molecula] = "R$ 1.03"
+        st.metric("Diferencial Tecnológico", diferenciais[molecula])
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Organização em abas
+tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
+
+with tab1:
+    col1, col2 = st.columns(2)
+    
+    with col2:
+        st.subheader("Dados do Animal")
+        consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
     .metric-value {
         color: #2f855a;
         font-size: 24px;
@@ -41,61 +113,9 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    .custom-table {
-        background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px 0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .custom-table table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-    .custom-table th {
-        background-color: #e2e8f0;
-        padding: 12px;
-        text-align: left;
-        font-weight: bold;
-        color: #2d3748;
-    }
-    .custom-table td {
-        padding: 12px;
-        background-color: white;
-        border-top: 1px solid #e2e8f0;
-    }
     </style>
 """, unsafe_allow_html=True)
 
-# Título da aplicação
-st.title("🚀 Calculadora de Alavancagem")
-
-# Tabela de entrada no início
-st.markdown('<div class="custom-table">', unsafe_allow_html=True)
-
-col1, col2, col3 = st.columns([3, 3, 3])
-
-# Dicionários para armazenar os valores
-precos = {}
-consumos = {}
-custos = {}
-
-# Molécula 1
-with col1:
-    st.subheader("Molécula 1")
-    precos["Molecula 1"] = st.number_input("Preço (R$/ton)", value=4.90, step=0.01, key="preco_1")
-    consumos["Molecula 1"] = st.number_input("Consumo (g/cab/dia)", value=250, step=1, key="consumo_1")
-    custos["Molecula 1"] = precos["Molecula 1"] * consumos["Molecula 1"] / 1000
-    st.metric("Custo (R$/cab/dia)", f"R$ {custos['Molecula 1']:.2f}")
-    st.metric("Diferencial Tecnológico", "-")
-
-# Molécula 2
-with col2:
-    st.subheader("Molécula 2")
-    precos["Molecula 2"] = st.number_input("Preço (R$/ton)", value=6.48, step=0.01, key="preco_2")
 def metric_card(title, value, prefix="", suffix=""):
     return f"""
     <div style="background-color: white; padding: 10px; border-radius: 5px; 
