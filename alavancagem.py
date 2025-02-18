@@ -51,7 +51,7 @@ moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
 with tab1:
     # Tabela de produtos centralizada
-    st.markdown('<div class="produto-table">', unsafe_allow_html=True)
+   
     st.subheader("Valores por Produto")
 
     # Criar colunas para o cabeçalho
