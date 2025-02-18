@@ -10,44 +10,23 @@ st.set_page_config(
 # CSS personalizado
 st.markdown("""
     <style>
-    /* Resetar cores de fundo */
-    .stApp {
-        background-color: #002A3B !important;
-    }
-    
     .main {
-        background-color: #002A3B !important;
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
-    
-    section[data-testid="stSidebar"] {
-        background-color: #002A3B !important;
+    .stTitle {
+        color: #2c5282;
     }
-    
-    div[data-testid="stToolbar"] {
-        background-color: #002A3B !important;
+    .stHeader {
+        color: #234e52;
     }
-    
-    div[data-testid="stDecoration"] {
-        background-color: #002A3B !important;
-    }
-    
-    div[data-testid="stStatusWidget"] {
-        background-color: #002A3B !important;
-    }
-    
-    /* Resto do CSS permanece o mesmo */
-    .stTitle, .stHeader {
-        color: white !important;
-    }
-    
     .metric-card {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin: 10px 0;
-        color: white;
-        backdrop-filter: blur(10px);
     }
     .metric-value {
         color: #2f855a;
@@ -113,23 +92,26 @@ with tab1:
         st.subheader("Valores por Produto")
         precos = {}
         consumos = {}
-        for molecula in moleculas:
-            with st.container():
+        with st.container():
+            for molecula in moleculas:
                 st.markdown(f"### {molecula}")
-                precos[molecula] = st.number_input(
-                    f"Preço de {molecula} (R$/ton)",
-                    min_value=0.0,
-                    value=5.0,
-                    step=0.1,
-                    key=f"preco_{molecula}"
-                )
-                consumos[molecula] = st.number_input(
-                    f"Consumo de {molecula} (g/cab/dia)",
-                    min_value=0,
-                    value=250,
-                    step=1,
-                    key=f"consumo_{molecula}"
-                )
+                col_preco, col_consumo = st.columns(2)
+                with col_preco:
+                    precos[molecula] = st.number_input(
+                        f"Preço de {molecula} (R$/ton)",
+                        min_value=0.0,
+                        value=5.0,
+                        step=0.1,
+                        key=f"preco_{molecula}"
+                    )
+                with col_consumo:
+                    consumos[molecula] = st.number_input(
+                        f"Consumo de {molecula} (g/cab/dia)",
+                        min_value=0,
+                        value=250,
+                        step=1,
+                        key=f"consumo_{molecula}"
+                    )
 
     with col2:
         st.subheader("Parâmetros Principais")
