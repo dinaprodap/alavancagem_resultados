@@ -78,40 +78,69 @@ with tab1:
     diferenciais = {}
 
     # Criar linhas para cada molécula
-    for molecula in moleculas:
-        cols = st.columns([2, 1, 1, 1])
-        
-        with cols[0]:
-            st.write(molecula)
-        with cols[1]:
-            precos[molecula] = st.number_input(
-                f"Preço de {molecula}",
-                min_value=0.0,
-                value=5.0,
-                step=0.1,
-                key=f"preco_tabela_{molecula}",
-                label_visibility="collapsed"
-            )
-        with cols[2]:
-            consumos[molecula] = st.number_input(
-                f"Consumo de {molecula}",
-                min_value=0,
-                value=250,
-                step=1,
-                key=f"consumo_tabela_{molecula}",
-                label_visibility="collapsed"
-            )
-        with cols[3]:
-            diferenciais[molecula] = st.number_input(
-                f"Diferencial de {molecula}",
-                min_value=0.0,
-                value=0.0,
-                step=0.01,
-                key=f"diferencial_tabela_{molecula}",
-                label_visibility="collapsed"
-            )
+    import streamlit as st
 
-    st.markdown('</div>', unsafe_allow_html=True)
+# Lista de exemplo para moléculas
+moleculas = ["Molecula A", "Molecula B", "Molecula C"]
+
+# Dicionários para armazenar os valores
+precos = {}
+consumos = {}
+diferenciais = {}
+
+# CSS para o container arredondado e cinza
+st.markdown(
+    """
+    <style>
+        .container {
+            background-color: #f0f0f0; /* Cinza claro */
+            padding: 15px;
+            border-radius: 10px; /* Cantos arredondados */
+            margin-bottom: 10px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Início do contêiner
+st.markdown('<div class="container">', unsafe_allow_html=True)
+
+for molecula in moleculas:
+    cols = st.columns([2, 1, 1, 1])
+
+    with cols[0]:
+        st.write(molecula)
+    with cols[1]:
+        precos[molecula] = st.number_input(
+            f"Preço de {molecula}",
+            min_value=0.0,
+            value=5.0,
+            step=0.1,
+            key=f"preco_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+    with cols[2]:
+        consumos[molecula] = st.number_input(
+            f"Consumo de {molecula}",
+            min_value=0,
+            value=250,
+            step=1,
+            key=f"consumo_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+    with cols[3]:
+        diferenciais[molecula] = st.number_input(
+            f"Diferencial de {molecula}",
+            min_value=0.0,
+            value=0.0,
+            step=0.01,
+            key=f"diferencial_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
+
+# Fim do contêiner
+st.markdown('</div>', unsafe_allow_html=True)
 
     # Dados do Animal
     col1, col2 = st.columns(2)
