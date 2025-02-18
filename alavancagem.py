@@ -12,6 +12,8 @@ st.markdown("""
     <style>
     .main {
         background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
     .stTitle {
         color: #2c5282;
@@ -30,6 +32,11 @@ st.markdown("""
         color: #2f855a;
         font-size: 24px;
         font-weight: bold;
+    }
+    div[data-testid="stVerticalBlock"] {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
