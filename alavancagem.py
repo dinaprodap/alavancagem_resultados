@@ -200,7 +200,6 @@ with tab1:
 
 # Parâmetros principais em container separado
 st.markdown("---")
-st.markdown('<div class="parametros-container">', unsafe_allow_html=True)
 st.subheader("Parâmetros Principais")
 params_col1, params_col2, params_col3, params_col4 = st.columns(4)
 
@@ -213,7 +212,6 @@ with params_col3:
 with params_col4:
     agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
     st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Calcular valores base após entrada de dados
 base_arrobas = 7.49
