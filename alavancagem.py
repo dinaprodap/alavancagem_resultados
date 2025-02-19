@@ -7,33 +7,53 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado para a tela toda dentro de um quadrado arredondado
+# CSS personalizado
 st.markdown("""
     <style>
     .stApp {
         background-color: #002A3B;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
     }
-    .container {
+    .main {
         background-color: #f0f9ff;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 1200px;
-    }
-    .produto-container {
-        background-color: #e2e8f0;
         border-radius: 15px;
         padding: 20px;
-        margin: 20px 0;
+    }
+    .stTitle {
+        color: #2c5282;
+    }
+    .stHeader {
+        color: #234e52;
+    }
+    .metric-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 10px 0;
+    }
+    .metric-value {
+        color: #2f855a;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    div[data-testid="stVerticalBlock"] {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
+def metric_card(title, value, prefix="", suffix=""):
+    return f"""
+    <div style="background-color: white; padding: 10px; border-radius: 5px; 
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
+        <div style="font-size: 0.9em; color: #666;">{title}</div>
+        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
+            {prefix}{value:.2f}{suffix}
+        </div>
+    </div>
+    """
 
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
