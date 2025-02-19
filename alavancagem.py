@@ -44,7 +44,7 @@ st.markdown("""
     .diferencial-value {
         font-size: 20px;
         font-weight: bold;
-        color: #464646;
+        color: #464646ee;
         text-align: left;
     }
     </style>
