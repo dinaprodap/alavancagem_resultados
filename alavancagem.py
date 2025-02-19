@@ -90,7 +90,7 @@ with st.container():
     with col_headers[2]:
         st.markdown('<div class="produto-label">Consumo</div>', unsafe_allow_html=True)
     with col_headers[3]:
-        st.markdown('<div class="produto-label">Diferencial</div>', unsafe_allow_html=True)
+        st.markdown('<div class="produto-label">Custo (R$/cab/dia)</div>', unsafe_allow_html=True)
     
     # Inputs para cada molécula
     for molecula in moleculas:
@@ -109,19 +109,21 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[2]:
+            valor_consumo = 250 if molecula == "Molecula 1" else (290 if molecula == "Molecula 2" else 260)
             consumos[molecula] = st.number_input(
                 f"Consumo de {molecula}",
                 min_value=0,
-                value=250,
+                value=valor_consumo,
                 step=1,
                 key=f"consumo_tabela_{molecula}",
                 label_visibility="collapsed"
             )
         with cols[3]:
+            valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
             diferenciais[molecula] = st.number_input(
-                f"Diferencial de {molecula}",
+                f"Custo de {molecula}",
                 min_value=0.0,
-                value=1.27,
+                value=valor_custo,
                 step=0.01,
                 key=f"diferencial_tabela_{molecula}",
                 label_visibility="collapsed"
