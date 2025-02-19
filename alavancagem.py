@@ -7,16 +7,23 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado
+# CSS personalizado para a tela toda dentro de um quadrado arredondado
 st.markdown("""
     <style>
     .stApp {
         background-color: #002A3B;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
-    .main {
+    .container {
         background-color: #f0f9ff;
-        border-radius: 15px;
-        padding: 20px;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 1200px;
     }
     .produto-container {
         background-color: #e2e8f0;
@@ -24,33 +31,17 @@ st.markdown("""
         padding: 20px;
         margin: 20px 0;
     }
-    .produto-header {
-        background-color: white;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    .produto-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 15px;
-        padding: 10px;
-    }
-    .produto-label {
-        font-weight: bold;
-        color: #333;
-        padding: 8px 0;
-    }
-    .input-field {
-        background-color: white;
-        padding: 10px;
-        border-radius: 8px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
+# Início do layout dentro do quadrado arredondado
+st.markdown('<div class="container">', unsafe_allow_html=True)
+
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
+
+# Fecha o container arredondado
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Definir variáveis globais
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
