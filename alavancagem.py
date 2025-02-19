@@ -183,11 +183,19 @@ with tab1:
     
     with col1:
         st.subheader("Dados do Animal")
-        consumo_pv = st.number_input("Consumo (%PV) - Molécula 1*", min_value=0.0, value=2.31, step=0.0001)
-        consumo_pv_mol2 = consumo_pv * 1.045
-        consumo_pv_mol3 = consumo_pv_mol2
-        st.markdown(f"Consumo (%PV) - Molécula 2: {consumo_pv_mol2:.4f}")
-        st.markdown(f"Consumo (%PV) - Molécula 3: {consumo_pv_mol3:.4f}")
+        
+        # Criar 3 colunas para os consumos
+        cons_col1, cons_col2, cons_col3 = st.columns(3)
+        
+        with cons_col1:
+            consumo_pv = st.number_input("Consumo (%PV) - M1*", min_value=0.0, value=2.31, step=0.0001)
+        with cons_col2:
+            consumo_pv_mol2 = consumo_pv * 1.045
+            st.metric("Consumo (%PV) - M2", f"{consumo_pv_mol2:.4f}")
+        with cons_col3:
+            consumo_pv_mol3 = consumo_pv_mol2
+            st.metric("Consumo (%PV) - M3", f"{consumo_pv_mol3:.4f}")
+            
         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
         pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
         gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
