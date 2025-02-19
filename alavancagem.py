@@ -231,10 +231,30 @@ with tab2:
     # Dicionário para armazenar os resultados
     resultados = {}
     
+    # Calcular rendimentos para cada molécula
+    rendimentos = {
+        "Molecula 1": rendimento_carcaca,
+        "Molecula 2": rendimento_carcaca * 1.009,
+        "Molecula 3": rendimento_carcaca * 1.0264
+    }
+
+    # Calcular GMDs e pesos finais
+    gmds = {
+        "Molecula 1": gmd,
+        "Molecula 2": 1.515,
+        "Molecula 3": 1.76
+    }
+
+    pesos_finais = {
+        "Molecula 1": pv_final,
+        "Molecula 2": pv_inicial + (gmds["Molecula 2"] * 110),
+        "Molecula 3": pv_inicial + (gmds["Molecula 3"] * 110)
+    }
+
     # Calcular resultados para cada molécula
     for idx, molecula in enumerate(moleculas):
-        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pv_final)
-        pv_final_arroba = calcular_pv_final_arroba(pv_final, rendimento_carcaca)
+        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pesos_finais[molecula])
+        pv_final_arroba = (pesos_finais[molecula] * rendimentos[molecula]/100) / 15
         
         base_resultados = {
             "consumo_ms": consumo_ms,
@@ -246,7 +266,11 @@ with tab2:
             )
         }
         
+        # Calcular resultado com ágio para cada molécula
+        resultado_atual = (pv_final_arroba * valor_venda_arroba) - custeio * 110 - agio_animal_magro
+        
         if idx == 0:
+            base_resultado = resultado_atual  # Armazenar o resultado da primeira molécula como base
             resultados[molecula] = {
                 **base_resultados,
                 "incremento_lucro": 0,
@@ -263,13 +287,16 @@ with tab2:
                 custeio
             )
             
-            arrobas = 8.30 if idx == 1 else 8.93
-            resultado = 1000.29 if idx == 1 else 1161.69
-            custo = 1820.09 if idx == 1 else 1874.33
+            arrobas = pv_final_arroba
+            resultado = resultado_atual
+            custo = custeio_atual * 110
+            
+            # Cálculo do incremento do lucro com a nova lógica
+            incremento = (resultado/base_resultado - 1) * -1 if base_resultado < 0 else resultado/base_resultado - 1
             
             resultados[molecula] = {
                 **base_resultados,
-                "incremento_lucro": ((resultado/base_resultado - 1) * 100),
+                "incremento_lucro": incremento * 100,  # Convertendo para percentual
                 "arrobas_adicionais": arrobas - base_arrobas,
                 "receita_adicional": (arrobas - base_arrobas) * valor_venda_arroba,
                 "custo_adicional": custo - base_custo,
