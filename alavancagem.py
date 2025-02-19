@@ -195,7 +195,10 @@ with tab1:
         with cons_col3:
             consumo_pv_mol3 = consumo_pv_mol2
             st.metric("Consumo (%PV) - Molécula 3", f"{consumo_pv_mol3:.4f}")
-            
+
+        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+
         # Criar 3 colunas para peso vivo inicial e finais
         pv_col1, pv_col2, pv_col3 = st.columns(3)
         
@@ -217,8 +220,7 @@ with tab1:
             
         pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
         st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
-        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
-        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+        
 
         # Calcular dias de confinamento para Molécula 1
         dias = (pv_final - pv_inicial) / gmd
