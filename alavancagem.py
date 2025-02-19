@@ -18,18 +18,28 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
-    /* Inputs com tom de cinza mais escuro */
-    div[data-baseweb="input"] {
-        background-color: #d1d1d1 !important;
+    .stTitle {
+        color: #2c5282;
     }
-    div[data-baseweb="select"] {
-        background-color: #d1d1d1 !important;
+    .stHeader {
+        color: #234e52;
     }
-    div[data-baseweb="number-input"] {
-        background-color: #d1d1d1 !important;
+    .metric-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 10px 0;
     }
-    .stNumberInput > div > div > input {
-        background-color: #d1d1d1 !important;
+    .metric-value {
+        color: #2f855a;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    div[data-testid="stVerticalBlock"] {
+        background-color: #f0f9ff;
+        border-radius: 15px;
+        padding: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
