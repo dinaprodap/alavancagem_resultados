@@ -92,7 +92,7 @@ with st.container():
             precos[molecula] = st.number_input(
                 f"Preço de {molecula}",
                 min_value=0.0,
-                value=4.98,
+                value=5.0,
                 step=0.1,
                 key=f"preco_tabela_{molecula}",
                 label_visibility="collapsed"
@@ -110,7 +110,7 @@ with st.container():
             diferenciais[molecula] = st.number_input(
                 f"Diferencial de {molecula}",
                 min_value=0.0,
-                value=1.23,
+                value=0.0,
                 step=0.01,
                 key=f"diferencial_tabela_{molecula}",
                 label_visibility="collapsed"
