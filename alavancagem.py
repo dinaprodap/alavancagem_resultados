@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 # Configuração da página
 st.set_page_config(
@@ -146,17 +147,6 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
 
-def metric_card(title, value, prefix="", suffix=""):
-    return f"""
-    <div style="background-color: white; padding: 10px; border-radius: 5px; 
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 5px 0;">
-        <div style="font-size: 0.9em; color: #666;">{title}</div>
-        <div style="font-size: 1.1em; color: #2f855a; font-weight: bold;">
-            {prefix}{value:.2f}{suffix}
-        </div>
-    </div>
-    """
-
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
 
@@ -175,6 +165,12 @@ def calcular_gdc(peso_final, rendimento_carcaca, peso_inicial, dias):
 def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
     return ((peso_final * rendimento/100)/15) - (peso_inicial/30)
 
+def calcular_rentabilidade_periodo(resultado, valor_arroba, peso_final_arroba):
+    return resultado/(valor_arroba * peso_final_arroba)
+
+def calcular_rentabilidade_mensal(rentabilidade_periodo, dias):
+    return ((1 + rentabilidade_periodo)**(1/(dias/30.4))) - 1
+
 # Organização em abas
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
@@ -186,7 +182,6 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-       
         st.subheader("Dados do Animal")
         consumo_pv = st.number_input("Consumo (%PV)*", min_value=0.0, value=0.0231, step=0.0001)
         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
@@ -209,31 +204,84 @@ with params_col4:
     agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
     st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
 
-# Calcular valores base após entrada de dados
-base_arrobas = 7.49
-base_resultado = 903.27
-base_custo = 1644.10
+# Calcular valores para cada molécula
+resultados = {}
 
-# Calcular arrobas_values após ter todas as variáveis necessárias
-arrobas_values = {
-    "Molecula 1": calcular_arrobas_produzidas(pv_final, rendimento_carcaca, pv_inicial),
-    "Molecula 2": calcular_arrobas_produzidas(576.75, 55.38, pv_inicial),
-    "Molecula 3": calcular_arrobas_produzidas(583.86, 56.34, pv_inicial)
-}
+for idx, molecula in enumerate(moleculas):
+    # Cálculos básicos
+    if idx == 0:  # Molécula 1
+        consumo_pv_atual = consumo_pv
+        peso_final_atual = pv_final
+        gmd_atual = gmd
+        rendimento_atual = rendimento_carcaca
+    elif idx == 1:  # Molécula 2
+        consumo_pv_atual = consumo_pv * 1.045
+        gmd_atual = gmd * 1.077 * 1.02
+        rendimento_atual = rendimento_carcaca * 1.009
+    else:  # Molécula 3
+        consumo_pv_atual = consumo_pv * 1.045  # Mesmo da Molécula 2
+        gmd_atual = gmd * 1.118 * 1.02
+        rendimento_atual = rendimento_carcaca * 1.0264
+    
+    # Cálculos derivados
+    dias = (pv_final - pv_inicial) / gmd_atual if idx == 0 else resultados["Molecula 1"]["dias"]
+    peso_final_atual = pv_inicial + (gmd_atual * dias) if idx > 0 else pv_final
+    
+    consumo_ms = calcular_consumo_ms(consumo_pv_atual, pv_inicial, peso_final_atual)
+    arrobas = calcular_arrobas_produzidas(peso_final_atual, rendimento_atual, pv_inicial)
+    
+    # Cálculos financeiros
+    custeio_atual = custeio if idx == 0 else (consumo_ms / resultados["Molecula 1"]["consumo_ms"]) * custeio
+    diferencial_tec = 0 if idx == 0 else diferenciais[molecula]
+    custeio_final = custeio_atual + diferencial_tec
+    
+    custo_periodo = custeio_final * dias
+    valor_arrobas = valor_venda_arroba * arrobas
+    custo_animal_magro = (valor_venda_arroba * (1 + agio_percentual/100)) * (pv_inicial/30)
+    
+    resultado = valor_arrobas - custo_periodo - custo_animal_magro
+    
+    # Armazenar resultados
+    resultados[molecula] = {
+        "consumo_pv": consumo_pv_atual,
+        "consumo_ms": consumo_ms,
+        "peso_final": peso_final_atual,
+        "gmd": gmd_atual,
+        "dias": dias,
+        "rendimento": rendimento_atual,
+        "arrobas": arrobas,
+        "custeio": custeio_atual,
+        "custeio_final": custeio_final,
+        "resultado": resultado,
+        "rentabilidade_periodo": calcular_rentabilidade_periodo(resultado, valor_venda_arroba, peso_final_atual),
+        "rentabilidade_mensal": calcular_rentabilidade_mensal(
+            calcular_rentabilidade_periodo(resultado, valor_venda_arroba, peso_final_atual),
+            dias
+        )
+    }
+    
+    if idx > 0:
+        resultados[molecula].update({
+            "incremento_lucro": ((resultado/resultados["Molecula 1"]["resultado"] - 1) * 100),
+            "arrobas_adicionais": arrobas - resultados["Molecula 1"]["arrobas"],
+            "receita_adicional": (arrobas - resultados["Molecula 1"]["arrobas"]) * valor_venda_arroba,
+            "custo_adicional": custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias,
+            "incremento_lucro_adicional": resultado - resultados["Molecula 1"]["resultado"],
+            "custo_arroba_adicional": (custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias) / 
+                                    (arrobas - resultados["Molecula 1"]["arrobas"])
+        })
 
 # Insights principais
 insight_col1, insight_col2, insight_col3, insight_col4 = st.columns(4)
 
 with insight_col1:
-    st.metric("Dias de Confinamento", "110")
+    st.metric("Dias de Confinamento", f"{resultados['Molecula 1']['dias']:.0f}")
 
 with insight_col2:
-    gdc = calcular_gdc(pv_final, rendimento_carcaca, pv_inicial, 110)
-    st.metric("GDC (KG/DIA)", f"{gdc:.3f}")
+    st.metric("GDC (KG/DIA)", f"{calcular_gdc(pv_final, rendimento_carcaca, pv_inicial, resultados['Molecula 1']['dias']):.3f}")
 
 with insight_col3:
-    arrobas = calcular_arrobas_produzidas(pv_final, rendimento_carcaca, pv_inicial)
-    st.metric("Arrobas Produzidas (@/Cab)", f"{arrobas:.2f}")
+    st.metric("Arrobas Produzidas (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
 
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
@@ -245,68 +293,23 @@ with tab2:
     # Grid de resultados
     col1, col2, col3 = st.columns(3)
     
-    # Dicionário para armazenar os resultados
-    resultados = {}
-    
-    # Calcular resultados para cada molécula
-    for idx, molecula in enumerate(moleculas):
-        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pv_final)
-        pv_final_arroba = calcular_pv_final_arroba(pv_final, rendimento_carcaca)
-        
-        base_resultados = {
-            "consumo_ms": consumo_ms,
-            "pv_final_arroba": pv_final_arroba,
-            "eficiencia_biologica": calcular_eficiencia_biologica(
-                consumo_ms,
-                110,
-                arrobas_values[molecula]
-            )
-        }
-        
-        if idx == 0:
-            resultados[molecula] = {
-                **base_resultados,
-                "incremento_lucro": 0,
-                "arrobas_adicionais": 0,
-                "receita_adicional": 0,
-                "custo_adicional": 0,
-                "incremento_lucro_adicional": 0,
-                "custo_arroba_adicional": 0
-            }
-        else:
-            custeio_atual = calcular_custeio(
-                consumo_ms,
-                resultados["Molecula 1"]["consumo_ms"],
-                custeio
-            )
-            
-            arrobas = 8.30 if idx == 1 else 8.93
-            resultado = 1000.29 if idx == 1 else 1161.69
-            custo = 1820.09 if idx == 1 else 1874.33
-            
-            resultados[molecula] = {
-                **base_resultados,
-                "incremento_lucro": ((resultado/base_resultado - 1) * 100),
-                "arrobas_adicionais": arrobas - base_arrobas,
-                "receita_adicional": (arrobas - base_arrobas) * valor_venda_arroba,
-                "custo_adicional": custo - base_custo,
-                "incremento_lucro_adicional": resultado - base_resultado,
-                "custo_arroba_adicional": (custo - base_custo) / (arrobas - base_arrobas)
-            }
-
     # Exibir resultados
     for idx, (molecula, res) in enumerate(resultados.items()):
         with [col1, col2, col3][idx]:
             st.markdown(f"#### {molecula}")
-            st.markdown(metric_card("Incremento do Lucro", res["incremento_lucro"], suffix="%"), unsafe_allow_html=True)
-            st.markdown(metric_card("Arrobas Adicionais", res["arrobas_adicionais"], suffix=" @/cab"), unsafe_allow_html=True)
-            st.markdown(metric_card("Receita Adicional", res["receita_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Custo Adicional", res["custo_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Incremento Lucro", res["incremento_lucro_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            st.markdown(metric_card("Custo @Adicional", res["custo_arroba_adicional"], prefix="R$ "), unsafe_allow_html=True)
+            if idx > 0:
+                st.markdown(metric_card("Incremento do Lucro", res["incremento_lucro"], suffix="%"), unsafe_allow_html=True)
+                st.markdown(metric_card("Arrobas Adicionais", res["arrobas_adicionais"], suffix=" @/cab"), unsafe_allow_html=True)
+                st.markdown(metric_card("Receita Adicional", res["receita_adicional"], prefix="R$ "), unsafe_allow_html=True)
+                st.markdown(metric_card("Custo Adicional", res["custo_adicional"], prefix="R$ "), unsafe_allow_html=True)
+                st.markdown(metric_card("Incremento Lucro", res["incremento_lucro_adicional"], prefix="R$ "), unsafe_allow_html=True)
+                st.markdown(metric_card("Custo @Adicional", res["custo_arroba_adicional"], prefix="R$ "), unsafe_allow_html=True)
+            
             st.markdown(metric_card("Consumo MS", res["consumo_ms"], suffix=" Kg/Cab/dia"), unsafe_allow_html=True)
-            st.markdown(metric_card("PV Final", res["pv_final_arroba"], suffix=" @/Cab"), unsafe_allow_html=True)
-            st.markdown(metric_card("Eficiência Biológica", res["eficiencia_biologica"], suffix=" kgMS/@"), unsafe_allow_html=True)
+            st.markdown(metric_card("PV Final", res["peso_final"]/15, suffix=" @/Cab"), unsafe_allow_html=True)
+            st.markdown(metric_card("Eficiência Biológica", (res["consumo_ms"] * res["dias"])/res["arrobas"], suffix=" kgMS/@"), unsafe_allow_html=True)
+            st.markdown(metric_card("Rentabilidade Período", res["rentabilidade_periodo"]*100, suffix="%"), unsafe_allow_html=True)
+            st.markdown(metric_card("Rentabilidade Mensal", res["rentabilidade_mensal"]*100, suffix="%"), unsafe_allow_html=True)
 
     # Parâmetros principais
     st.markdown("---")
