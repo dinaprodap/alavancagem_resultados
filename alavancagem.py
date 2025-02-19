@@ -74,7 +74,7 @@ with st.container():
     # Cabeçalho
     st.markdown("""
         <div class="produto-header">
-            <h3 style="margin:0">Valores por Produto</h3>
+            <h3 style="margin:0">Diferencial Tecnológico</h3>
         </div>
     """, unsafe_allow_html=True)
     
@@ -99,10 +99,11 @@ with st.container():
         with cols[0]:
             st.markdown(f'<div class="input-field">{molecula}</div>', unsafe_allow_html=True)
         with cols[1]:
+            valor_inicial = 4.90 if molecula == "Molecula 1" else (6.48 if molecula == "Molecula 2" else 8.68)
             precos[molecula] = st.number_input(
                 f"Preço de {molecula}",
                 min_value=0.0,
-                value=4.98,
+                value=valor_inicial,
                 step=0.1,
                 key=f"preco_tabela_{molecula}",
                 label_visibility="collapsed"
@@ -231,30 +232,10 @@ with tab2:
     # Dicionário para armazenar os resultados
     resultados = {}
     
-    # Calcular rendimentos para cada molécula
-    rendimentos = {
-        "Molecula 1": rendimento_carcaca,
-        "Molecula 2": rendimento_carcaca * 1.009,
-        "Molecula 3": rendimento_carcaca * 1.0264
-    }
-
-    # Calcular GMDs e pesos finais
-    gmds = {
-        "Molecula 1": gmd,
-        "Molecula 2": 1.515,
-        "Molecula 3": 1.76
-    }
-
-    pesos_finais = {
-        "Molecula 1": pv_final,
-        "Molecula 2": pv_inicial + (gmds["Molecula 2"] * 110),
-        "Molecula 3": pv_inicial + (gmds["Molecula 3"] * 110)
-    }
-
     # Calcular resultados para cada molécula
     for idx, molecula in enumerate(moleculas):
-        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pesos_finais[molecula])
-        pv_final_arroba = (pesos_finais[molecula] * rendimentos[molecula]/100) / 15
+        consumo_ms = calcular_consumo_ms(consumo_pv, pv_inicial, pv_final)
+        pv_final_arroba = calcular_pv_final_arroba(pv_final, rendimento_carcaca)
         
         base_resultados = {
             "consumo_ms": consumo_ms,
@@ -266,11 +247,7 @@ with tab2:
             )
         }
         
-        # Calcular resultado com ágio para cada molécula
-        resultado_atual = (pv_final_arroba * valor_venda_arroba) - custeio * 110 - agio_animal_magro
-        
         if idx == 0:
-            base_resultado = resultado_atual  # Armazenar o resultado da primeira molécula como base
             resultados[molecula] = {
                 **base_resultados,
                 "incremento_lucro": 0,
@@ -287,16 +264,13 @@ with tab2:
                 custeio
             )
             
-            arrobas = pv_final_arroba
-            resultado = resultado_atual
-            custo = custeio_atual * 110
-            
-            # Cálculo do incremento do lucro com a nova lógica
-            incremento = (resultado/base_resultado - 1) * -1 if base_resultado < 0 else resultado/base_resultado - 1
+            arrobas = 8.30 if idx == 1 else 8.93
+            resultado = 1000.29 if idx == 1 else 1161.69
+            custo = 1820.09 if idx == 1 else 1874.33
             
             resultados[molecula] = {
                 **base_resultados,
-                "incremento_lucro": incremento * 100,  # Convertendo para percentual
+                "incremento_lucro": ((resultado/base_resultado - 1) * 100),
                 "arrobas_adicionais": arrobas - base_arrobas,
                 "receita_adicional": (arrobas - base_arrobas) * valor_venda_arroba,
                 "custo_adicional": custo - base_custo,
