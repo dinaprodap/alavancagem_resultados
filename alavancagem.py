@@ -152,9 +152,6 @@ def calcular_gdc(peso_final, rendimento_carcaca, peso_inicial, dias):
 def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
     return ((peso_final * rendimento/100)/15) - (peso_inicial/30)
 
-# Título da aplicação
-st.title("🚀 Calculadora de Alavancagem")
-
 # Organização em abas
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
