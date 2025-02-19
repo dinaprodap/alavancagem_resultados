@@ -82,7 +82,7 @@ with st.container():
     st.markdown('<div class="produto-grid">', unsafe_allow_html=True)
     
     # Cabeçalhos das colunas
-    col_headers = st.columns([2, 1, 1, 1])
+    col_headers = st.columns([2, 1, 1, 1, 1])
     with col_headers[0]:
         st.markdown('<div class="produto-label">Molécula</div>', unsafe_allow_html=True)
     with col_headers[1]:
@@ -91,10 +91,12 @@ with st.container():
         st.markdown('<div class="produto-label">Consumo</div>', unsafe_allow_html=True)
     with col_headers[3]:
         st.markdown('<div class="produto-label">Custo (R$/cab/dia)</div>', unsafe_allow_html=True)
+    with col_headers[4]:
+        st.markdown('<div class="produto-label">Diferencial Tecnológico (R$/cab/dia)</div>', unsafe_allow_html=True)
     
     # Inputs para cada molécula
     for molecula in moleculas:
-        cols = st.columns([2, 1, 1, 1])
+        cols = st.columns([2, 1, 1, 1, 1])
         
         with cols[0]:
             st.markdown(f'<div class="input-field">{molecula}</div>', unsafe_allow_html=True)
@@ -128,6 +130,12 @@ with st.container():
                 key=f"diferencial_tabela_{molecula}",
                 label_visibility="collapsed"
             )
+        with cols[4]:
+            if molecula == "Molecula 1":
+                diferencial_tecnologico = 0.00
+            else:
+                diferencial_tecnologico = diferenciais[molecula] - diferenciais["Molecula 1"]
+            st.markdown(f'<div class="input-field">{diferencial_tecnologico:.2f}</div>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
