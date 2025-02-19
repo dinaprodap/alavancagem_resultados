@@ -201,16 +201,22 @@ with tab1:
         
         with pv_col1:
             pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+            st.metric("PV Inicial (@/Cab)", f"{pv_inicial/30:.2f}")
         with pv_col2:
             gmd_mol2 = gmd * 1.077 * 1.02 if 'gmd' in locals() else 0
             pv_final_mol2 = pv_inicial + (gmd_mol2 * dias) if 'dias' in locals() else 0
             st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}" if 'pv_final_mol2' in locals() else "0.0")
+            if 'pv_final_mol2' in locals():
+                st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
         with pv_col3:
             gmd_mol3 = gmd * 1.118 * 1.02 if 'gmd' in locals() else 0
             pv_final_mol3 = pv_inicial + (gmd_mol3 * dias) if 'dias' in locals() else 0
             st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}" if 'pv_final_mol3' in locals() else "0.0")
+            if 'pv_final_mol3' in locals():
+                st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
             
         pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+        st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
         gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
 
