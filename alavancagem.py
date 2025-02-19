@@ -34,8 +34,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Início do layout dentro do quadrado arredondado
-st.markdown('<div class="container">', unsafe_allow_html=True)
 
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
