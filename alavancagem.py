@@ -199,40 +199,40 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-    st.subheader("Dados do Animal")
-    
-    # Inputs básicos
-    pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
-    pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
-    gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
-    rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-    
-    # Calcular dias com base na Molécula 1
-    dias = (pv_final - pv_inicial) / gmd
-    
-    # Calcular pesos finais para cada molécula
-    pv_final_mol2 = calcular_peso_final_molecula(pv_inicial, gmd, dias, "Molecula 2")
-    pv_final_mol3 = calcular_peso_final_molecula(pv_inicial, gmd, dias, "Molecula 3")
-    
-    # Exibir resultados em colunas
-    pv_col1, pv_col2, pv_col3 = st.columns(3)
-    
-    with pv_col1:
-        st.metric("GMD (kg/dia)", f"{gmd:.3f}")
-        st.metric("PV Final (Kg/Cab)", f"{pv_final:.1f}")
-        st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
-    
-    with pv_col2:
-        gmd_mol2 = gmd * 1.077 * 1.02
-        st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
-        st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
-        st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
-    
-    with pv_col3:
-        gmd_mol3 = gmd * 1.118 * 1.02
-        st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
-        st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
-        st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
+        st.subheader("Dados do Animal")
+        
+        # Inputs básicos
+        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+        pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
+        
+        # Calcular dias com base na Molécula 1
+        dias = (pv_final - pv_inicial) / gmd
+        
+        # Calcular pesos finais para cada molécula
+        pv_final_mol2 = calcular_peso_final_molecula(pv_inicial, gmd, dias, "Molecula 2")
+        pv_final_mol3 = calcular_peso_final_molecula(pv_inicial, gmd, dias, "Molecula 3")
+        
+        # Exibir resultados em colunas
+        pv_col1, pv_col2, pv_col3 = st.columns(3)
+        
+        with pv_col1:
+            st.metric("GMD (kg/dia)", f"{gmd:.3f}")
+            st.metric("PV Final (Kg/Cab)", f"{pv_final:.1f}")
+            st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
+        
+        with pv_col2:
+            gmd_mol2 = gmd * 1.077 * 1.02
+            st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
+            st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
+            st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
+        
+        with pv_col3:
+            gmd_mol3 = gmd * 1.118 * 1.02
+            st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
+            st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
+            st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
