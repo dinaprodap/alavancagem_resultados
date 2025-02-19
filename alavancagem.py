@@ -52,9 +52,6 @@ st.markdown("""
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
-# Organização em abas
-tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
-
 # Definir variáveis globais
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
