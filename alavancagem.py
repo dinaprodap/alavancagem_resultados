@@ -196,7 +196,7 @@ with tab1:
             consumo_pv_mol3 = consumo_pv_mol2
             st.metric("Consumo (%PV) - Molécula 3", f"{consumo_pv_mol3:.4f}")
             
-         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
+        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
         pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
         gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
