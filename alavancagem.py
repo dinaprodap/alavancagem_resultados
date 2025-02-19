@@ -203,7 +203,19 @@ with tab1:
         
         # Inputs básicos
         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
-        gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+        
+        # Criar linha para GMD
+        gmd_col1, gmd_col2, gmd_col3 = st.columns(3)
+        
+        with gmd_col1:
+            gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
+        with gmd_col2:
+            gmd_mol2 = gmd * 1.077 * 1.02
+            st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
+        with gmd_col3:
+            gmd_mol3 = gmd * 1.118 * 1.02
+            st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
+        
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
         
         # Criar linha para pesos finais
@@ -219,7 +231,6 @@ with tab1:
         
         with pv_final_col2:
             st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
-        
         with pv_final_col3:
             st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
         
@@ -232,18 +243,6 @@ with tab1:
             st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
         with arroba_col3:
             st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
-        
-        # Exibir GMDs
-        gmd_col1, gmd_col2, gmd_col3 = st.columns(3)
-        
-        with gmd_col1:
-            st.metric("GMD (kg/dia)", f"{gmd:.3f}")
-        with gmd_col2:
-            gmd_mol2 = gmd * 1.077 * 1.02
-            st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
-        with gmd_col3:
-            gmd_mol3 = gmd * 1.118 * 1.02
-            st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
