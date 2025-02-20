@@ -26,10 +26,10 @@ st.markdown("""
     }
     .metric-card {
         background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        margin: 5px 0;
     }
     .metric-value {
         color: #2f855a;
@@ -196,8 +196,17 @@ with tab1:
         with arroba_col3:
             st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
 
-    # Entrada de dados para o consumo em %PV da Molecula 1
-    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+    # Criar linha para consumo em %PV
+    consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
+
+    with consumo_pv_col1:
+        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+
+    with consumo_pv_col2:
+        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv_mol1 * 1.045 * 100:.2f}%")
+
+    with consumo_pv_col3:
+        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv_mol1 * 1.045 * 100:.2f}%")
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
@@ -212,24 +221,6 @@ with tab1:
         "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final_mol2]),
         "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final_mol3])
     }
-
-    # Exibir consumo em %PV e MS após PV final
-    consumo_col1, consumo_col2, consumo_col3 = st.columns(3)
-
-    with consumo_col1:
-        st.subheader("Molecula 1")
-        st.write(f"Consumo (%PV): {consumo_pv['Molecula 1']*100:.2f}%")
-        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 1']:.2f}")
-
-    with consumo_col2:
-        st.subheader("Molecula 2")
-        st.write(f"Consumo (%PV): {consumo_pv['Molecula 2']*100:.2f}%")
-        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 2']:.2f}")
-
-    with consumo_col3:
-        st.subheader("Molecula 3")
-        st.write(f"Consumo (%PV): {consumo_pv['Molecula 3']*100:.2f}%")
-        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 3']:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
