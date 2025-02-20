@@ -147,6 +147,24 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
 
+# Entrada de dados para o consumo em %PV da Molecula 1
+consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+
+# Definir o consumo em porcentagem do peso vivo para cada molécula
+consumo_pv = {
+    "Molecula 1": consumo_pv_mol1,
+    "Molecula 2": consumo_pv_mol1 * 1.045,
+    "Molecula 3": consumo_pv_mol1 * 1.045
+}
+
+# Calcular o consumo MS (Kg/Cab/dia) para cada molécula
+# Substitua valor1, valor2, etc., pelos valores reais
+consumo_ms = {
+    "Molecula 1": consumo_pv["Molecula 1"] * np.mean([250, 260]),  # Exemplo de valores
+    "Molecula 2": consumo_pv["Molecula 2"] * np.mean([290, 300]),
+    "Molecula 3": consumo_pv["Molecula 3"] * np.mean([260, 270])
+}
+
 def calcular_consumo_ms(consumo_pv, pv_inicial, pv_final):
     return consumo_pv * ((pv_inicial + pv_final) / 2)
 
@@ -188,6 +206,7 @@ def calcular_peso_final_molecula(peso_inicial, gmd_base, dias, molecula):
 
 def calcular_arrobas_produzidas(peso_final, rendimento, peso_inicial):
     return ((peso_final * rendimento/100)/15) - (peso_inicial/30)
+
 # Organização em abas
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
@@ -264,17 +283,17 @@ resultados = {}
 
 for idx, molecula in enumerate(moleculas):
     # Cálculos básicos
+    consumo_pv_atual = consumo_pv[molecula]
+    consumo_ms_atual = consumo_ms[molecula]
+    
     if idx == 0:  # Molécula 1
-        consumo_pv_atual = consumo_pv
         peso_final_atual = pv_final
         gmd_atual = gmd
         rendimento_atual = rendimento_carcaca
     elif idx == 1:  # Molécula 2
-        consumo_pv_atual = consumo_pv * 1.045
         gmd_atual = gmd * 1.077 * 1.02
         rendimento_atual = rendimento_carcaca * 1.009
     else:  # Molécula 3
-        consumo_pv_atual = consumo_pv * 1.045  # Mesmo da Molécula 2
         gmd_atual = gmd * 1.118 * 1.02
         rendimento_atual = rendimento_carcaca * 1.0264
     
