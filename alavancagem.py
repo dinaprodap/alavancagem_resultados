@@ -191,37 +191,9 @@ with tab1:
 
     # Criar linha para consumo em %PV
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
-        
-    with consumo_pv_col1:
-        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01, key="consumo_pv_mol1") / 100
     
-    # Definir o consumo em porcentagem do peso vivo para cada molécula
-    consumo_pv = {
-        "Molecula 1": consumo_pv_mol1,
-        "Molecula 2": consumo_pv_mol1 * 1.045,
-        "Molecula 3": consumo_pv_mol1 * 1.045
-    }
-    
-    # Exibir consumo em %PV
     with consumo_pv_col1:
-        st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
-    with consumo_pv_col2:
-        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
-    with consumo_pv_col3:
-        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['Molecula 3']*100:.2f}%")
-        
-    # Criar linha para exibição em arrobas
-    arroba_col1, arroba_col2, arroba_col3 = st.columns(3)
-        
-    with arroba_col1:
-        st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
-    with arroba_col2:
-        st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
-    with arroba_col3:
-        st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
-
-    # Entrada de dados para o consumo em %PV da Molecula 1
-    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01, key="consumo_pv_mol1_2") / 100
+        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
@@ -231,8 +203,6 @@ with tab1:
     }
 
     # Exibir consumo em %PV
-    consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
-    
     with consumo_pv_col1:
         st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
     with consumo_pv_col2:
