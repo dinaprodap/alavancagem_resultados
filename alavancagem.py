@@ -64,9 +64,6 @@ def metric_card(title, value, prefix="", suffix=""):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
-# Fecha o container arredondado
-st.markdown('</div>', unsafe_allow_html=True)
-
 # Definir variáveis globais
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
@@ -208,6 +205,31 @@ with tab1:
         "Molecula 2": consumo_pv_mol1 * 1.045,
         "Molecula 3": consumo_pv_mol1 * 1.045
     }
+
+    # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
+    consumo_ms = {
+        "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
+        "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final_mol2]),
+        "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final_mol3])
+    }
+
+    # Exibir consumo em %PV e MS após PV final
+    consumo_col1, consumo_col2, consumo_col3 = st.columns(3)
+
+    with consumo_col1:
+        st.subheader("Molecula 1")
+        st.write(f"Consumo (%PV): {consumo_pv['Molecula 1']*100:.2f}%")
+        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 1']:.2f}")
+
+    with consumo_col2:
+        st.subheader("Molecula 2")
+        st.write(f"Consumo (%PV): {consumo_pv['Molecula 2']*100:.2f}%")
+        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 2']:.2f}")
+
+    with consumo_col3:
+        st.subheader("Molecula 3")
+        st.write(f"Consumo (%PV): {consumo_pv['Molecula 3']*100:.2f}%")
+        st.write(f"Consumo MS (Kg/Cab/dia): {consumo_ms['Molecula 3']:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
