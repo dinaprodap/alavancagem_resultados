@@ -193,7 +193,7 @@ with tab1:
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
         
     with consumo_pv_col1:
-        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01, key="consumo_pv_mol1") / 100
     
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
@@ -221,7 +221,7 @@ with tab1:
         st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
 
     # Entrada de dados para o consumo em %PV da Molecula 1
-    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01, key="consumo_pv_mol1_2") / 100
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
