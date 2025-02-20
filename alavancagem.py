@@ -117,15 +117,17 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[2]:
-            valor_consumo = 250 if molecula == "Molecula 1" else (290 if molecula == "Molecula 2" else 260)
-            consumos[molecula] = st.number_input(
-                f"Consumo de {molecula}",
-                min_value=0,
-                value=valor_consumo,
-                step=1,
-                key=f"consumo_tabela_{molecula}",
-                label_visibility="collapsed"
-            )
+            if molecula == "Molecula 1":
+                consumo_pv_mol1 = st.number_input(
+                    "Consumo (%PV) para Molecula 1",
+                    min_value=0.0,
+                    value=2.31,
+                    step=0.01,
+                    key="consumo_pv_mol1",
+                    label_visibility="collapsed"
+                ) / 100
+            else:
+                st.markdown(f'<div class="input-field">Consumo (%PV) Mol {molecula[-1]}</div>', unsafe_allow_html=True)
         with cols[3]:
             valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
             diferenciais[molecula] = st.number_input(
@@ -144,133 +146,7 @@ with st.container():
             st.markdown(f'<div class="diferencial-value">{diferencial_tecnologico:.2f}</div>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
-    st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-container
-
-# Organização em abas
-tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
-
-with tab1:
-    # Entrada de dados em colunas
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Dados do Animal")
-        
-        # Inputs básicos
-        pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
-        
-        # Criar linha para GMD
-        gmd_col1, gmd_col2, gmd_col3 = st.columns(3)
-        
-        with gmd_col1:
-            gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
-        with gmd_col2:
-            gmd_mol2 = gmd * 1.077 * 1.02
-            st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
-        with gmd_col3:
-            gmd_mol3 = gmd * 1.118 * 1.02
-            st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
-        
-        rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-        
-        # Criar linha para pesos finais
-        pv_final_col1, pv_final_col2, pv_final_col3 = st.columns(3)
-        
-        with pv_final_col1:
-            pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
-        
-        # Calcular dias e pesos finais das outras moléculas
-        dias = (pv_final - pv_inicial) / gmd
-        pv_final_mol2 = pv_inicial + (gmd_mol2 * dias)
-        pv_final_mol3 = pv_inicial + (gmd_mol3 * dias)
-        
-        with pv_final_col2:
-            st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
-        with pv_final_col3:
-            st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
-        
-        # Criar linha para exibição em arrobas
-        arroba_col1, arroba_col2, arroba_col3 = st.columns(3)
-        
-        with arroba_col1:
-            st.metric("PV Final (@/Cab)", f"{pv_final/30:.2f}")
-        with arroba_col2:
-            st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
-        with arroba_col3:
-            st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
-
-    # Entrada de dados para o consumo em %PV da Molecula 1
-    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
-
-    # Definir o consumo em porcentagem do peso vivo para cada molécula
-    consumo_pv = {
-        "Molecula 1": consumo_pv_mol1,
-        "Molecula 2": consumo_pv_mol1 * 1.045,
-        "Molecula 3": consumo_pv_mol1 * 1.045
-    }
-
-    # Exibir consumo em %PV
-    consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
-    
-    with consumo_pv_col1:
-        st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
-    with consumo_pv_col2:
-        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
-    with consumo_pv_col3:
-        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['Molecula 3']*100:.2f}%")
-
-    # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
-    consumo_ms = {
-        "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
-        "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final_mol2]),
-        "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final_mol3])
-    }
-
-    # Exibir consumo MS
-    consumo_ms_col1, consumo_ms_col2, consumo_ms_col3 = st.columns(3)
-    
-    with consumo_ms_col1:
-        st.metric("Consumo MS Mol 1 (Kg/Cab/dia)", f"{consumo_ms['Molecula 1']:.2f}")
-    with consumo_ms_col2:
-        st.metric("Consumo MS Mol 2 (Kg/Cab/dia)", f"{consumo_ms['Molecula 2']:.2f}")
-    with consumo_ms_col3:
-        st.metric("Consumo MS Mol 3 (Kg/Cab/dia)", f"{consumo_ms['Molecula 3']:.2f}")
-
-# Parâmetros principais em container separado
-st.markdown("---")
-st.subheader("Parâmetros Principais")
-params_col1, params_col2, params_col3, params_col4 = st.columns(4)
-
-with params_col1:
-    custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
-with params_col2:    
-    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
-with params_col3:
-    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
-with params_col4:
-    agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
-    st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
-
-# Calcular valores para cada molécula
-resultados = {}
-
-for idx, molecula in enumerate(moleculas):
-    # Cálculos básicos
-    consumo_pv_atual = consumo_pv[molecula]
-    
-    if idx == 0:  # Molécula 1
-        peso_final_atual = pv_final
-        gmd_atual = gmd
-        rendimento_atual = rendimento_carcaca
-    elif idx == 1:  # Molécula 2
-        peso_final_atual = pv_final_mol2
-        gmd_atual = gmd_mol2
-        rendimento_atual = rendimento_carcaca * 1.009
-    else:  # Molécula 3
-        peso_final_atual = pv_final_mol3
-        gmd_atual = gmd_mol3
-        rendimento_atual = rendimento_carcaca * 1.0264
-    
+    st.markdown('</...(3846 chars omitted)... 
     # Cálculos derivados
     dias = (peso_final_atual - pv_inicial) / gmd_atual
     consumo_ms = consumo_pv_atual * np.mean([pv_inicial, peso_final_atual])
