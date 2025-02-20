@@ -197,7 +197,7 @@ with tab1:
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
-        "Molecula 1": consumo_pv_mol1,
+      #  "Molecula 1": consumo_pv_mol1,
         "Molecula 2": consumo_pv_mol1 * 1.045,
         "Molecula 3": consumo_pv_mol1 * 1.045
     }
