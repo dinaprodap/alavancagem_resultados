@@ -197,14 +197,14 @@ with tab1:
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
-      #  "Molecula 1": consumo_pv_mol1,
+        "Molecula 1": consumo_pv_mol1,
         "Molecula 2": consumo_pv_mol1 * 1.045,
         "Molecula 3": consumo_pv_mol1 * 1.045
     }
 
     # Exibir consumo em %PV
-    with consumo_pv_col1:
-        st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
+   # with consumo_pv_col1:
+   #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
     with consumo_pv_col2:
         st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
     with consumo_pv_col3:
