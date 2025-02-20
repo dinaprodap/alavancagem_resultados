@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as np
+import numpy as np
 
 # Configuração da página
 st.set_page_config(
@@ -160,23 +160,6 @@ with tab1:
         pv_inicial = st.number_input("Peso Vivo Inicial (Kg/Cab)", min_value=0, value=390, step=1)
         pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
         
-        # Entrada de dados para o consumo em %PV da Molecula 1
-        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
-
-        # Definir o consumo em porcentagem do peso vivo para cada molécula
-        consumo_pv = {
-            "Molecula 1": consumo_pv_mol1,
-            "Molecula 2": consumo_pv_mol1 * 1.045,
-            "Molecula 3": consumo_pv_mol1 * 1.045
-        }
-
-        # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
-        consumo_ms = {
-            "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
-            "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final]),
-            "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final])
-        }
-        
         # Criar linha para GMD
         gmd_col1, gmd_col2, gmd_col3 = st.columns(3)
         
@@ -202,6 +185,23 @@ with tab1:
         with pv_final_col3:
             pv_final_mol3 = pv_final * 1.045
             st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
+
+# Entrada de dados para o consumo em %PV da Molecula 1
+consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+
+# Definir o consumo em porcentagem do peso vivo para cada molécula
+consumo_pv = {
+    "Molecula 1": consumo_pv_mol1,
+    "Molecula 2": consumo_pv_mol1 * 1.045,
+    "Molecula 3": consumo_pv_mol1 * 1.045
+}
+
+# Calcular o consumo MS (Kg/Cab/dia) para cada molécula
+consumo_ms = {
+    "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
+    "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final]),
+    "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final])
+}
 
 # Parâmetros principais em container separado
 st.markdown("---")
