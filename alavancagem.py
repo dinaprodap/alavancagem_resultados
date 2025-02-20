@@ -64,6 +64,9 @@ def metric_card(title, value, prefix="", suffix=""):
 # Título da aplicação
 st.title("🚀 Calculadora de Alavancagem")
 
+# Fecha o container arredondado
+st.markdown('</div>', unsafe_allow_html=True)
+
 # Definir variáveis globais
 moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 
@@ -196,17 +199,8 @@ with tab1:
         with arroba_col3:
             st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
 
-    # Criar linha para consumo em %PV
-    consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
-
-    with consumo_pv_col1:
-        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
-
-    with consumo_pv_col2:
-        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv_mol1 * 1.045 * 100:.2f}%")
-
-    with consumo_pv_col3:
-        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv_mol1 * 1.045 * 100:.2f}%")
+    # Entrada de dados para o consumo em %PV da Molecula 1
+    consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
@@ -215,12 +209,32 @@ with tab1:
         "Molecula 3": consumo_pv_mol1 * 1.045
     }
 
+    # Exibir consumo em %PV
+    consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
+    
+    with consumo_pv_col1:
+        st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
+    with consumo_pv_col2:
+        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
+    with consumo_pv_col3:
+        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['Molecula 3']*100:.2f}%")
+
     # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
     consumo_ms = {
         "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
         "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final_mol2]),
         "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final_mol3])
     }
+
+    # Exibir consumo MS
+    consumo_ms_col1, consumo_ms_col2, consumo_ms_col3 = st.columns(3)
+    
+    with consumo_ms_col1:
+        st.metric("Consumo MS Mol 1 (Kg/Cab/dia)", f"{consumo_ms['Molecula 1']:.2f}")
+    with consumo_ms_col2:
+        st.metric("Consumo MS Mol 2 (Kg/Cab/dia)", f"{consumo_ms['Molecula 2']:.2f}")
+    with consumo_ms_col3:
+        st.metric("Consumo MS Mol 3 (Kg/Cab/dia)", f"{consumo_ms['Molecula 3']:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
