@@ -276,7 +276,7 @@ with params_col3:
 custeio_final_col1, custeio_final_col2, custeio_final_col3 = st.columns(3)
 
 with custeio_final_col1:
-    custeio_final_mol1 = diferenciais["Molecula 1"] + custeio_mol1
+    custeio_final_mol1 = custeio_mol1
     st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
 with custeio_final_col2:
     custeio_final_mol2 = diferenciais["Molecula 2"] + custeio_mol2
