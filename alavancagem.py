@@ -332,7 +332,10 @@ with insight_col1:
     st.metric("Dias de Confinamento", f"{resultados['Molecula 1']['dias']:.0f}")
 
 with insight_col2:
-    st.metric("GDC (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
+    st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
+    st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['Molecula 2']['dias']:.3f}")
+    st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['Molecula 3']['dias']:.3f}")
+
 
 with insight_col3:
     st.metric("Arrobas Produzidas (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
