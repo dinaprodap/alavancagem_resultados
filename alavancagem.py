@@ -290,11 +290,11 @@ for idx, molecula in enumerate(moleculas):
     
     # Cálculos derivados
     dias = (peso_final_atual - pv_inicial) / gmd_atual
-    consumo_ms = consumo_pv_atual * np.mean([pv_inicial, peso_final_atual])
+    consumo_ms_atual = consumo_pv_atual * np.mean([pv_inicial, peso_final_atual])
     arrobas = ((peso_final_atual * rendimento_atual/100)/15) - (pv_inicial/30)
     
     # Cálculos financeiros
-    custeio_atual = custeio if idx == 0 else (consumo_ms / resultados["Molecula 1"]["consumo_ms"]) * custeio
+    custeio_atual = custeio_mol1 if idx == 0 else (consumo_ms_atual / resultados["Molecula 1"]["consumo_ms"]) * custeio_mol1
     diferencial_tec = 0 if idx == 0 else diferenciais[molecula]
     custeio_final = custeio_atual + diferencial_tec
     
@@ -307,7 +307,7 @@ for idx, molecula in enumerate(moleculas):
     # Armazenar resultados
     resultados[molecula] = {
         "consumo_pv": consumo_pv_atual,
-        "consumo_ms": consumo_ms,
+        "consumo_ms": consumo_ms_atual,
         "peso_final": peso_final_atual,
         "gmd": gmd_atual,
         "dias": dias,
@@ -318,7 +318,7 @@ for idx, molecula in enumerate(moleculas):
         "resultado": resultado,
         "rentabilidade_periodo": resultado/(valor_venda_arroba * peso_final_atual),
         "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * peso_final_atual))**(1/(dias/30.4))) - 1,
-        "eficiencia_biologica": (consumo_ms * dias) / arrobas
+        "eficiencia_biologica": (consumo_ms_atual * dias) / arrobas
     }
     
     if idx > 0:
