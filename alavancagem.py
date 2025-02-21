@@ -249,18 +249,25 @@ with tab1:
 
 # Parâmetros principais em container separado
 st.markdown("---")
-st.subheader("Parâmetros Principais")
+st.subheader("Parâmetros Financeiros")
 params_col1, params_col2, params_col3, params_col4 = st.columns(4)
 
 with params_col1:
-    custeio = st.number_input("Custeio (R$/Cab/dia)", min_value=0.0, value=15.0, step=0.01)
-with params_col2:    
-    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01)
+with params_col2:
+    custeio_mol2 = consumo_ms["Molecula 2"] / consumo_ms["Molecula 1"] * custeio_mol1
+    st.metric("Custeio (R$/Cab/dia) Mol 2", f"{custeio_mol2:.2f}")
 with params_col3:
+    custeio_mol3 = consumo_ms["Molecula 3"] / consumo_ms["Molecula 1"] * custeio_mol1
+    st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
+with params_col4:    
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+with params_col4:
     agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
 with params_col4:
     agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
     st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
+
 
 # Calcular valores para cada molécula
 resultados = {}
