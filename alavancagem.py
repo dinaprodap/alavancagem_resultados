@@ -312,6 +312,7 @@ for idx, molecula in enumerate(moleculas):
         "resultado": resultado,
         "rentabilidade_periodo": resultado/(valor_venda_arroba * peso_final_atual),
         "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * peso_final_atual))**(1/(dias/30.4))) - 1
+        "eficiencia_biologica": (consumo_ms * dias) / arrobas
     }
     
     if idx > 0:
@@ -343,7 +344,9 @@ with insight_col3:
     st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
 
 with insight_col4:
-    st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
+    st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['Molecula 1']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['Molecula 2']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['Molecula 3']['eficiencia_biologica']:.2f}")
 
 # Tab 2 - Resultados
 with tab2:
