@@ -333,26 +333,24 @@ for idx, molecula in enumerate(moleculas):
         })
 
 # Insights principais
-insight_col1, insight_col2, insight_col3, insight_col4 = st.columns(4)
+insight_col1, insight_col2, insight_col3 = st.columns(3)
 
 with insight_col1:
-    st.metric("Dias de Confinamento", f"{resultados['Molecula 1']['dias']:.0f}")
-
-with insight_col2:
     st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
     st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['Molecula 2']['dias']:.3f}")
     st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['Molecula 3']['dias']:.3f}")
 
-
-with insight_col3:
+with insight_col2:
     st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
     st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['Molecula 2']['arrobas']:.2f}")
     st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
 
-with insight_col4:
+
+with insight_col3:
     st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['Molecula 1']['eficiencia_biologica']:.2f}")
     st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['Molecula 2']['eficiencia_biologica']:.2f}")
     st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['Molecula 3']['eficiencia_biologica']:.2f}")
+    
 
 # Tab 2 - Resultados
 with tab2:
