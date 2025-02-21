@@ -250,6 +250,19 @@ with tab1:
 # Parâmetros principais em container separado
 st.markdown("---")
 st.subheader("Parâmetros Financeiros")
+
+finance_col1, finance_col2, finance_col3 = st.columns(3)
+
+with finance_col1:
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+with finance_col2:
+    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
+with finance_col3:
+    custo_animal_magro = (valor_venda_arroba * (1 + agio_percentual/100)) * (pv_inicial/30)
+    st.metric("Custo do Animal Magro (R$/cab)", f"R$ {custo_animal_magro:.2f}")
+
+params_col1, params_col2, params_col3 = st.columns(3)
+
 params_col1, params_col2, params_col3, params_col4 = st.columns(4)
 
 with params_col1:
@@ -300,7 +313,6 @@ for idx, molecula in enumerate(moleculas):
     
     custo_periodo = custeio_final * dias
     valor_arrobas = valor_venda_arroba * arrobas
-    custo_animal_magro = (valor_venda_arroba * (1 + agio_percentual/100)) * (pv_inicial/30)
     
     resultado = valor_arrobas - custo_periodo - custo_animal_magro
     
