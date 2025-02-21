@@ -268,7 +268,6 @@ with params_col4:
     agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
     st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
 
-
 # Calcular valores para cada molécula
 resultados = {}
 
