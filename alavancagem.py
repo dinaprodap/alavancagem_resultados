@@ -311,7 +311,7 @@ for idx, molecula in enumerate(moleculas):
         "custeio_final": custeio_final,
         "resultado": resultado,
         "rentabilidade_periodo": resultado/(valor_venda_arroba * peso_final_atual),
-        "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * peso_final_atual))**(1/(dias/30.4))) - 1
+        "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * peso_final_atual))**(1/(dias/30.4))) - 1,
         "eficiencia_biologica": (consumo_ms * dias) / arrobas
     }
     
