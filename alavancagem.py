@@ -6,6 +6,14 @@ st.set_page_config(
     page_title="Calculadora de Alavancagem",
     layout="wide"
 )
+import streamlit as st
+import numpy as np
+
+# Configuração da página
+st.set_page_config(
+    page_title="Calculadora de Alavancagem",
+    layout="wide"
+)
 
 # CSS personalizado
 st.markdown("""
@@ -292,13 +300,13 @@ with custeio_final_col3:
 custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
 
 with custo_arroba_col1:
-    custo_arroba_mol1 = (custeio_final_mol1 * resultados["Molecula 1"]["dias"]) / resultados["Molecula 1"]["arrobas"]
+    custo_arroba_mol1 = (custeio_final_mol1 * dias) / (pv_final * rendimento_carcaca / 100 / 15)
     st.metric("Custo da Arroba Mol 1 (R$/@)", f"{custo_arroba_mol1:.2f}")
 with custo_arroba_col2:
-    custo_arroba_mol2 = (custeio_final_mol2 * resultados["Molecula 2"]["dias"]) / resultados["Molecula 2"]["arrobas"]
+    custo_arroba_mol2 = (custeio_final_mol2 * dias) / (pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15)
     st.metric("Custo da Arroba Mol 2 (R$/@)", f"{custo_arroba_mol2:.2f}")
 with custo_arroba_col3:
-    custo_arroba_mol3 = (custeio_final_mol3 * resultados["Molecula 3"]["dias"]) / resultados["Molecula 3"]["arrobas"]
+    custo_arroba_mol3 = (custeio_final_mol3 * dias) / (pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15)
     st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
     
 # Calcular valores para cada molécula
@@ -419,3 +427,4 @@ with tab2:
         st.metric("Rendimento Carcaça", f"{rendimento_carcaca:.2f}%")
     with params_col3:
         st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
+        custo_arroba_mol1 = (custeio_final_mol1 * resultados["Molecula 1"]["dias"]) / resultados["Molecula 1"]["arrobas"]
