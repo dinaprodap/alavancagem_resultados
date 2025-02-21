@@ -198,7 +198,17 @@ with tab1:
             st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
         with pv_final_col3:
             st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
-
+    
+        # Criar linha para pesos vivos finais em arrobas
+        pv_final_arroba_col1, pv_final_arroba_col2, pv_final_arroba_col3 = st.columns(3)
+        
+        with pv_final_arroba_col1:
+            st.metric("PV Final Mol 1 (@/Cab)", f"{pv_final/30:.2f}")
+        with pv_final_arroba_col2:
+            st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2/30:.2f}")
+        with pv_final_arroba_col3:
+            st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3/30:.2f}")
+    
     # Criar linha para consumo em %PV
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
     
