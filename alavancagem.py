@@ -73,6 +73,7 @@ moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
 # Dicionários para armazenar os valores
 precos = {}
 consumos = {}
+custos = {} 
 diferenciais = {}
 
 # Container de Produtos
@@ -127,20 +128,22 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[3]:
-            valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
-            diferenciais[molecula] = st.number_input(
-                f"Custo de {molecula}",
-                min_value=0.0,
-                value=valor_custo,
-                step=0.01,
-                key=f"diferencial_tabela_{molecula}",
-                label_visibility="collapsed"
-            )
+        valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
+        custos[molecula] = valor_custo  # Armazenar custo no dicionário de custos
+        st.number_input(
+            f"Custo de {molecula}",
+            min_value=0.0,
+            value=valor_custo,
+            step=0.01,
+            key=f"custo_tabela_{molecula}",
+            label_visibility="collapsed"
+        )
         with cols[4]:
             if molecula == "Molecula 1":
                 diferencial_tecnologico = 0.00
             else:
-                diferencial_tecnologico = diferenciais[molecula] - diferenciais["Molecula 1"]
+                diferencial_tecnologico = custos[molecula] - custos["Molecula 1"]
+            diferenciais[molecula] = diferencial_tecnologico  # Armazenar diferencial tecnológico
             st.markdown(f'<div class="diferencial-value">{diferencial_tecnologico:.2f}</div>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)  # Fecha produto-grid
