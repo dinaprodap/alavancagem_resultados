@@ -338,7 +338,9 @@ with insight_col2:
 
 
 with insight_col3:
-    st.metric("Arrobas Produzidas (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['Molecula 2']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
 
 with insight_col4:
     st.metric("Diferencial Tecnológico (R$/cab/dia)", "0.00")
