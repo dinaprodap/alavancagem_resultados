@@ -128,16 +128,16 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[3]:
-        valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
-        custos[molecula] = valor_custo  # Armazenar custo no dicionário de custos
-        st.number_input(
-            f"Custo de {molecula}",
-            min_value=0.0,
-            value=valor_custo,
-            step=0.01,
-            key=f"custo_tabela_{molecula}",
-            label_visibility="collapsed"
-        )
+            valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
+            custos[molecula] = valor_custo  # Armazenar custo no dicionário de custos
+            st.number_input(
+                f"Custo de {molecula}",
+                min_value=0.0,
+                value=valor_custo,
+                step=0.01,
+                key=f"custo_tabela_{molecula}",
+                label_visibility="collapsed"
+            )
         with cols[4]:
             if molecula == "Molecula 1":
                 diferencial_tecnologico = 0.00
