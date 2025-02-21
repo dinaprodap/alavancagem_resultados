@@ -172,30 +172,27 @@ with tab1:
             st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
         
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-        # Exibir rendimento de carcaça ajustado para moléculas 2 e 3 fora do bloco de col1
-rendimento_carcaca_col2, rendimento_carcaca_col3 = st.columns(2)
-with rendimento_carcaca_col2:
-    rendimento_carcaca_mol2 = rendimento_carcaca * 1.009
-    st.metric("Rendimento Carcaça Mol 2 (%)", f"{rendimento_carcaca_mol2:.2f}")
-with rendimento_carcaca_col3:
-    rendimento_carcaca_mol3 = rendimento_carcaca * 1.0264
-    st.metric("Rendimento Carcaça Mol 3 (%)", f"{rendimento_carcaca_mol3:.2f}")
-
-# Criar linha para pesos finais fora do bloco de col1
-pv_final_col1, pv_final_col2, pv_final_col3 = st.columns(3)
-with pv_final_col1:
-    pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
-
-# Calcular dias e pesos finais das outras moléculas
-dias = (pv_final - pv_inicial) / gmd
-pv_final_mol2 = pv_inicial + (gmd_mol2 * dias)
-pv_final_mol3 = pv_inicial + (gmd_mol3 * dias)
-
-with pv_final_col2:
-    st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
-with pv_final_col3:
-    st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
-
+        # Exibir rendimento de carcaça ajustado para moléculas 2 e 3
+    rendimento_carcaca_col2, rendimento_carcaca_col3 = st.columns(2)
+    with rendimento_carcaca_col2:
+        rendimento_carcaca_mol2 = rendimento_carcaca * 1.009
+        st.metric("Rendimento Carcaça Mol 2 (%)", f"{rendimento_carcaca_mol2:.2f}")
+    with rendimento_carcaca_col3:
+        rendimento_carcaca_mol3 = rendimento_carcaca * 1.0264
+        st.metric("Rendimento Carcaça Mol 3 (%)", f"{rendimento_carcaca_mol3:.2f}")
+        
+        with pv_final_col1:
+            pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
+        
+        # Calcular dias e pesos finais das outras moléculas
+        dias = (pv_final - pv_inicial) / gmd
+        pv_final_mol2 = pv_inicial + (gmd_mol2 * dias)
+        pv_final_mol3 = pv_inicial + (gmd_mol3 * dias)
+        
+        with pv_final_col2:
+            st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
+        with pv_final_col3:
+            st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
 
     # Criar linha para consumo em %PV
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
