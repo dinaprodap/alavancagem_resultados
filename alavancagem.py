@@ -62,7 +62,7 @@ def metric_card(title, value, prefix="", suffix=""):
     """
 
 # Título da aplicação
-st.title("🚀 Calculadora de Potencial Molécula Confinamento")
+st.title("🚀 Calculadora de Alavancagem")
 
 # Fecha o container arredondado
 st.markdown('</div>', unsafe_allow_html=True)
@@ -172,14 +172,9 @@ with tab1:
             st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
         
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
-        # Exibir rendimento de carcaça ajustado para moléculas 2 e 3
-    rendimento_carcaca_col2, rendimento_carcaca_col3 = st.columns(2)
-    with rendimento_carcaca_col2:
-        rendimento_carcaca_mol2 = rendimento_carcaca * 1.009
-        st.metric("Rendimento Carcaça Mol 2 (%)", f"{rendimento_carcaca_mol2:.2f}")
-    with rendimento_carcaca_col3:
-        rendimento_carcaca_mol3 = rendimento_carcaca * 1.0264
-        st.metric("Rendimento Carcaça Mol 3 (%)", f"{rendimento_carcaca_mol3:.2f}")
+        
+        # Criar linha para pesos finais
+        pv_final_col1, pv_final_col2, pv_final_col3 = st.columns(3)
         
         with pv_final_col1:
             pv_final = st.number_input("Peso Vivo Final (Kg/Cab)", min_value=0, value=560, step=1)
