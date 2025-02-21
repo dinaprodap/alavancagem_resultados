@@ -283,10 +283,23 @@ with custeio_final_col1:
     st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
 with custeio_final_col2:
     custeio_final_mol2 = diferenciais["Molecula 2"] + custeio_mol2
-    st.metric("Custeio Final (R$/Cab/dia)Mol 2", f"{custeio_final_mol2:.2f}")
+    st.metric("Custeio Final (R$/Cab/dia) Mol 2", f"{custeio_final_mol2:.2f}")
 with custeio_final_col3:
     custeio_final_mol3 = diferenciais["Molecula 3"] + custeio_mol3
     st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
+
+# Adicionar cálculo do custo da arroba produzida
+custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
+
+with custo_arroba_col1:
+    custo_arroba_mol1 = (custeio_final_mol1 * resultados["Molecula 1"]["dias"]) / resultados["Molecula 1"]["arrobas"]
+    st.metric("Custo da Arroba Mol 1 (R$/@)", f"{custo_arroba_mol1:.2f}")
+with custo_arroba_col2:
+    custo_arroba_mol2 = (custeio_final_mol2 * resultados["Molecula 2"]["dias"]) / resultados["Molecula 2"]["arrobas"]
+    st.metric("Custo da Arroba Mol 2 (R$/@)", f"{custo_arroba_mol2:.2f}")
+with custo_arroba_col3:
+    custo_arroba_mol3 = (custeio_final_mol3 * resultados["Molecula 3"]["dias"]) / resultados["Molecula 3"]["arrobas"]
+    st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
     
 # Calcular valores para cada molécula
 resultados = {}
