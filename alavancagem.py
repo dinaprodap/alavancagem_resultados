@@ -272,6 +272,19 @@ with params_col3:
     custeio_mol3 = consumo_ms["Molecula 3"] / consumo_ms["Molecula 1"] * custeio_mol1
     st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
 
+# Calcular Custeio Final
+custeio_final_col1, custeio_final_col2, custeio_final_col3 = st.columns(3)
+
+with custeio_final_col1:
+    custeio_final_mol1 = diferenciais["Molecula 1"] + custeio_mol1
+    st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
+with custeio_final_col2:
+    custeio_final_mol2 = diferenciais["Molecula 2"] + custeio_mol2
+    st.metric("Custeio Final (R$/Cab/dia) Mol 2", f"{custeio_final_mol2:.2f}")
+with custeio_final_col3:
+    custeio_final_mol3 = diferenciais["Molecula 3"] + custeio_mol3
+    st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
+    
 # Calcular valores para cada molécula
 resultados = {}
 
