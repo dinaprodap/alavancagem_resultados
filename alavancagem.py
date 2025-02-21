@@ -173,6 +173,13 @@ with tab1:
         
         rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
         
+        # Adicionar cálculo de rendimento de carcaça para molécula 2 e 3
+        rendimento_carcaca_mol2 = rendimento_carcaca * 1.009
+        rendimento_carcaca_mol3 = rendimento_carcaca * 1.0264
+        
+        st.metric("Rendimento Carcaça Mol 2 (%)", f"{rendimento_carcaca_mol2:.2f}")
+        st.metric("Rendimento Carcaça Mol 3 (%)", f"{rendimento_carcaca_mol3:.2f}")
+        
         # Criar linha para pesos finais
         pv_final_col1, pv_final_col2, pv_final_col3 = st.columns(3)
         
