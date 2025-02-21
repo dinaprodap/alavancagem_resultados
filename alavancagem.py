@@ -254,9 +254,9 @@ st.subheader("Parâmetros Financeiros")
 finance_col1, finance_col2, finance_col3 = st.columns(3)
 
 with finance_col1:
-    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1, key="valor_venda_arroba_1")
 with finance_col2:
-    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
+    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1, key="agio_percentual_1")
 with finance_col3:
     custo_animal_magro = (valor_venda_arroba * (1 + agio_percentual/100)) * (pv_inicial/30)
     st.metric("Custo do Animal Magro (R$/cab)", f"R$ {custo_animal_magro:.2f}")
@@ -266,7 +266,7 @@ params_col1, params_col2, params_col3 = st.columns(3)
 params_col1, params_col2, params_col3, params_col4 = st.columns(4)
 
 with params_col1:
-    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01)
+    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01, key="custeio_mol1_1")
 with params_col2:
     custeio_mol2 = consumo_ms["Molecula 2"] / consumo_ms["Molecula 1"] * custeio_mol1
     st.metric("Custeio (R$/Cab/dia) Mol 2", f"{custeio_mol2:.2f}")
@@ -274,9 +274,9 @@ with params_col3:
     custeio_mol3 = consumo_ms["Molecula 3"] / consumo_ms["Molecula 1"] * custeio_mol1
     st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
 with params_col4:    
-    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1)
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1, key="valor_venda_arroba_2")
 with params_col4:
-    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1)
+    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1, key="agio_percentual_2")
 with params_col4:
     agio_animal_magro = (agio_percentual / 100) * (pv_inicial/30 * valor_venda_arroba)
     st.metric("Ágio Animal Magro", f"R$ {agio_animal_magro:.2f}")
