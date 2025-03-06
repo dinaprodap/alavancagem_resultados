@@ -391,7 +391,7 @@ with valor_arrobas_col3:
     valor_arrobas_mol3 = valor_venda_arroba * resultados["Molecula 3"]["arrobas"]
     st.metric("Valor das Arrobas Produzidas Mol 3 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
 
-# Resultado (R$/cab/dia)
+# Resultado (R$/cab)
 resultado_col1, resultado_col2, resultado_col3 = st.columns(3)
 
 with resultado_col1:
@@ -403,6 +403,19 @@ with resultado_col2:
 with resultado_col3:
     resultado_mol3 = valor_arrobas_mol3 - custeio_periodo_mol3
     st.metric("Resultado Mol 3 (R$/Cab)", f"{resultado_mol3:.2f}")
+
+# Resultado com ágio
+resultado_agio_col1, resultado_agio_col2, resultado_agio_col3 = st.columns(3)
+
+with resultado_agio_col1:
+    resultado_agio_mol1 = (pv_final * rendimento_carcaca / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol1
+    st.metric("Resultado com Ágio Mol 1 (R$/Cab)", f"{resultado_agio_mol1:.2f}")
+with resultado_agio_col2:
+    resultado_agio_mol2 = (pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol2
+    st.metric("Resultado com Ágio Mol 2 (R$/Cab)", f"{resultado_agio_mol2:.2f}")
+with resultado_agio_col3:
+    resultado_agio_mol3 = (pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol3
+    st.metric("Resultado com Ágio Mol 3 (R$/Cab)", f"{resultado_agio_mol3:.2f}")
 
 # Insights principais
 insight_col1, insight_col2, insight_col3 = st.columns(3)
