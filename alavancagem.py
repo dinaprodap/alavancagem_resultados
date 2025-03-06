@@ -566,7 +566,8 @@ with tab2:
         fig_incremento = go.Figure()
         incrementos = [0]  # Molécula 1 é referência
         for molecula in moleculas[1:]:
-            incrementos.append(resultados[molecula]['incremento_lucro'])
+            incremento_lucro = (resultados[molecula]['resultado'] / resultados["Molecula 1"]["resultado"] - 1) * 100
+            incrementos.append(incremento_lucro)
         
         fig_incremento.add_trace(go.Bar(
             x=moleculas,
