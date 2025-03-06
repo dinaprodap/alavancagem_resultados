@@ -152,6 +152,19 @@ with st.container():
 # Organização em abas
 tab1, tab2 = st.tabs(["📝 Entrada de Dados", "📊 Resultados"])
 
+# Calcular valores para cada molécula
+resultados = {}
+
+# Inicializar valores padrão para evitar erros
+pv_inicial = 390
+pv_final = 560
+gmd = 1.551
+rendimento_carcaca = 54.89
+consumo_pv_mol1 = 2.31 / 100
+valor_venda_arroba = 340.0
+agio_percentual = 5.0
+custeio_mol1 = 15.0
+
 with tab1:
     # Entrada de dados em colunas
     col1, col2 = st.columns(2)
@@ -288,6 +301,67 @@ with tab1:
         custeio_final_mol3 = diferenciais["Molecula 3"] + custeio_mol3
         st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
 
+    # Calcular valores para cada molécula
+    for idx, molecula in enumerate(moleculas):
+        # Cálculos básicos
+        consumo_pv_atual = consumo_pv[molecula]
+        
+        if idx == 0:  # Molécula 1
+            peso_final_atual = pv_final
+            gmd_atual = gmd
+            rendimento_atual = rendimento_carcaca
+        elif idx == 1:  # Molécula 2
+            peso_final_atual = pv_final_mol2
+            gmd_atual = gmd_mol2
+            rendimento_atual = rendimento_carcaca * 1.009
+        else:  # Molécula 3
+            peso_final_atual = pv_final_mol3
+            gmd_atual = gmd_mol3
+            rendimento_atual = rendimento_carcaca * 1.0264
+        
+        # Cálculos derivados
+        dias_calc = (peso_final_atual - pv_inicial) / gmd_atual
+        consumo_ms_atual = consumo_pv_atual * np.mean([pv_inicial, peso_final_atual])
+        arrobas = ((peso_final_atual * rendimento_atual/100)/15) - (pv_inicial/30)
+        
+        # Cálculos financeiros
+        custeio_atual = custeio_mol1 if idx == 0 else (consumo_ms_atual / consumo_ms["Molecula 1"]) * custeio_mol1
+        diferencial_tec = 0 if idx == 0 else diferenciais[molecula]
+        custeio_final = custeio_atual + diferencial_tec
+        
+        custo_periodo = custeio_final * dias_calc
+        valor_arrobas = valor_venda_arroba * arrobas
+        
+        resultado = valor_arrobas - custo_periodo - custo_animal_magro
+        
+        # Armazenar resultados
+        resultados[molecula] = {
+            "consumo_pv": consumo_pv_atual,
+            "consumo_ms": consumo_ms_atual,
+            "peso_final": peso_final_atual,
+            "gmd": gmd_atual,
+            "dias": dias_calc,
+            "rendimento": rendimento_atual,
+            "arrobas": arrobas,
+            "custeio": custeio_atual,
+            "custeio_final": custeio_final,
+            "resultado": resultado,
+            "rentabilidade_periodo": resultado/(valor_venda_arroba * (peso_final_atual * rendimento_atual/100/15)),
+            "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * (peso_final_atual * rendimento_atual/100/15)))**(1/(dias_calc/30.4))) - 1,
+            "eficiencia_biologica": (consumo_ms_atual * dias_calc) / arrobas
+        }
+        
+        if idx > 0:
+            resultados[molecula].update({
+                "incremento_lucro": ((resultado/resultados["Molecula 1"]["resultado"] - 1) * 100),
+                "arrobas_adicionais": arrobas - resultados["Molecula 1"]["arrobas"],
+                "receita_adicional": (arrobas - resultados["Molecula 1"]["arrobas"]) * valor_venda_arroba,
+                "custo_adicional": custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias_calc,
+                "incremento_lucro_adicional": resultado - resultados["Molecula 1"]["resultado"],
+                "custo_arroba_adicional": (custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias_calc) / 
+                                        (arrobas - resultados["Molecula 1"]["arrobas"]) if (arrobas - resultados["Molecula 1"]["arrobas"]) > 0 else 0
+            })
+
     # Custo da arroba produzida
     custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
 
@@ -388,18 +462,217 @@ with tab1:
     with insight_col1:
         st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
         st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['Molecula 2']['dias']:.3f}")
-        st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['Molecula 3']['dias']:.3f}")
+with finance_col1:
+    valor_venda_arroba = st.number_input("Valor de Venda da arroba (R$/@)", min_value=0.0, value=340.0, step=0.1, key="valor_venda_arroba_1")
+with finance_col2:
+    agio_percentual = st.number_input("Ágio para Animal Magro (%)", min_value=0.0, value=5.0, step=0.1, key="agio_percentual_1")
+with finance_col3:
+    custo_animal_magro = (valor_venda_arroba * (1 + agio_percentual/100)) * (pv_inicial/30)
+    st.metric("Custo do Animal Magro (R$/cab)", f"R$ {custo_animal_magro:.2f}")
 
-    with insight_col2:
-        st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
-        st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['Molecula 2']['arrobas']:.2f}")
-        st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
+params_col1, params_col2, params_col3 = st.columns(3)
 
-    with insight_col3:
-        st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['Molecula 1']['eficiencia_biologica']:.2f}")
-        st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['Molecula 2']['eficiencia_biologica']:.2f}")
-        st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['Molecula 3']['eficiencia_biologica']:.2f}")
+with params_col1:
+    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01, key="custeio_mol1_1")
+with params_col2:
+    custeio_mol2 = consumo_ms["Molecula 2"] / consumo_ms["Molecula 1"] * custeio_mol1
+    st.metric("Custeio (R$/Cab/dia) Mol 2", f"{custeio_mol2:.2f}")
+with params_col3:
+    custeio_mol3 = consumo_ms["Molecula 3"] / consumo_ms["Molecula 1"] * custeio_mol1
+    st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
 
+# Calcular Custeio Final
+custeio_final_col1, custeio_final_col2, custeio_final_col3 = st.columns(3)
+
+with custeio_final_col1:
+    custeio_final_mol1 = diferenciais["Molecula 1"] + custeio_mol1
+    st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
+with custeio_final_col2:
+    custeio_final_mol2 = diferenciais["Molecula 2"] + custeio_mol2
+    st.metric("Custeio Final (R$/Cab/dia) Mol 2", f"{custeio_final_mol2:.2f}")
+with custeio_final_col3:
+    custeio_final_mol3 = diferenciais["Molecula 3"] + custeio_mol3
+    st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
+
+
+# Calcular valores para cada molécula
+resultados = {}
+
+for idx, molecula in enumerate(moleculas):
+    # Cálculos básicos
+    consumo_pv_atual = consumo_pv[molecula]
+    
+    if idx == 0:  # Molécula 1
+        peso_final_atual = pv_final
+        gmd_atual = gmd
+        rendimento_atual = rendimento_carcaca
+    elif idx == 1:  # Molécula 2
+        peso_final_atual = pv_final_mol2
+        gmd_atual = gmd_mol2
+        rendimento_atual = rendimento_carcaca * 1.009
+    else:  # Molécula 3
+        peso_final_atual = pv_final_mol3
+        gmd_atual = gmd_mol3
+        rendimento_atual = rendimento_carcaca * 1.0264
+    
+    # Cálculos derivados
+    dias = (peso_final_atual - pv_inicial) / gmd_atual
+    consumo_ms_atual = consumo_pv_atual * np.mean([pv_inicial, peso_final_atual])
+    arrobas = ((peso_final_atual * rendimento_atual/100)/15) - (pv_inicial/30)
+    
+    # Cálculos financeiros
+    custeio_atual = custeio_mol1 if idx == 0 else (consumo_ms_atual / resultados["Molecula 1"]["consumo_ms"]) * custeio_mol1
+    diferencial_tec = 0 if idx == 0 else diferenciais[molecula]
+    custeio_final = custeio_atual + diferencial_tec
+    
+    custo_periodo = custeio_final * dias
+    valor_arrobas = valor_venda_arroba * arrobas
+    
+    resultado = valor_arrobas - custo_periodo - custo_animal_magro
+    
+    # Armazenar resultados
+    resultados[molecula] = {
+        "consumo_pv": consumo_pv_atual,
+        "consumo_ms": consumo_ms_atual,
+        "peso_final": peso_final_atual,
+        "gmd": gmd_atual,
+        "dias": dias,
+        "rendimento": rendimento_atual,
+        "arrobas": arrobas,
+        "custeio": custeio_atual,
+        "custeio_final": custeio_final,
+        "resultado": resultado,
+        "rentabilidade_periodo": resultado/(valor_venda_arroba * peso_final_atual),
+        "rentabilidade_mensal": ((1 + resultado/(valor_venda_arroba * peso_final_atual))**(1/(dias/30.4))) - 1,
+        "eficiencia_biologica": (consumo_ms_atual * dias) / arrobas
+    }
+    
+    if idx > 0:
+        resultados[molecula].update({
+            "incremento_lucro": ((resultado/resultados["Molecula 1"]["resultado"] - 1) * 100),
+            "arrobas_adicionais": arrobas - resultados["Molecula 1"]["arrobas"],
+            "receita_adicional": (arrobas - resultados["Molecula 1"]["arrobas"]) * valor_venda_arroba,
+            "custo_adicional": custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias,
+            "incremento_lucro_adicional": resultado - resultados["Molecula 1"]["resultado"],
+            "custo_arroba_adicional": (custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias) / 
+                                    (arrobas - resultados["Molecula 1"]["arrobas"])
+        })
+
+# Custo da arroba produzida
+custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
+
+with custo_arroba_col1:
+    custo_arroba_mol1 = (custeio_final_mol1 * dias) / resultados["Molecula 1"]["arrobas"]
+    st.metric("Custo da Arroba Mol 1 (R$/@)", f"{custo_arroba_mol1:.2f}")
+with custo_arroba_col2:
+    custo_arroba_mol2 = (custeio_final_mol2 * dias) / resultados["Molecula 2"]["arrobas"]
+    st.metric("Custo da Arroba Mol 2 (R$/@)", f"{custo_arroba_mol2:.2f}")
+with custo_arroba_col3:
+    custo_arroba_mol3 = (custeio_final_mol3 * dias) / resultados["Molecula 3"]["arrobas"]
+    st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
+
+# Custeio no período da arroba produzida
+custeio_periodo_col1, custeio_periodo_col2, custeio_periodo_col3 = st.columns(3)
+
+with custeio_periodo_col1:
+    custeio_periodo_mol1 = custeio_final_mol1 * dias
+    st.metric("Custeio no Período Mol 1 (R$/Cab)", f"{custeio_periodo_mol1:.2f}")
+with custeio_periodo_col2:
+    custeio_periodo_mol2 = custeio_final_mol2 * dias
+    st.metric("Custeio no Período Mol 2 (R$/Cab)", f"{custeio_periodo_mol2:.2f}")
+with custeio_periodo_col3:
+    custeio_periodo_mol3 = custeio_final_mol3 * dias
+    st.metric("Custeio no Período Mol 3 (R$/Cab)", f"{custeio_periodo_mol3:.2f}")
+
+# Valor das arrobas produzidas
+valor_arrobas_col1, valor_arrobas_col2, valor_arrobas_col3 = st.columns(3)
+
+with valor_arrobas_col1:
+    valor_arrobas_mol1 = valor_venda_arroba * resultados["Molecula 1"]["arrobas"]
+    st.metric("Valor das Arrobas Produzidas Mol 1 (R$/Cab)", f"{valor_arrobas_mol1:.2f}")
+with valor_arrobas_col2:
+    valor_arrobas_mol2 = valor_venda_arroba * resultados["Molecula 2"]["arrobas"]
+    st.metric("Valor das Arrobas Produzidas Mol 2 (R$/Cab)", f"{valor_arrobas_mol2:.2f}")
+with valor_arrobas_col3:
+    valor_arrobas_mol3 = valor_venda_arroba * resultados["Molecula 3"]["arrobas"]
+    st.metric("Valor das Arrobas Produzidas Mol 3 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
+
+# Resultado (R$/cab)
+resultado_col1, resultado_col2, resultado_col3 = st.columns(3)
+
+with resultado_col1:
+    resultado_mol1 = valor_arrobas_mol1 - custeio_periodo_mol1
+    st.metric("Resultado Mol 1 (R$/Cab)", f"{resultado_mol1:.2f}")
+with resultado_col2:
+    resultado_mol2 = valor_arrobas_mol2 - custeio_periodo_mol2
+    st.metric("Resultado Mol 2 (R$/Cab)", f"{resultado_mol2:.2f}")
+with resultado_col3:
+    resultado_mol3 = valor_arrobas_mol3 - custeio_periodo_mol3
+    st.metric("Resultado Mol 3 (R$/Cab)", f"{resultado_mol3:.2f}")
+
+# Resultado com ágio
+resultado_agio_col1, resultado_agio_col2, resultado_agio_col3 = st.columns(3)
+
+with resultado_agio_col1:
+    resultado_agio_mol1 = (pv_final * rendimento_carcaca / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol1
+    st.metric("Resultado com Ágio Mol 1 (R$/Cab)", f"{resultado_agio_mol1:.2f}")
+with resultado_agio_col2:
+    resultado_agio_mol2 = (pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol2
+    st.metric("Resultado com Ágio Mol 2 (R$/Cab)", f"{resultado_agio_mol2:.2f}")
+with resultado_agio_col3:
+    resultado_agio_mol3 = (pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol3
+    st.metric("Resultado com Ágio Mol 3 (R$/Cab)", f"{resultado_agio_mol3:.2f}")
+
+# Rentabilidade no período
+rentabilidade_periodo_col1, rentabilidade_periodo_col2, rentabilidade_periodo_col3 = st.columns(3)
+
+with rentabilidade_periodo_col1:
+    pv_final_arroba_mol1 = pv_final * rendimento_carcaca / 100 / 15
+    rentabilidade_periodo_agio_mol1 = resultado_agio_mol1 / (valor_venda_arroba * pv_final_arroba_mol1)
+    st.metric("Rentabilidade no Período Mol 1 (%)", f"{rentabilidade_periodo_agio_mol1 * 100:.2f}%")
+with rentabilidade_periodo_col2:
+    pv_final_arroba_mol2 = pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15
+    rentabilidade_periodo_agio_mol2 = resultado_agio_mol2 / (valor_venda_arroba * pv_final_arroba_mol2)
+    st.metric("Rentabilidade no Período Mol 2 (%)", f"{rentabilidade_periodo_agio_mol2 * 100:.2f}%")
+with rentabilidade_periodo_col3:
+    pv_final_arroba_mol3 = pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15
+    rentabilidade_periodo_agio_mol3 = resultado_agio_mol3 / (valor_venda_arroba * pv_final_arroba_mol3)
+    st.metric("Rentabilidade no Período Mol 3 (%)", f"{rentabilidade_periodo_agio_mol3 * 100:.2f}%")
+
+# Rentabilidade mensal
+rentabilidade_mensal_col1, rentabilidade_mensal_col2, rentabilidade_mensal_col3 = st.columns(3)
+
+with rentabilidade_mensal_col1:
+    rentabilidade_mensal_mol1 = ((1 + rentabilidade_periodo_agio_mol1)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 1 (%)", f"{rentabilidade_mensal_mol1 * 100:.2f}%")
+with rentabilidade_mensal_col2:
+    rentabilidade_mensal_mol2 = ((1 + rentabilidade_periodo_agio_mol2)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 2 (%)", f"{rentabilidade_mensal_mol2 * 100:.2f}%")
+with rentabilidade_mensal_col3:
+    rentabilidade_mensal_mol3 = ((1 + rentabilidade_periodo_agio_mol3)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 3 (%)", f"{rentabilidade_mensal_mol3 * 100:.2f}%")
+
+# Insights principais
+insight_col1, insight_col2, insight_col3 = st.columns(3)
+
+with insight_col1:
+    st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
+    st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['Molecula 2']['dias']:.3f}")
+    st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['Molecula 3']['dias']:.3f}")
+
+with insight_col2:
+    st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['Molecula 2']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
+
+
+with insight_col3:
+    st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['Molecula 1']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['Molecula 2']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['Molecula 3']['eficiencia_biologica']:.2f}")
+    
+
+# Tab 2 - Resultados
 with tab2:
     st.header("📈 Análise Comparativa", divider='rainbow')
     
