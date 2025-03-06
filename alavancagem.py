@@ -352,7 +352,7 @@ for idx, molecula in enumerate(moleculas):
                                     (arrobas - resultados["Molecula 1"]["arrobas"])
         })
 
-# Adicionar cálculo do custo da arroba produzida
+# Custo da arroba produzida
 custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
 
 with custo_arroba_col1:
@@ -364,6 +364,20 @@ with custo_arroba_col2:
 with custo_arroba_col3:
     custo_arroba_mol3 = (custeio_final_mol3 * dias) / resultados["Molecula 3"]["arrobas"]
     st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
+
+# Custeio no período da arroba produzida
+custeio_periodo_col1, custeio_periodo_col2, custeio_periodo_col3 = st.columns(3)
+
+with custeio_periodo_col1:
+    custeio_periodo_mol1 = custeio_final_mol1 * dias
+    st.metric("Custeio no Período Mol 1 (R$/Cab)", f"{custeio_periodo_mol1:.2f}")
+with custeio_periodo_col2:
+    custeio_periodo_mol2 = custeio_final_mol2 * dias
+    st.metric("Custeio no Período Mol 2 (R$/Cab)", f"{custeio_periodo_mol2:.2f}")
+with custeio_periodo_col3:
+    custeio_periodo_mol3 = custeio_final_mol3 * dias
+    st.metric("Custeio no Período Mol 3 (R$/Cab)", f"{custeio_periodo_mol3:.2f}")
+
 
 # Insights principais
 insight_col1, insight_col2, insight_col3 = st.columns(3)
