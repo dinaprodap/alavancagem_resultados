@@ -344,7 +344,6 @@ for idx, molecula in enumerate(moleculas):
     
     if idx > 0:
         resultados[molecula].update({
-            "incremento_lucro": ((resultado/resultados["Molecula 1"]["resultado"] - 1) * 100),
             "arrobas_adicionais": arrobas - resultados["Molecula 1"]["arrobas"],
             "receita_adicional": (arrobas - resultados["Molecula 1"]["arrobas"]) * valor_venda_arroba,
             "custo_adicional": custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias,
