@@ -433,6 +433,19 @@ with rentabilidade_periodo_col3:
     rentabilidade_periodo_agio_mol3 = resultado_agio_mol3 / (valor_venda_arroba * pv_final_arroba_mol3)
     st.metric("Rentabilidade no Período Mol 3 (%)", f"{rentabilidade_periodo_agio_mol3 * 100:.2f}%")
 
+# Rentabilidade mensal
+rentabilidade_mensal_col1, rentabilidade_mensal_col2, rentabilidade_mensal_col3 = st.columns(3)
+
+with rentabilidade_mensal_col1:
+    rentabilidade_mensal_mol1 = ((1 + rentabilidade_periodo_agio_mol1)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 1 (%)", f"{rentabilidade_mensal_mol1 * 100:.2f}%")
+with rentabilidade_mensal_col2:
+    rentabilidade_mensal_mol2 = ((1 + rentabilidade_periodo_agio_mol2)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 2 (%)", f"{rentabilidade_mensal_mol2 * 100:.2f}%")
+with rentabilidade_mensal_col3:
+    rentabilidade_mensal_mol3 = ((1 + rentabilidade_periodo_agio_mol3)**(1/(dias/30.4))) - 1
+    st.metric("Rentabilidade Mensal Mol 3 (%)", f"{rentabilidade_mensal_mol3 * 100:.2f}%")
+
 # Insights principais
 insight_col1, insight_col2, insight_col3 = st.columns(3)
 
