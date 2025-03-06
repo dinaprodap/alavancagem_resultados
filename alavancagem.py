@@ -475,11 +475,14 @@ with tab2:
     st.subheader("Indicadores de Performance")
     
     # Função para criar sparkline
-    def create_sparkline(values, height=50):
+    def create_sparkline(valores, height=50):
         fig = go.Figure()
-        fig.add_trace(go.Scatter(y=values, mode='lines+markers',
-                                line=dict(color='#2f855a', width=2),
-                                marker=dict(color='#2f855a', size=6)))
+        fig.add_trace(go.Scatter(
+            y=valores,
+            mode='lines+markers',
+            line=dict(color='#2f855a', width=2),
+            marker=dict(color='#2f855a', size=6)
+        ))
         fig.update_layout(
             height=height,
             margin=dict(l=0, r=0, t=0, b=0),
@@ -491,15 +494,43 @@ with tab2:
         )
         return fig
 
-    # Container para os cards
-    for metrica, titulo, sufixo in [
+    # Definir métricas
+    metricas = [
         ('gmd', 'GMD', 'kg/dia'),
         ('rendimento', 'Rendimento de Carcaça', '%'),
         ('gdc', 'GDC', 'kg/dia'),
         ('eficiencia_biologica', 'Eficiência Biológica', 'kgMS/@'),
         ('arrobas_adicionais', 'Arrobas Adicionais', '@/cab')
-    ]:
+    ]
+
+    # Container para os cards
+    for metrica, titulo, sufixo in metricas:
+        st.markdown(f"### {titulo}")
+        
+        valores_ref = []  # Para armazenar valores para o sparkline
+        
+        for molecula in moleculas:
+            col1, col2 = st.columns([4, 1])
+            
+            with col1:
+                if metrica == 'gdc':
+                    valor = (((resultados[molecula]['peso_final'] * resultados[molecula]['rendimento']/100)) - 
+                            (pv_inicial/2))/resultados[molecula]['dias']
+                elif metrica == 'arrobas_adicionais':
+                    valor = resultados[molecula].get('arrobas_adicionais', 0)
+                else:
+                    valor = resultados[molecula][metrica]
+                
+                valores_ref.append(valor)
+                st.metric(f"{molecula}", f"{valor:.3f} {sufixo}")
+            
+            # Mostrar sparkline apenas para moléculas 2 e 3
+            if molecula != "Molecula 1":
+                with col2:
+                    st.plotly_chart(create_sparkline([valores_ref[0], valor]), use_container_width=True)
+        
         st.markdown("---")
+
         col1, col2 = st.columns([3, 1])
         
         with col1:
