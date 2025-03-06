@@ -475,7 +475,7 @@ with tab2:
     st.subheader("Indicadores de Performance")
     
     # Função para criar sparkline
-    def create_sparkline(valores, height=50):
+    def create_sparkline(valores, height=50, key=None):
         fig = go.Figure()
         fig.add_trace(go.Scatter(
             y=valores,
@@ -504,12 +504,12 @@ with tab2:
     ]
 
     # Container para os cards
-    for metrica, titulo, sufixo in metricas:
+    for metrica_idx, (metrica, titulo, sufixo) in enumerate(metricas):
         st.markdown(f"### {titulo}")
         
         valores_ref = []  # Para armazenar valores para o sparkline
         
-        for molecula in moleculas:
+        for mol_idx, molecula in enumerate(moleculas):
             col1, col2 = st.columns([4, 1])
             
             with col1:
@@ -527,36 +527,16 @@ with tab2:
             # Mostrar sparkline apenas para moléculas 2 e 3
             if molecula != "Molecula 1":
                 with col2:
-                    st.plotly_chart(create_sparkline([valores_ref[0], valor]), use_container_width=True)
+                    st.plotly_chart(
+                        create_sparkline(
+                            [valores_ref[0], valor],
+                            key=f"spark_{metrica}_{molecula}"
+                        ),
+                        key=f"plot_{metrica}_{molecula}",
+                        use_container_width=True
+                    )
         
         st.markdown("---")
-
-        col1, col2 = st.columns([3, 1])
-        
-        with col1:
-            for idx, molecula in enumerate(moleculas):
-                valores = []
-                if metrica == 'gmd':
-                    valor = resultados[molecula]['gmd']
-                elif metrica == 'rendimento':
-                    valor = resultados[molecula]['rendimento']
-                elif metrica == 'gdc':
-                    valor = (((resultados[molecula]['peso_final'] * resultados[molecula]['rendimento']/100)) - 
-                            (pv_inicial/2))/resultados[molecula]['dias']
-                elif metrica == 'eficiencia_biologica':
-                    valor = resultados[molecula]['eficiencia_biologica']
-                elif metrica == 'arrobas_adicionais':
-                    valor = resultados[molecula].get('arrobas_adicionais', 0)
-                
-                valores.append(valor)
-                
-                # Criar card com valor e sparkline
-                col_valor, col_spark = st.columns([2, 1])
-                with col_valor:
-                    st.metric(f"{molecula}", f"{valor:.3f} {sufixo}")
-                if idx > 0:  # Só mostra sparkline para moléculas 2 e 3
-                    with col_spark:
-                        st.plotly_chart(create_sparkline([resultados['Molecula 1'][metrica], valor]))
 
     # Seção 2: Gráficos
     st.markdown("---")
@@ -580,7 +560,7 @@ with tab2:
             yaxis_title='Incremento (%)',
             showlegend=False
         )
-        st.plotly_chart(fig_incremento)
+        st.plotly_chart(fig_incremento, key="plot_incremento_lucro")
 
     # b) Incremento Lucro Adicional (R$/cab)
     with col2:
@@ -605,7 +585,7 @@ with tab2:
             yaxis_title='R$/cab',
             showlegend=True
         )
-        st.plotly_chart(fig_lucro)
+        st.plotly_chart(fig_lucro, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
     fig_custoReceita = go.Figure()
@@ -635,4 +615,4 @@ with tab2:
         showlegend=True
     )
     
-    st.plotly_chart(fig_custoReceita, use_container_width=True)
+    st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
