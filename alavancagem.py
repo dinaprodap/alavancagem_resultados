@@ -391,6 +391,18 @@ with valor_arrobas_col3:
     valor_arrobas_mol3 = valor_venda_arroba * resultados["Molecula 3"]["arrobas"]
     st.metric("Valor das Arrobas Produzidas Mol 3 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
 
+# Resultado (R$/cab/dia)
+resultado_col1, resultado_col2, resultado_col3 = st.columns(3)
+
+with resultado_col1:
+    resultado_mol1 = valor_arrobas_mol1 - custeio_periodo_mol1
+    st.metric("Resultado Mol 1 (R$/Cab)", f"{resultado_mol1:.2f}")
+with resultado_col2:
+    resultado_mol2 = valor_arrobas_mol2 - custeio_periodo_mol2
+    st.metric("Resultado Mol 2 (R$/Cab)", f"{resultado_mol2:.2f}")
+with resultado_col3:
+    resultado_mol3 = valor_arrobas_mol3 - custeio_periodo_mol3
+    st.metric("Resultado Mol 3 (R$/Cab)", f"{resultado_mol3:.2f}")
 
 # Insights principais
 insight_col1, insight_col2, insight_col3 = st.columns(3)
