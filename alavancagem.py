@@ -470,35 +470,137 @@ with insight_col3:
 with tab2:
     st.header("📈 Análise Comparativa", divider='rainbow')
     
-    # Grid de resultados
-    col1, col2, col3 = st.columns(3)
+    # Seção 1: Cards de Indicadores
+    st.subheader("Indicadores de Performance")
     
-    # Exibir resultados
-    for idx, (molecula, res) in enumerate(resultados.items()):
-        with [col1, col2, col3][idx]:
-            st.markdown(f"#### {molecula}")
-            if idx > 0:
-                st.markdown(metric_card("Incremento do Lucro", res["incremento_lucro"], suffix="%"), unsafe_allow_html=True)
-                st.markdown(metric_card("Arrobas Adicionais", res["arrobas_adicionais"], suffix=" @/cab"), unsafe_allow_html=True)
-                st.markdown(metric_card("Receita Adicional", res["receita_adicional"], prefix="R$ "), unsafe_allow_html=True)
-                st.markdown(metric_card("Custo Adicional", res["custo_adicional"], prefix="R$ "), unsafe_allow_html=True)
-                st.markdown(metric_card("Incremento Lucro", res["incremento_lucro_adicional"], prefix="R$ "), unsafe_allow_html=True)
-                st.markdown(metric_card("Custo @Adicional", res["custo_arroba_adicional"], prefix="R$ "), unsafe_allow_html=True)
-            
-            st.markdown(metric_card("Consumo MS", res["consumo_ms"], suffix=" Kg/Cab/dia"), unsafe_allow_html=True)
-            st.markdown(metric_card("PV Final", res["peso_final"]/15, suffix=" @/Cab"), unsafe_allow_html=True)
-            st.markdown(metric_card("Eficiência Biológica", (res["consumo_ms"] * res["dias"])/res["arrobas"], suffix=" kgMS/@"), unsafe_allow_html=True)
-            st.markdown(metric_card("Rentabilidade Período", res["rentabilidade_periodo"]*100, suffix="%"), unsafe_allow_html=True)
-            st.markdown(metric_card("Rentabilidade Mensal", res["rentabilidade_mensal"]*100, suffix="%"), unsafe_allow_html=True)
+    # Função para criar sparkline
+    def create_sparkline(values, height=50):
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(y=values, mode='lines+markers',
+                                line=dict(color='#2f855a', width=2),
+                                marker=dict(color='#2f855a', size=6)))
+        fig.update_layout(
+            height=height,
+            margin=dict(l=0, r=0, t=0, b=0),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            showlegend=False,
+            xaxis=dict(showgrid=False, showticklabels=False),
+            yaxis=dict(showgrid=False, showticklabels=False)
+        )
+        return fig
 
-    # Parâmetros principais
+    # Container para os cards
+    for metrica, titulo, sufixo in [
+        ('gmd', 'GMD', 'kg/dia'),
+        ('rendimento', 'Rendimento de Carcaça', '%'),
+        ('gdc', 'GDC', 'kg/dia'),
+        ('eficiencia_biologica', 'Eficiência Biológica', 'kgMS/@'),
+        ('arrobas_adicionais', 'Arrobas Adicionais', '@/cab')
+    ]:
+        st.markdown("---")
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            for idx, molecula in enumerate(moleculas):
+                valores = []
+                if metrica == 'gmd':
+                    valor = resultados[molecula]['gmd']
+                elif metrica == 'rendimento':
+                    valor = resultados[molecula]['rendimento']
+                elif metrica == 'gdc':
+                    valor = (((resultados[molecula]['peso_final'] * resultados[molecula]['rendimento']/100)) - 
+                            (pv_inicial/2))/resultados[molecula]['dias']
+                elif metrica == 'eficiencia_biologica':
+                    valor = resultados[molecula]['eficiencia_biologica']
+                elif metrica == 'arrobas_adicionais':
+                    valor = resultados[molecula].get('arrobas_adicionais', 0)
+                
+                valores.append(valor)
+                
+                # Criar card com valor e sparkline
+                col_valor, col_spark = st.columns([2, 1])
+                with col_valor:
+                    st.metric(f"{molecula}", f"{valor:.3f} {sufixo}")
+                if idx > 0:  # Só mostra sparkline para moléculas 2 e 3
+                    with col_spark:
+                        st.plotly_chart(create_sparkline([resultados['Molecula 1'][metrica], valor]))
+
+    # Seção 2: Gráficos
     st.markdown("---")
-    st.caption("Parâmetros Principais")
-    params_col1, params_col2, params_col3 = st.columns(3)
-    with params_col1:
-        st.metric("GMD (kg/dia)", f"{gmd:.3f}")
-    with params_col2:
-        st.metric("Rendimento Carcaça", f"{rendimento_carcaca:.2f}%")
-    with params_col3:
-        st.metric("Valor Arroba", f"R$ {valor_venda_arroba:.2f}")
-        custo_arroba_mol1 = (custeio_final_mol1 * resultados["Molecula 1"]["dias"]) / resultados["Molecula 1"]["arrobas"]
+    st.subheader("Análise Comparativa")
+
+    # a) Incremento do Lucro (%)
+    col1, col2 = st.columns(2)
+    with col1:
+        fig_incremento = go.Figure()
+        incrementos = [0]  # Molécula 1 é referência
+        for molecula in moleculas[1:]:
+            incrementos.append(resultados[molecula]['incremento_lucro'])
+        
+        fig_incremento.add_trace(go.Bar(
+            x=moleculas,
+            y=incrementos,
+            name='Incremento do Lucro (%)'
+        ))
+        fig_incremento.update_layout(
+            title='Incremento do Lucro (%)',
+            yaxis_title='Incremento (%)',
+            showlegend=False
+        )
+        st.plotly_chart(fig_incremento)
+
+    # b) Incremento Lucro Adicional (R$/cab)
+    with col2:
+        fig_lucro = go.Figure()
+        lucros = [0]  # Molécula 1 é referência
+        for molecula in moleculas[1:]:
+            lucros.append(resultados[molecula]['incremento_lucro_adicional'])
+        
+        fig_lucro.add_trace(go.Bar(
+            x=moleculas,
+            y=lucros,
+            name='Incremento Lucro Adicional'
+        ))
+        fig_lucro.add_trace(go.Scatter(
+            x=moleculas,
+            y=lucros,
+            mode='lines+markers',
+            name='Variação'
+        ))
+        fig_lucro.update_layout(
+            title='Incremento Lucro Adicional (R$/cab)',
+            yaxis_title='R$/cab',
+            showlegend=True
+        )
+        st.plotly_chart(fig_lucro)
+
+    # c) Custo x Receita Adicional
+    fig_custoReceita = go.Figure()
+    
+    receitas = [0]  # Molécula 1 é referência
+    custos = [0]    # Molécula 1 é referência
+    for molecula in moleculas[1:]:
+        receitas.append(resultados[molecula]['receita_adicional'])
+        custos.append(resultados[molecula]['custo_adicional'])
+    
+    fig_custoReceita.add_trace(go.Bar(
+        x=moleculas,
+        y=receitas,
+        name='Receita Adicional'
+    ))
+    fig_custoReceita.add_trace(go.Scatter(
+        x=moleculas,
+        y=custos,
+        mode='lines+markers',
+        name='Custo Adicional',
+        line=dict(color='red')
+    ))
+    
+    fig_custoReceita.update_layout(
+        title='Custo x Receita Adicional',
+        yaxis_title='R$/cab',
+        showlegend=True
+    )
+    
+    st.plotly_chart(fig_custoReceita, use_container_width=True)
