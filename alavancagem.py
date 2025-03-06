@@ -421,13 +421,13 @@ with resultado_agio_col3:
 rentabilidade_periodo_col1, rentabilidade_periodo_col2, rentabilidade_periodo_col3 = st.columns(3)
 
 with rentabilidade_periodo_col1:
-    rentabilidade_periodo_agio_mol1 = resultado_agio_mol1 / (valor_venda_arroba * (pv_final / 15))
+    rentabilidade_periodo_agio_mol1 = resultado_agio_mol1 / (valor_venda_arroba * (pv_final_arroba_col1)
     st.metric("Rentabilidade no Período Mol 1 (%)", f"{rentabilidade_periodo_agio_mol1 * 100:.2f}%")
 with rentabilidade_periodo_col2:
-    rentabilidade_periodo_agio_mol2 = resultado_agio_mol2 / (valor_venda_arroba * (pv_final_mol2 / 15))
+    rentabilidade_periodo_agio_mol2 = resultado_agio_mol2 / (valor_venda_arroba * (pv_final_arroba_col2)
     st.metric("Rentabilidade no Período Mol 2 (%)", f"{rentabilidade_periodo_agio_mol2 * 100:.2f}%")
 with rentabilidade_periodo_col3:
-    rentabilidade_periodo_agio_mol3 = resultado_agio_mol3 / (valor_venda_arroba * (pv_final_mol3 / 15))
+    rentabilidade_periodo_agio_mol3 = resultado_agio_mol3 / (valor_venda_arroba * (pv_final_arroba_col3)
     st.metric("Rentabilidade no Período Mol 3 (%)", f"{rentabilidade_periodo_agio_mol3 * 100:.2f}%")
 
 
