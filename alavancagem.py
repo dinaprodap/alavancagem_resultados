@@ -471,71 +471,90 @@ with insight_col3:
 with tab2:
     st.header("📈 Análise Comparativa", divider='rainbow')
     
-    # Seção 1: Cards de Indicadores
+    # Seção 1: Cards de Indicadores em colunas
     st.subheader("Indicadores de Performance")
     
-    # Função para criar sparkline
-    def create_sparkline(valores, height=50, key=None):
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            y=valores,
-            mode='lines+markers',
-            line=dict(color='#2f855a', width=2),
-            marker=dict(color='#2f855a', size=6)
-        ))
-        fig.update_layout(
-            height=height,
-            margin=dict(l=0, r=0, t=0, b=0),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False,
-            xaxis=dict(showgrid=False, showticklabels=False),
-            yaxis=dict(showgrid=False, showticklabels=False)
-        )
-        return fig
+    # Criar 5 colunas para os indicadores
+    col_gmd, col_rend, col_gdc, col_efic, col_arr = st.columns(5)
+    
+    # GMD
+    with col_gmd:
+        st.markdown("""
+            <div style="background-color: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #2c5282; margin-bottom: 10px;">GMD (Kg/dia)</h4>
+        """, unsafe_allow_html=True)
+        
+        for molecula in moleculas:
+            st.markdown(metric_card(
+                f"{molecula}", 
+                resultados[molecula]['gmd'],
+                suffix=" kg/dia"
+            ), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Rendimento de Carcaça
+    with col_rend:
+        st.markdown("""
+            <div style="background-color: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #2c5282; margin-bottom: 10px;">Rendimento de Carcaça</h4>
+        """, unsafe_allow_html=True)
+        
+        for molecula in moleculas:
+            st.markdown(metric_card(
+                f"{molecula}", 
+                resultados[molecula]['rendimento'],
+                suffix=" %"
+            ), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # GDC
+    with col_gdc:
+        st.markdown("""
+            <div style="background-color: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #2c5282; margin-bottom: 10px;">GDC (Kg/dia)</h4>
+        """, unsafe_allow_html=True)
+        
+        for molecula in moleculas:
+            gdc = (((resultados[molecula]['peso_final'] * resultados[molecula]['rendimento']/100)) - 
+                   (pv_inicial/2))/resultados[molecula]['dias']
+            st.markdown(metric_card(
+                f"{molecula}", 
+                gdc,
+                suffix=" kg/dia"
+            ), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Eficiência Biológica
+    with col_efic:
+        st.markdown("""
+            <div style="background-color: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #2c5282; margin-bottom: 10px;">Eficiência Biológica</h4>
+        """, unsafe_allow_html=True)
+        
+        for molecula in moleculas:
+            st.markdown(metric_card(
+                f"{molecula}", 
+                resultados[molecula]['eficiencia_biologica'],
+                suffix=" kgMS/@"
+            ), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Arrobas Adicionais
+    with col_arr:
+        st.markdown("""
+            <div style="background-color: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h4 style="color: #2c5282; margin-bottom: 10px;">Arrobas Adicionais</h4>
+        """, unsafe_allow_html=True)
+        
+        for molecula in moleculas:
+            valor = resultados[molecula].get('arrobas_adicionais', 0)
+            st.markdown(metric_card(
+                f"{molecula}", 
+                valor,
+                suffix=" @/cab"
+            ), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    # Definir métricas
-    metricas = [
-        ('gmd', 'GMD', 'kg/dia'),
-        ('rendimento', 'Rendimento de Carcaça', '%'),
-        ('gdc', 'GDC', 'kg/dia'),
-        ('eficiencia_biologica', 'Eficiência Biológica', 'kgMS/@'),
-        ('arrobas_adicionais', 'Arrobas Adicionais', '@/cab')
-    ]
-
-    # Container para os cards
-    for metrica_idx, (metrica, titulo, sufixo) in enumerate(metricas):
-        st.markdown(f"### {titulo}")
-        
-        valores_ref = []  # Para armazenar valores para o sparkline
-        
-        for mol_idx, molecula in enumerate(moleculas):
-            col1, col2 = st.columns([4, 1])
-            
-            with col1:
-                if metrica == 'gdc':
-                    valor = (((resultados[molecula]['peso_final'] * resultados[molecula]['rendimento']/100)) - 
-                            (pv_inicial/2))/resultados[molecula]['dias']
-                elif metrica == 'arrobas_adicionais':
-                    valor = resultados[molecula].get('arrobas_adicionais', 0)
-                else:
-                    valor = resultados[molecula][metrica]
-                
-                valores_ref.append(valor)
-                st.metric(f"{molecula}", f"{valor:.3f} {sufixo}")
-            
-            # Mostrar sparkline apenas para moléculas 2 e 3
-            if molecula != "Molecula 1":
-                with col2:
-                    st.plotly_chart(
-                        create_sparkline(
-                            [valores_ref[0], valor],
-                            key=f"spark_{metrica}_{molecula}"
-                        ),
-                        key=f"plot_{metrica}_{molecula}",
-                        use_container_width=True
-                    )
-        
         st.markdown("---")
 
     # Seção 2: Gráficos
