@@ -675,12 +675,12 @@ with tab2:
             arrobas_adicionais.append(resultados[mol]['arrobas_adicionais'])
         
         # Calcular custo da arroba adicional
-        custos_arroba = [0]  # Molécula 1 é referência
-        for mol in moleculas[1:]:
-            custo_adicional = resultados[mol]['custo_adicional']
-            arrobas_adicionais_mol = resultados[mol]['arrobas_adicionais']
-            custo_arroba = custo_adicional / arrobas_adicionais_mol if arrobas_adicionais_mol != 0 else 0
-            custos_arroba.append(custo_arroba)
+        custos_arroba = [custos_arroba[1]]  # Primeiro valor igual ao da molécula 2
+        custos_arroba.extend([
+            resultados[mol]['custo_adicional'] / resultados[mol]['arrobas_adicionais'] 
+            if resultados[mol]['arrobas_adicionais'] != 0 else 0 
+            for mol in moleculas[1:]
+        ])
 
         # Barra para Arrobas Base
         fig_performance.add_trace(go.Bar(
@@ -706,21 +706,19 @@ with tab2:
             marker_color='rgb(35, 67, 98)'  # Azul escuro
         ))
 
-        # Adicionar anotações para o custo
-        for i, custo in enumerate(custos_arroba):
-            if custo > 0:
-                fig_performance.add_annotation(
-                    x=moleculas[i],
-                    y=arrobas_base[i] + arrobas_adicionais[i],
-                    text=f"R${custo:.2f}",
-                    showarrow=False,
-                    yshift=20,
-                    font=dict(size=14),
-                    bgcolor='rgba(255, 255, 255, 0.8)',
-                    bordercolor='rgb(0, 0, 0)',
-                    borderwidth=1,
-                    borderpad=4
-                )
+        # Adicionar linha de custo
+        fig_performance.add_trace(go.Scatter(
+            x=moleculas,
+            y=[max(arrobas_base) + max(arrobas_adicionais) + 1] * 3,  # Posição Y fixa acima das barras
+            name='Custo @+ (R$/@)',
+            mode='lines+markers+text',
+            line=dict(color='red', width=2),
+            marker=dict(size=10, color='red'),
+            text=[f"R${custo:.2f}" for custo in custos_arroba],
+            textposition='top center',
+            textfont=dict(size=14),
+            showlegend=False
+        ))
 
         fig_performance.update_layout(
             title='Performance',
@@ -728,6 +726,16 @@ with tab2:
             showlegend=True,
             barmode='stack',
             uniformtext=dict(mode='hide', minsize=10)
+        )
+
+        # Adicionar anotação para identificar a linha de custo
+        fig_performance.add_annotation(
+            x=moleculas[0],
+            y=max(arrobas_base) + max(arrobas_adicionais) + 1.5,
+            text="Custo da Arroba Adicional (R$/@)",
+            showarrow=False,
+            font=dict(size=14),
+            xanchor='left'
         )
 
         st.plotly_chart(fig_performance, use_container_width=True, key="plot_performance")
