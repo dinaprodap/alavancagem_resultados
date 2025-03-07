@@ -129,7 +129,7 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[3]:
-            valor_custo = 1.88 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
+            valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
             custos[molecula] = valor_custo  # Armazenar custo no dicionário de custos
             st.number_input(
                 f"Custo de {molecula}",
@@ -675,7 +675,7 @@ with tab2:
             arrobas_adicionais.append(resultados[mol]['arrobas_adicionais'])
         
         # Calcular custo da arroba adicional
-        custos_arroba = [custos[1]]  # Primeiro valor igual ao da molécula 2
+        custos_arroba = [0]  # Primeiro valor igual ao da molécula 2
         custos_arroba.extend([
             resultados[mol]['custo_adicional'] / resultados[mol]['arrobas_adicionais'] 
             if resultados[mol]['arrobas_adicionais'] != 0 else 0 
