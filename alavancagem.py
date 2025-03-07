@@ -600,14 +600,11 @@ with tab2:
         for molecula in moleculas[1:]:
             lucros.append(resultados[molecula]['incremento_lucro_adicional'])
         
-        # Adiciona apenas as barras (remove a linha)
+        # Adiciona apenas as barras (sem texto no topo)
         fig_lucro.add_trace(go.Bar(
             x=moleculas,
             y=lucros,
-            name='Incremento Lucro Adicional',
-            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in lucros],  # Valores no topo
-            textposition='outside',  # Posição do texto acima das barras
-            textfont=dict(size=14)
+            name='Incremento Lucro Adicional'
         ))
 
         # Adiciona anotações para variação no meio das barras
@@ -616,7 +613,7 @@ with tab2:
                 fig_lucro.add_annotation(
                     x=moleculas[i],
                     y=valor/2,  # Posição vertical no meio da barra
-                    text=f"+{abs(valor):.2f}",  # Sempre mostra valor positivo
+                    text=f"+R$ {abs(valor):.2f}",  # Mostra valor positivo com R$
                     showarrow=False,
                     font=dict(size=14, color='white')
                 )
@@ -624,9 +621,7 @@ with tab2:
         fig_lucro.update_layout(
             title='Incremento Lucro Adicional (R$/cab)',
             yaxis_title='R$/cab',
-            showlegend=False,  # Remove a legenda
-            uniformtext_minsize=8,
-            uniformtext_mode='hide'
+            showlegend=False
         )
         
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
