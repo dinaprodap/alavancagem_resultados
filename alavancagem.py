@@ -618,7 +618,7 @@ with tab2:
             x=moleculas,
             y=lucros,
             name='Incremento Lucro Adicional',
-            text=[f"{valor:.1f}%" if valor != 0 else "" for valor in incrementos],  # Percentual no topo
+            text=[f"{valor:.0f}%" if valor != 0 else "" for valor in incrementos],  # Percentual no topo
             textposition='outside',  # Texto no topo
             textfont=dict(size=14)
         ))
