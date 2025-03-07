@@ -645,7 +645,7 @@ with tab2:
             text=[
                 "",  # Mol 1
                 f"R$ {abs(custos[1]):.2f}",  # Mol 2
-                f"R$ {abs(custos[2])::.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
+                f"R$ {abs(custos[2]):.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
             ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
