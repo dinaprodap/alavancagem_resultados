@@ -560,41 +560,9 @@ with tab2:
     st.markdown("---")
     st.subheader("Análise Comparativa")
 
-    # a) Incremento do Lucro (%)
+    # b) Incremento Lucro Adicional (R$/cab)
     col1, col2 = st.columns(2)
     with col1:
-        fig_incremento = go.Figure()
-        incrementos = [0]  # Molécula 1 é referência
-        resultado_base = resultado_agio_mol1  # Resultado com ágio da molécula 1
-        
-        # Cálculo para Molécula 2
-        if resultado_base < 0:
-            incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * -1 * 100
-        else:
-            incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * 100
-        incrementos.append(incremento_mol2)
-        
-        # Cálculo para Molécula 3
-        if resultado_base < 0:
-            incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * -1 * 100
-        else:
-            incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * 100
-        incrementos.append(incremento_mol3)
-        
-        fig_incremento.add_trace(go.Bar(
-            x=moleculas,
-            y=incrementos,
-            name='Incremento do Lucro (%)'
-        ))
-        fig_incremento.update_layout(
-            title='Incremento do Lucro (%)',
-            yaxis_title='Incremento (%)',
-            showlegend=False
-        )
-        st.plotly_chart(fig_incremento, use_container_width=True, key="plot_incremento_lucro")
-    
-    # b) Incremento Lucro Adicional (R$/cab)
-    with col2:
         fig_lucro = go.Figure()
         lucros = [0]  # Molécula 1 é referência
         incrementos = [0]  # Para armazenar os percentuais
@@ -641,31 +609,32 @@ with tab2:
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
-    fig_custoReceita = go.Figure()
-    
-    receitas = [0]  # Molécula 1 é referência
-    custos = [0]    # Molécula 1 é referência
-    for molecula in moleculas[1:]:
-        receitas.append(resultados[molecula]['receita_adicional'])
-        custos.append(resultados[molecula]['custo_adicional'])
-    
-    fig_custoReceita.add_trace(go.Bar(
-        x=moleculas,
-        y=receitas,
-        name='Receita Adicional'
-    ))
-    fig_custoReceita.add_trace(go.Scatter(
-        x=moleculas,
-        y=custos,
-        mode='lines+markers',
-        name='Custo Adicional',
-        line=dict(color='red')
-    ))
-    
-    fig_custoReceita.update_layout(
-        title='Custo x Receita Adicional',
-        yaxis_title='R$/cab',
-        showlegend=True
-    )
-    
-    st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
+    with col2:
+        fig_custoReceita = go.Figure()
+        
+        receitas = [0]  # Molécula 1 é referência
+        custos = [0]    # Molécula 1 é referência
+        for molecula in moleculas[1:]:
+            receitas.append(resultados[molecula]['receita_adicional'])
+            custos.append(resultados[molecula]['custo_adicional'])
+        
+        fig_custoReceita.add_trace(go.Bar(
+            x=moleculas,
+            y=receitas,
+            name='Receita Adicional'
+        ))
+        fig_custoReceita.add_trace(go.Scatter(
+            x=moleculas,
+            y=custos,
+            mode='lines+markers',
+            name='Custo Adicional',
+            line=dict(color='red')
+        ))
+        
+        fig_custoReceita.update_layout(
+            title='Custo x Receita Adicional',
+            yaxis_title='R$/cab',
+            showlegend=True
+        )
+        
+        st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
