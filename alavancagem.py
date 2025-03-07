@@ -609,6 +609,7 @@ with tab2:
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
+    with col2:
         fig_custoReceita = go.Figure()
 
         receitas = [0]  # Molécula 1 é referência
