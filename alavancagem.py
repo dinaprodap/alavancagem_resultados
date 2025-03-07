@@ -609,7 +609,6 @@ with tab2:
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
-    with col2:
         fig_custoReceita = go.Figure()
 
         receitas = [0]  # Molécula 1 é referência
@@ -618,15 +617,23 @@ with tab2:
             receitas.append(resultados[molecula]['receita_adicional'])
             custos.append(resultados[molecula]['custo_adicional'])
 
+        # Calcula as variações percentuais (Mol 3 em relação à Mol 2)
+        var_receita = ((receitas[2] / receitas[1]) - 1) * 100 if receitas[1] != 0 else 0
+        var_custo = ((custos[2] / custos[1]) - 1) * 100 if custos[1] != 0 else 0
+
         # Barra para Receita Adicional
         fig_custoReceita.add_trace(go.Bar(
             x=moleculas,
             y=receitas,
             name='Receita Adicional',
-            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in receitas],
+            text=[
+                "",  # Mol 1
+                f"R$ {abs(receitas[1]):.2f}",  # Mol 2
+                f"R$ {abs(receitas[2]):.2f}<br>({var_receita:.1f}%)"  # Mol 3 com variação
+            ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
-            insidetextanchor='middle'  # Garante centralização horizontal
+            insidetextanchor='middle'
         ))
 
         # Barra para Custo Adicional
@@ -634,34 +641,22 @@ with tab2:
             x=moleculas,
             y=custos,
             name='Custo Adicional',
-            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in custos],
+            text=[
+                "",  # Mol 1
+                f"R$ {abs(custos[1]):.2f}",  # Mol 2
+                f"R$ {abs(custos[2]):.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
+            ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
-            insidetextanchor='middle'  # Garante centralização horizontal
+            insidetextanchor='middle'
         ))
-
-        # Adiciona anotações para a variação percentual
-        for i, (receita, custo) in enumerate(zip(receitas, custos)):
-            if receita != 0 and custo != 0:  # Para moléculas 2 e 3
-                # Calcula e adiciona a variação percentual
-                variacao_percentual = ((receita - custo) / abs(custo)) * 100
-                fig_custoReceita.add_annotation(
-                    x=moleculas[i],
-                    y=max(receita, custo),
-                    text=f"Δ {variacao_percentual:+.1f}%",
-                    showarrow=False,
-                    font=dict(size=14),
-                    yshift=20,
-                    xanchor='center',  # Garante centralização horizontal da variação
-                    yanchor='bottom'
-                )
 
         fig_custoReceita.update_layout(
             title='Custo x Receita Adicional',
             yaxis_title='R$/cab',
             showlegend=True,
-            barmode='group',  # Para mostrar as barras lado a lado
-            uniformtext=dict(mode='hide', minsize=10)  # Garante consistência no tamanho do texto
+            barmode='group',
+            uniformtext=dict(mode='hide', minsize=10)
         )
 
         st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
