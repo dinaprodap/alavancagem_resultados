@@ -663,10 +663,10 @@ with tab2:
         st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
 
 
-    # d) Arrobas Produzidas x Custo da Arroba Adicional
+    # d) Variação Percentual: Arrobas Produzidas x Custo da Arroba
     col1, col2 = st.columns(2)
     with col1:
-        fig_arrobas = go.Figure()
+        fig_variacoes = go.Figure()
 
         # Preparar dados
         arrobas = [resultados[mol]['arrobas'] for mol in moleculas]
@@ -679,38 +679,59 @@ with tab2:
             custo_arroba = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
             custos_arroba.append(custo_arroba)
 
-        # Barra para Arrobas Produzidas
-        fig_arrobas.add_trace(go.Bar(
-            x=moleculas,
-            y=arrobas,
-            name='Arrobas Produzidas',
-            text=[f"{valor:.2f}<br>@/cab" for valor in arrobas],
-            textposition='inside',
-            textfont=dict(size=14, color='white'),
-            insidetextanchor='middle'
-        ))
+        # Calcular variações percentuais em relação à Molécula 2
+        var_arrobas = [
+            0,  # Mol 1
+            0,  # Mol 2 (referência)
+            ((arrobas[2] / arrobas[1]) - 1) * 100  # Mol 3
+        ]
 
-        # Barra para Custo da Arroba Adicional
-        fig_arrobas.add_trace(go.Bar(
+        var_custos = [
+            0,  # Mol 1
+            0,  # Mol 2 (referência)
+            ((custos_arroba[2] / custos_arroba[1]) - 1) * 100 if custos_arroba[1] != 0 else 0  # Mol 3
+        ]
+
+        # Barra para Variação de Arrobas Produzidas
+        fig_variacoes.add_trace(go.Bar(
             x=moleculas,
-            y=custos_arroba,
-            name='Custo Arroba Adicional',
+            y=var_arrobas,
+            name='Variação Arrobas',
             text=[
                 "",  # Mol 1
-                f"R$ {abs(custos_arroba[1]):.2f}/@" if custos_arroba[1] != 0 else "",  # Mol 2
-                f"R$ {abs(custos_arroba[2]):.2f}/@ <br>({((custos_arroba[2]/custos_arroba[1])-1)*100:.1f}%)" if custos_arroba[2] != 0 and custos_arroba[1] != 0 else ""  # Mol 3
+                f"{arrobas[1]:.2f} @/cab",  # Mol 2 (valor base)
+                f"{arrobas[2]:.2f} @/cab<br>({var_arrobas[2]:+.1f}%)"  # Mol 3
             ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
             insidetextanchor='middle'
         ))
 
-        fig_arrobas.update_layout(
-            title='Arrobas Produzidas x Custo da Arroba Adicional',
-            yaxis_title='@/cab e R$/@',
+        # Barra para Variação do Custo da Arroba
+        fig_variacoes.add_trace(go.Bar(
+            x=moleculas,
+            y=var_custos,
+            name='Variação Custo/@',
+            text=[
+                "",  # Mol 1
+                f"R$ {custos_arroba[1]:.2f}/@",  # Mol 2 (valor base)
+                f"R$ {custos_arroba[2]:.2f}/@<br>({var_custos[2]:+.1f}%)"  # Mol 3
+            ],
+            textposition='inside',
+            textfont=dict(size=14, color='white'),
+            insidetextanchor='middle'
+        ))
+
+        fig_variacoes.update_layout(
+            title='Variação: Arrobas Produzidas x Custo da Arroba',
+            yaxis_title='Variação (%)',
             showlegend=True,
             barmode='group',
-            uniformtext=dict(mode='hide', minsize=10)
+            uniformtext=dict(mode='hide', minsize=10),
+            yaxis=dict(
+                tickformat='+.1f',  # Formato dos ticks do eixo Y
+                ticksuffix='%'  # Sufixo dos ticks do eixo Y
+            )
         )
 
-        st.plotly_chart(fig_arrobas, use_container_width=True, key="plot_arrobas_custo")
+        st.plotly_chart(fig_variacoes, use_container_width=True, key="plot_variacoes")
