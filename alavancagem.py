@@ -609,58 +609,59 @@ with tab2:
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
-    fig_custoReceita = go.Figure()
+    with col2:
+        fig_custoReceita = go.Figure()
 
-    receitas = [0]  # Molécula 1 é referência
-    custos = [0]    # Molécula 1 é referência
-    for molecula in moleculas[1:]:
-        receitas.append(resultados[molecula]['receita_adicional'])
-        custos.append(resultados[molecula]['custo_adicional'])
+        receitas = [0]  # Molécula 1 é referência
+        custos = [0]    # Molécula 1 é referência
+        for molecula in moleculas[1:]:
+            receitas.append(resultados[molecula]['receita_adicional'])
+            custos.append(resultados[molecula]['custo_adicional'])
 
-    # Barra para Receita Adicional
-    fig_custoReceita.add_trace(go.Bar(
-        x=moleculas,
-        y=receitas,
-        name='Receita Adicional',
-        text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in receitas],
-        textposition='inside',
-        textfont=dict(size=14, color='white'),
-        insidetextanchor='middle'  # Garante centralização horizontal
-    ))
+        # Barra para Receita Adicional
+        fig_custoReceita.add_trace(go.Bar(
+            x=moleculas,
+            y=receitas,
+            name='Receita Adicional',
+            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in receitas],
+            textposition='inside',
+            textfont=dict(size=14, color='white'),
+            insidetextanchor='middle'  # Garante centralização horizontal
+        ))
 
-    # Barra para Custo Adicional
-    fig_custoReceita.add_trace(go.Bar(
-        x=moleculas,
-        y=custos,
-        name='Custo Adicional',
-        text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in custos],
-        textposition='inside',
-        textfont=dict(size=14, color='white'),
-        insidetextanchor='middle'  # Garante centralização horizontal
-    ))
+        # Barra para Custo Adicional
+        fig_custoReceita.add_trace(go.Bar(
+            x=moleculas,
+            y=custos,
+            name='Custo Adicional',
+            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in custos],
+            textposition='inside',
+            textfont=dict(size=14, color='white'),
+            insidetextanchor='middle'  # Garante centralização horizontal
+        ))
 
-    # Adiciona anotações para a variação percentual
-    for i, (receita, custo) in enumerate(zip(receitas, custos)):
-        if receita != 0 and custo != 0:  # Para moléculas 2 e 3
-            # Calcula e adiciona a variação percentual
-            variacao_percentual = ((receita - custo) / abs(custo)) * 100
-            fig_custoReceita.add_annotation(
-                x=moleculas[i],
-                y=max(receita, custo),
-                text=f"Δ {variacao_percentual:+.1f}%",
-                showarrow=False,
-                font=dict(size=14),
-                yshift=20,
-                xanchor='center',  # Garante centralização horizontal da variação
-                yanchor='bottom'
-            )
+        # Adiciona anotações para a variação percentual
+        for i, (receita, custo) in enumerate(zip(receitas, custos)):
+            if receita != 0 and custo != 0:  # Para moléculas 2 e 3
+                # Calcula e adiciona a variação percentual
+                variacao_percentual = ((receita - custo) / abs(custo)) * 100
+                fig_custoReceita.add_annotation(
+                    x=moleculas[i],
+                    y=max(receita, custo),
+                    text=f"Δ {variacao_percentual:+.1f}%",
+                    showarrow=False,
+                    font=dict(size=14),
+                    yshift=20,
+                    xanchor='center',  # Garante centralização horizontal da variação
+                    yanchor='bottom'
+                )
 
-    fig_custoReceita.update_layout(
-        title='Custo x Receita Adicional',
-        yaxis_title='R$/cab',
-        showlegend=True,
-        barmode='group',  # Para mostrar as barras lado a lado
-        uniformtext=dict(mode='hide', minsize=10)  # Garante consistência no tamanho do texto
-    )
+        fig_custoReceita.update_layout(
+            title='Custo x Receita Adicional',
+            yaxis_title='R$/cab',
+            showlegend=True,
+            barmode='group',  # Para mostrar as barras lado a lado
+            uniformtext=dict(mode='hide', minsize=10)  # Garante consistência no tamanho do texto
+        )
 
-    st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
+        st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
