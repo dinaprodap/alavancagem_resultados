@@ -626,7 +626,7 @@ with tab2:
                 fig_lucro.add_annotation(
                     x=moleculas[i],
                     y=valor/2,  # Posição do valor em R$
-                    text=f"+R$ {abs(valor):.2f}<br>(+{abs(percentual):.1f}%)",  # Valor em R$ e percentual
+                    text=f"+R$ {abs(valor):.2f}<br>(+{abs(percentual):.0f}%)",  # Valor em R$ e percentual
                     showarrow=False,
                     font=dict(size=14, color='white'),
                     align='center'
