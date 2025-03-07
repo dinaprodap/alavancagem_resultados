@@ -661,3 +661,57 @@ with tab2:
         )
 
         st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
+
+    # Após os gráficos anteriores, adicione:
+
+# d) Arrobas Produzidas x Custo da Arroba Adicional
+col1, col2 = st.columns(2)
+with col1:
+    fig_arrobas = go.Figure()
+
+    # Preparar dados
+    arrobas = [resultados[mol]['arrobas'] for mol in moleculas]
+    
+    # Calcular custo da arroba adicional
+    custos_arroba = [0]  # Molécula 1 é referência
+    for mol in moleculas[1:]:
+        custo_adicional = resultados[mol]['custo_adicional']
+        arrobas_adicionais = resultados[mol]['arrobas_adicionais']
+        custo_arroba = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
+        custos_arroba.append(custo_arroba)
+
+    # Barra para Arrobas Produzidas
+    fig_arrobas.add_trace(go.Bar(
+        x=moleculas,
+        y=arrobas,
+        name='Arrobas Produzidas',
+        text=[f"{valor:.2f}<br>@/cab" for valor in arrobas],
+        textposition='inside',
+        textfont=dict(size=14, color='white'),
+        insidetextanchor='middle'
+    ))
+
+    # Barra para Custo da Arroba Adicional
+    fig_arrobas.add_trace(go.Bar(
+        x=moleculas,
+        y=custos_arroba,
+        name='Custo Arroba Adicional',
+        text=[
+            "",  # Mol 1
+            f"R$ {abs(custos_arroba[1]):.2f}/@" if custos_arroba[1] != 0 else "",  # Mol 2
+            f"R$ {abs(custos_arroba[2]):.2f}/@ <br>({((custos_arroba[2]/custos_arroba[1])-1)*100:.1f}%)" if custos_arroba[2] != 0 and custos_arroba[1] != 0 else ""  # Mol 3
+        ],
+        textposition='inside',
+        textfont=dict(size=14, color='white'),
+        insidetextanchor='middle'
+    ))
+
+    fig_arrobas.update_layout(
+        title='Arrobas Produzidas x Custo da Arroba Adicional',
+        yaxis_title='@/cab e R$/@',
+        showlegend=True,
+        barmode='group',
+        uniformtext=dict(mode='hide', minsize=10)
+    )
+
+    st.plotly_chart(fig_arrobas, use_container_width=True, key="plot_arrobas_custo")
