@@ -599,7 +599,7 @@ with tab2:
         lucros = [0]  # Molécula 1 é referência
         incrementos = [0]  # Para armazenar os percentuais
         
-        # Calcula os incrementos percentuais usando a mesma lógica do gráfico A
+        # Calcula os incrementos percentuais
         resultado_base = resultado_agio_mol1
         if resultado_base < 0:
             incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * -1 * 100
@@ -613,25 +613,23 @@ with tab2:
         for molecula in moleculas[1:]:
             lucros.append(resultados[molecula]['incremento_lucro_adicional'])
         
-        # Adiciona as barras com os dois textos
+        # Adiciona as barras
         fig_lucro.add_trace(go.Bar(
             x=moleculas,
             y=lucros,
-            name='Incremento Lucro Adicional',
-            text=[f"{valor:.0f}%" if valor != 0 else "" for valor in incrementos],  # Percentual no topo
-            textposition='outside',  # Texto no topo
-            textfont=dict(size=14)
+            name='Incremento Lucro Adicional'
         ))
 
-        # Adiciona anotações para os valores em R$ no meio das barras
-        for i, valor in enumerate(lucros):
+        # Adiciona anotações para os valores em R$ e percentual no meio das barras
+        for i, (valor, percentual) in enumerate(zip(lucros, incrementos)):
             if valor != 0:  # Apenas para valores não zero
                 fig_lucro.add_annotation(
                     x=moleculas[i],
-                    y=valor/2,  # Posição vertical no meio da barra
-                    text=f"+R$ {abs(valor):.2f}",  # Valor em R$ no meio
+                    y=valor/2,  # Posição do valor em R$
+                    text=f"+R$ {abs(valor):.2f}<br>(+{abs(percentual):.1f}%)",  # Valor em R$ e percentual
                     showarrow=False,
-                    font=dict(size=14, color='white')
+                    font=dict(size=14, color='white'),
+                    align='center'
                 )
 
         fig_lucro.update_layout(
