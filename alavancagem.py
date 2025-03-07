@@ -645,7 +645,7 @@ with tab2:
             text=[
                 "",  # Mol 1
                 f"R$ {abs(custos[1]):.2f}",  # Mol 2
-                f"R$ {abs(custos[2]):.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
+                f"R$ {abs(custos[2])::.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
             ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
@@ -709,7 +709,7 @@ with tab2:
         # Adicionar linha de custo
         fig_performance.add_trace(go.Scatter(
             x=moleculas,
-            y=[max(arrobas_base) + max(arrobas_adicionais) + 1] * 3,  # Posição Y fixa acima das barras
+            y=custos_arroba,
             name='Custo @+ (R$/@)',
             mode='lines+markers+text',
             line=dict(color='red', width=2),
@@ -717,25 +717,21 @@ with tab2:
             text=[f"R${custo:.2f}" for custo in custos_arroba],
             textposition='top center',
             textfont=dict(size=14),
+            yaxis='y2',
             showlegend=False
         ))
 
         fig_performance.update_layout(
             title='Performance',
             yaxis_title='Arrobas (@/cab)',
+            yaxis2=dict(
+                title='Custo @+ (R$/@)',
+                overlaying='y',
+                side='right'
+            ),
             showlegend=True,
             barmode='stack',
             uniformtext=dict(mode='hide', minsize=10)
-        )
-
-        # Adicionar anotação para identificar a linha de custo
-        fig_performance.add_annotation(
-            x=moleculas[0],
-            y=max(arrobas_base) + max(arrobas_adicionais) + 1.5,
-            text="Custo da Arroba Adicional (R$/@)",
-            showarrow=False,
-            font=dict(size=14),
-            xanchor='left'
         )
 
         st.plotly_chart(fig_performance, use_container_width=True, key="plot_performance")
