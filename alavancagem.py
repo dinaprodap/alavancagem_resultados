@@ -69,7 +69,7 @@ st.title("🚀 Calculadora de Alavancagem")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Definir variáveis globais
-moleculas = ["Molecula 1", "Molecula 2", "Molecula 3"]
+moleculas = ["FOSBOVI CONF. PLUS", "FOSBOVI CONF. PRIME", "FOSBOVI CONF. PRIME 5.0"]
 
 # Dicionários para armazenar os valores
 precos = {}
@@ -109,7 +109,7 @@ with st.container():
         with cols[0]:
             st.markdown(f'<div class="input-field">{molecula}</div>', unsafe_allow_html=True)
         with cols[1]:
-            valor_inicial = 4.90 if molecula == "Molecula 1" else (6.48 if molecula == "Molecula 2" else 8.68)
+            valor_inicial = 4.90 if molecula == "FOSBOVI CONF. PLUS" else (6.48 if molecula == "FOSBOVI CONF. PRIME" else 8.68)
             precos[molecula] = st.number_input(
                 f"Preço de {molecula}",
                 min_value=0.0,
@@ -119,7 +119,7 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[2]:
-            valor_consumo = 250 if molecula == "Molecula 1" else (290 if molecula == "Molecula 2" else 260)
+            valor_consumo = 250 if molecula == "FOSBOVI CONF. PLUS" else (290 if molecula == "FOSBOVI CONF. PRIME" else 260)
             consumos[molecula] = st.number_input(
                 f"Consumo de {molecula}",
                 min_value=0,
@@ -129,7 +129,7 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[3]:
-            valor_custo = 1.23 if molecula == "Molecula 1" else (1.88 if molecula == "Molecula 2" else 2.26)
+            valor_custo = 1.23 if molecula == "FOSBOVI CONF. PLUS" else (1.88 if molecula == "FOSBOVI CONF. PRIME" else 2.26)
             custos[molecula] = valor_custo  # Armazenar custo no dicionário de custos
             st.number_input(
                 f"Custo de {molecula}",
@@ -140,10 +140,10 @@ with st.container():
                 label_visibility="collapsed"
             )
         with cols[4]:
-            if molecula == "Molecula 1":
+            if molecula == "FOSBOVI CONF. PLUS":
                 diferencial_tecnologico = 0.00
             else:
-                diferencial_tecnologico = custos[molecula] - custos["Molecula 1"]
+                diferencial_tecnologico = custos[molecula] - custos["FOSBOVI CONF. PLUS"]
             diferenciais[molecula] = diferencial_tecnologico  # Armazenar diferencial tecnológico
             st.markdown(f'<div class="diferencial-value">{diferencial_tecnologico:.2f}</div>', unsafe_allow_html=True)
     
@@ -217,39 +217,39 @@ with tab1:
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
     
     with consumo_pv_col1:
-        consumo_pv_mol1 = st.number_input("Consumo (%PV) para Molecula 1", min_value=0.0, value=2.31, step=0.01) / 100
+        consumo_pv_mol1 = st.number_input("Consumo (%PV) para FOSBOVI CONF. PLUS", min_value=0.0, value=2.31, step=0.01) / 100
 
     # Definir o consumo em porcentagem do peso vivo para cada molécula
     consumo_pv = {
-        "Molecula 1": consumo_pv_mol1,
-        "Molecula 2": consumo_pv_mol1 * 1.045,
-        "Molecula 3": consumo_pv_mol1 * 1.045
+        "FOSBOVI CONF. PLUS": consumo_pv_mol1,
+        "FOSBOVI CONF. PRIME": consumo_pv_mol1 * 1.045,
+        "FOSBOVI CONF. PRIME 5.0": consumo_pv_mol1 * 1.045
     }
 
     # Exibir consumo em %PV
     # with consumo_pv_col1:
-    #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
+    #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['FOSBOVI CONF. PLUS']*100:.2f}%")
     with consumo_pv_col2:
-        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
+        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['FOSBOVI CONF. PRIME']*100:.2f}%")
     with consumo_pv_col3:
-        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['Molecula 3']*100:.2f}%")
+        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['FOSBOVI CONF. PRIME 5.0']*100:.2f}%")
 
     # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
     consumo_ms = {
-        "Molecula 1": consumo_pv["Molecula 1"] * np.mean([pv_inicial, pv_final]),
-        "Molecula 2": consumo_pv["Molecula 2"] * np.mean([pv_inicial, pv_final_mol2]),
-        "Molecula 3": consumo_pv["Molecula 3"] * np.mean([pv_inicial, pv_final_mol3])
+        "FOSBOVI CONF. PLUS": consumo_pv["FOSBOVI CONF. PLUS"] * np.mean([pv_inicial, pv_final]),
+        "FOSBOVI CONF. PRIME": consumo_pv["FOSBOVI CONF. PRIME"] * np.mean([pv_inicial, pv_final_mol2]),
+        "FOSBOVI CONF. PRIME 5.0": consumo_pv["FOSBOVI CONF. PRIME 5.0"] * np.mean([pv_inicial, pv_final_mol3])
     }
 
     # Exibir consumo MS
     consumo_ms_col1, consumo_ms_col2, consumo_ms_col3 = st.columns(3)
     
     with consumo_ms_col1:
-        st.metric("Consumo MS Mol 1 (Kg/Cab/dia)", f"{consumo_ms['Molecula 1']:.2f}")
+        st.metric("Consumo MS Mol 1 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PLUS']:.2f}")
     with consumo_ms_col2:
-        st.metric("Consumo MS Mol 2 (Kg/Cab/dia)", f"{consumo_ms['Molecula 2']:.2f}")
+        st.metric("Consumo MS Mol 2 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME']:.2f}")
     with consumo_ms_col3:
-        st.metric("Consumo MS Mol 3 (Kg/Cab/dia)", f"{consumo_ms['Molecula 3']:.2f}")
+        st.metric("Consumo MS Mol 3 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME 5.0']:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
@@ -270,23 +270,23 @@ params_col1, params_col2, params_col3 = st.columns(3)
 with params_col1:
     custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01, key="custeio_mol1_1")
 with params_col2:
-    custeio_mol2 = consumo_ms["Molecula 2"] / consumo_ms["Molecula 1"] * custeio_mol1
+    custeio_mol2 = consumo_ms["FOSBOVI CONF. PRIME"] / consumo_ms["FOSBOVI CONF. PLUS"] * custeio_mol1
     st.metric("Custeio (R$/Cab/dia) Mol 2", f"{custeio_mol2:.2f}")
 with params_col3:
-    custeio_mol3 = consumo_ms["Molecula 3"] / consumo_ms["Molecula 1"] * custeio_mol1
+    custeio_mol3 = consumo_ms["FOSBOVI CONF. PRIME 5.0"] / consumo_ms["FOSBOVI CONF. PLUS"] * custeio_mol1
     st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
 
 # Calcular Custeio Final
 custeio_final_col1, custeio_final_col2, custeio_final_col3 = st.columns(3)
 
 with custeio_final_col1:
-    custeio_final_mol1 = diferenciais["Molecula 1"] + custeio_mol1
+    custeio_final_mol1 = diferenciais["FOSBOVI CONF. PLUS"] + custeio_mol1
     st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
 with custeio_final_col2:
-    custeio_final_mol2 = diferenciais["Molecula 2"] + custeio_mol2
+    custeio_final_mol2 = diferenciais["FOSBOVI CONF. PRIME"] + custeio_mol2
     st.metric("Custeio Final (R$/Cab/dia) Mol 2", f"{custeio_final_mol2:.2f}")
 with custeio_final_col3:
-    custeio_final_mol3 = diferenciais["Molecula 3"] + custeio_mol3
+    custeio_final_mol3 = diferenciais["FOSBOVI CONF. PRIME 5.0"] + custeio_mol3
     st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
 
 
@@ -297,15 +297,15 @@ for idx, molecula in enumerate(moleculas):
     # Cálculos básicos
     consumo_pv_atual = consumo_pv[molecula]
     
-    if idx == 0:  # Molécula 1
+    if idx == 0:  # FOSBOVI CONF. PLUS
         peso_final_atual = pv_final
         gmd_atual = gmd
         rendimento_atual = rendimento_carcaca
-    elif idx == 1:  # Molécula 2
+    elif idx == 1:  # FOSBOVI CONF. PRIME
         peso_final_atual = pv_final_mol2
         gmd_atual = gmd_mol2
         rendimento_atual = rendimento_carcaca * 1.009
-    else:  # Molécula 3
+    else:  # FOSBOVI CONF. PRIME 5.0
         peso_final_atual = pv_final_mol3
         gmd_atual = gmd_mol3
         rendimento_atual = rendimento_carcaca * 1.0264
@@ -316,7 +316,7 @@ for idx, molecula in enumerate(moleculas):
     arrobas = ((peso_final_atual * rendimento_atual/100)/15) - (pv_inicial/30)
     
     # Cálculos financeiros
-    custeio_atual = custeio_mol1 if idx == 0 else (consumo_ms_atual / resultados["Molecula 1"]["consumo_ms"]) * custeio_mol1
+    custeio_atual = custeio_mol1 if idx == 0 else (consumo_ms_atual / resultados["FOSBOVI CONF. PLUS"]["consumo_ms"]) * custeio_mol1
     diferencial_tec = 0 if idx == 0 else diferenciais[molecula]
     custeio_final = custeio_atual + diferencial_tec
     
@@ -344,25 +344,25 @@ for idx, molecula in enumerate(moleculas):
     
     if idx > 0:
         resultados[molecula].update({
-            "arrobas_adicionais": arrobas - resultados["Molecula 1"]["arrobas"],
-            "receita_adicional": (arrobas - resultados["Molecula 1"]["arrobas"]) * valor_venda_arroba,
-            "custo_adicional": custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias,
-            "incremento_lucro_adicional": resultado - resultados["Molecula 1"]["resultado"],
-            "custo_arroba_adicional": (custo_periodo - resultados["Molecula 1"]["custeio_final"] * dias) / 
-                                    (arrobas - resultados["Molecula 1"]["arrobas"])
+            "arrobas_adicionais": arrobas - resultados["FOSBOVI CONF. PLUS"]["arrobas"],
+            "receita_adicional": (arrobas - resultados["FOSBOVI CONF. PLUS"]["arrobas"]) * valor_venda_arroba,
+            "custo_adicional": custo_periodo - resultados["FOSBOVI CONF. PLUS"]["custeio_final"] * dias,
+            "incremento_lucro_adicional": resultado - resultados["FOSBOVI CONF. PLUS"]["resultado"],
+            "custo_arroba_adicional": (custo_periodo - resultados["FOSBOVI CONF. PLUS"]["custeio_final"] * dias) / 
+                                    (arrobas - resultados["FOSBOVI CONF. PLUS"]["arrobas"])
         })
 
 # Custo da arroba produzida
 custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
 
 with custo_arroba_col1:
-    custo_arroba_mol1 = (custeio_final_mol1 * dias) / resultados["Molecula 1"]["arrobas"]
+    custo_arroba_mol1 = (custeio_final_mol1 * dias) / resultados["FOSBOVI CONF. PLUS"]["arrobas"]
     st.metric("Custo da Arroba Mol 1 (R$/@)", f"{custo_arroba_mol1:.2f}")
 with custo_arroba_col2:
-    custo_arroba_mol2 = (custeio_final_mol2 * dias) / resultados["Molecula 2"]["arrobas"]
+    custo_arroba_mol2 = (custeio_final_mol2 * dias) / resultados["FOSBOVI CONF. PRIME"]["arrobas"]
     st.metric("Custo da Arroba Mol 2 (R$/@)", f"{custo_arroba_mol2:.2f}")
 with custo_arroba_col3:
-    custo_arroba_mol3 = (custeio_final_mol3 * dias) / resultados["Molecula 3"]["arrobas"]
+    custo_arroba_mol3 = (custeio_final_mol3 * dias) / resultados["FOSBOVI CONF. PRIME 5.0"]["arrobas"]
     st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
 
 # Custeio no período da arroba produzida
@@ -382,13 +382,13 @@ with custeio_periodo_col3:
 valor_arrobas_col1, valor_arrobas_col2, valor_arrobas_col3 = st.columns(3)
 
 with valor_arrobas_col1:
-    valor_arrobas_mol1 = valor_venda_arroba * resultados["Molecula 1"]["arrobas"]
+    valor_arrobas_mol1 = valor_venda_arroba * resultados["FOSBOVI CONF. PLUS"]["arrobas"]
     st.metric("Valor das Arrobas Produzidas Mol 1 (R$/Cab)", f"{valor_arrobas_mol1:.2f}")
 with valor_arrobas_col2:
-    valor_arrobas_mol2 = valor_venda_arroba * resultados["Molecula 2"]["arrobas"]
+    valor_arrobas_mol2 = valor_venda_arroba * resultados["FOSBOVI CONF. PRIME"]["arrobas"]
     st.metric("Valor das Arrobas Produzidas Mol 2 (R$/Cab)", f"{valor_arrobas_mol2:.2f}")
 with valor_arrobas_col3:
-    valor_arrobas_mol3 = valor_venda_arroba * resultados["Molecula 3"]["arrobas"]
+    valor_arrobas_mol3 = valor_venda_arroba * resultados["FOSBOVI CONF. PRIME 5.0"]["arrobas"]
     st.metric("Valor das Arrobas Produzidas Mol 3 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
 
 # Resultado (R$/cab)
@@ -450,20 +450,20 @@ with rentabilidade_mensal_col3:
 insight_col1, insight_col2, insight_col3 = st.columns(3)
 
 with insight_col1:
-    st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['Molecula 1']['dias']:.3f}")
-    st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['Molecula 2']['dias']:.3f}")
-    st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['Molecula 3']['dias']:.3f}")
+    st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PLUS']['dias']:.3f}")
+    st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME']['dias']:.3f}")
+    st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME 5.0']['dias']:.3f}")
 
 with insight_col2:
-    st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['Molecula 1']['arrobas']:.2f}")
-    st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['Molecula 2']['arrobas']:.2f}")
-    st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['Molecula 3']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['FOSBOVI CONF. PLUS']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['arrobas']:.2f}")
 
 
 with insight_col3:
-    st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['Molecula 1']['eficiencia_biologica']:.2f}")
-    st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['Molecula 2']['eficiencia_biologica']:.2f}")
-    st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['Molecula 3']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['FOSBOVI CONF. PLUS']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['eficiencia_biologica']:.2f}")
     
 
 # Tab 2 - Resultados
