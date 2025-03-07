@@ -561,26 +561,38 @@ with tab2:
     st.subheader("Análise Comparativa")
 
     # a) Incremento do Lucro (%)
-    col1, col2 = st.columns(2)
-    with col1:
-        fig_incremento = go.Figure()
-        incrementos = [0]  # Molécula 1 é referência
-        for molecula in moleculas[1:]:
-            incremento_lucro = (resultados[molecula]['resultado'] / resultados["Molecula 1"]["resultado"] - 1) * 100
-            incrementos.append(incremento_lucro)
-        
-        fig_incremento.add_trace(go.Bar(
-            x=moleculas,
-            y=incrementos,
-            name='Incremento do Lucro (%)'
-        ))
-        fig_incremento.update_layout(
-            title='Incremento do Lucro (%)',
-            yaxis_title='Incremento (%)',
-            showlegend=False
-        )
-        st.plotly_chart(fig_incremento, key="plot_incremento_lucro")
-
+col1, col2 = st.columns(2)
+with col1:
+    fig_incremento = go.Figure()
+    incrementos = [0]  # Molécula 1 é referência
+    resultado_base = resultado_agio_mol1  # Resultado com ágio da molécula 1
+    
+    # Cálculo para Molécula 2
+    if resultado_base < 0:
+        incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * -1 * 100
+    else:
+        incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * 100
+    incrementos.append(incremento_mol2)
+    
+    # Cálculo para Molécula 3
+    if resultado_base < 0:
+        incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * -1 * 100
+    else:
+        incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * 100
+    incrementos.append(incremento_mol3)
+    
+    fig_incremento.add_trace(go.Bar(
+        x=moleculas,
+        y=incrementos,
+        name='Incremento do Lucro (%)'
+    ))
+    fig_incremento.update_layout(
+        title='Incremento do Lucro (%)',
+        yaxis_title='Incremento (%)',
+        showlegend=False
+    )
+    st.plotly_chart(fig_incremento, key="plot_incremento_lucro")
+    
     # b) Incremento Lucro Adicional (R$/cab)
     with col2:
         fig_lucro = go.Figure()
