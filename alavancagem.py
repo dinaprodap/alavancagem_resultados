@@ -170,10 +170,10 @@ with tab1:
             gmd = st.number_input("GMD (kg/dia)", min_value=0.0, value=1.551, step=0.001)
         with gmd_col2:
             gmd_mol2 = gmd * 1.077 * 1.02
-            st.metric("GMD Mol 2 (kg/dia)", f"{gmd_mol2:.3f}")
+            st.metric("GMD FOSBOVI CONF. PRIME (kg/dia)", f"{gmd_mol2:.3f}")
         with gmd_col3:
             gmd_mol3 = gmd * 1.118 * 1.02
-            st.metric("GMD Mol 3 (kg/dia)", f"{gmd_mol3:.3f}")
+            st.metric("GMD FOSBOVI CONF. PRIME 5.0 (kg/dia)", f"{gmd_mol3:.3f}")
         
         # Criar linha para rendimento de carcaça
         rendimento_col1, rendimento_col2, rendimento_col3 = st.columns(3)
@@ -182,10 +182,10 @@ with tab1:
             rendimento_carcaca = st.number_input("Rendimento de Carcaça (%)", min_value=0.0, value=54.89, step=0.01)
         with rendimento_col2:
             rendimento_carcaca_mol2 = rendimento_carcaca * 1.009
-            st.metric("Rendimento Carcaça Mol 2 (%)", f"{rendimento_carcaca_mol2:.2f}")
+            st.metric("Rendimento Carcaça FOSBOVI CONF. PRIME (%)", f"{rendimento_carcaca_mol2:.2f}")
         with rendimento_col3:
             rendimento_carcaca_mol3 = rendimento_carcaca * 1.0264
-            st.metric("Rendimento Carcaça Mol 3 (%)", f"{rendimento_carcaca_mol3:.2f}")
+            st.metric("Rendimento Carcaça FOSBOVI CONF. PRIME 5.0 (%)", f"{rendimento_carcaca_mol3:.2f}")
         
         # Criar linha para pesos finais
         pv_final_col1, pv_final_col2, pv_final_col3 = st.columns(3)
@@ -199,19 +199,19 @@ with tab1:
         pv_final_mol3 = pv_inicial + (gmd_mol3 * dias)
         
         with pv_final_col2:
-            st.metric("PV Final Mol 2 (Kg/Cab)", f"{pv_final_mol2:.1f}")
+            st.metric("PV Final FOSBOVI CONF. PRIME (Kg/Cab)", f"{pv_final_mol2:.1f}")
         with pv_final_col3:
-            st.metric("PV Final Mol 3 (Kg/Cab)", f"{pv_final_mol3:.1f}")
+            st.metric("PV Final FOSBOVI CONF. PRIME 5.0 (Kg/Cab)", f"{pv_final_mol3:.1f}")
     
         # Criar linha para pesos vivos finais em arrobas
         pv_final_arroba_col1, pv_final_arroba_col2, pv_final_arroba_col3 = st.columns(3)
         
         with pv_final_arroba_col1:
-            st.metric("PV Final Mol 1 (@/Cab)", f"{pv_final * rendimento_carcaca / 100 / 15:.2f}")
+            st.metric("PV Final FOSBOVI CONF. PLUS (@/Cab)", f"{pv_final * rendimento_carcaca / 100 / 15:.2f}")
         with pv_final_arroba_col2:
-            st.metric("PV Final Mol 2 (@/Cab)", f"{pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15:.2f}")
+            st.metric("PV Final FOSBOVI CONF. PRIME (@/Cab)", f"{pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15:.2f}")
         with pv_final_arroba_col3:
-            st.metric("PV Final Mol 3 (@/Cab)", f"{pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15:.2f}")
+            st.metric("PV Final FOSBOVI CONF. PRIME 5.0 (@/Cab)", f"{pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15:.2f}")
     
     # Criar linha para consumo em %PV
     consumo_pv_col1, consumo_pv_col2, consumo_pv_col3 = st.columns(3)
@@ -228,11 +228,11 @@ with tab1:
 
     # Exibir consumo em %PV
     # with consumo_pv_col1:
-    #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['FOSBOVI CONF. PLUS']*100:.2f}%")
+    #     st.metric("Consumo (%PV) FOSBOVI CONF. PLUS", f"{consumo_pv['FOSBOVI CONF. PLUS']*100:.2f}%")
     with consumo_pv_col2:
-        st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['FOSBOVI CONF. PRIME']*100:.2f}%")
+        st.metric("Consumo (%PV) FOSBOVI CONF. PRIME", f"{consumo_pv['FOSBOVI CONF. PRIME']*100:.2f}%")
     with consumo_pv_col3:
-        st.metric("Consumo (%PV) Mol 3", f"{consumo_pv['FOSBOVI CONF. PRIME 5.0']*100:.2f}%")
+        st.metric("Consumo (%PV) FOSBOVI CONF. PRIME 5.0", f"{consumo_pv['FOSBOVI CONF. PRIME 5.0']*100:.2f}%")
 
     # Calcular o consumo MS (Kg/Cab/dia) para cada molécula
     consumo_ms = {
@@ -245,11 +245,11 @@ with tab1:
     consumo_ms_col1, consumo_ms_col2, consumo_ms_col3 = st.columns(3)
     
     with consumo_ms_col1:
-        st.metric("Consumo MS Mol 1 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PLUS']:.2f}")
+        st.metric("Consumo MS FOSBOVI CONF. PLUS (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PLUS']:.2f}")
     with consumo_ms_col2:
-        st.metric("Consumo MS Mol 2 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME']:.2f}")
+        st.metric("Consumo MS FOSBOVI CONF. PRIME (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME']:.2f}")
     with consumo_ms_col3:
-        st.metric("Consumo MS Mol 3 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME 5.0']:.2f}")
+        st.metric("Consumo MS FOSBOVI CONF. PRIME 5.0 (Kg/Cab/dia)", f"{consumo_ms['FOSBOVI CONF. PRIME 5.0']:.2f}")
 
 # Parâmetros principais em container separado
 st.markdown("---")
@@ -268,26 +268,26 @@ with finance_col3:
 params_col1, params_col2, params_col3 = st.columns(3)
 
 with params_col1:
-    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) Mol 1", min_value=0.0, value=15.0, step=0.01, key="custeio_mol1_1")
+    custeio_mol1 = st.number_input("Custeio (R$/Cab/dia) FOSBOVI CONF. PLUS", min_value=0.0, value=15.0, step=0.01, key="custeio_mol1_1")
 with params_col2:
     custeio_mol2 = consumo_ms["FOSBOVI CONF. PRIME"] / consumo_ms["FOSBOVI CONF. PLUS"] * custeio_mol1
-    st.metric("Custeio (R$/Cab/dia) Mol 2", f"{custeio_mol2:.2f}")
+    st.metric("Custeio (R$/Cab/dia) FOSBOVI CONF. PRIME", f"{custeio_mol2:.2f}")
 with params_col3:
     custeio_mol3 = consumo_ms["FOSBOVI CONF. PRIME 5.0"] / consumo_ms["FOSBOVI CONF. PLUS"] * custeio_mol1
-    st.metric("Custeio (R$/Cab/dia) Mol 3", f"{custeio_mol3:.2f}")
+    st.metric("Custeio (R$/Cab/dia) FOSBOVI CONF. PRIME 5.0", f"{custeio_mol3:.2f}")
 
 # Calcular Custeio Final
 custeio_final_col1, custeio_final_col2, custeio_final_col3 = st.columns(3)
 
 with custeio_final_col1:
     custeio_final_mol1 = diferenciais["FOSBOVI CONF. PLUS"] + custeio_mol1
-    st.metric("Custeio Final (R$/Cab/dia) Mol 1", f"{custeio_final_mol1:.2f}")
+    st.metric("Custeio Final (R$/Cab/dia) FOSBOVI CONF. PLUS", f"{custeio_final_mol1:.2f}")
 with custeio_final_col2:
     custeio_final_mol2 = diferenciais["FOSBOVI CONF. PRIME"] + custeio_mol2
-    st.metric("Custeio Final (R$/Cab/dia) Mol 2", f"{custeio_final_mol2:.2f}")
+    st.metric("Custeio Final (R$/Cab/dia) FOSBOVI CONF. PRIME", f"{custeio_final_mol2:.2f}")
 with custeio_final_col3:
     custeio_final_mol3 = diferenciais["FOSBOVI CONF. PRIME 5.0"] + custeio_mol3
-    st.metric("Custeio Final (R$/Cab/dia) Mol 3", f"{custeio_final_mol3:.2f}")
+    st.metric("Custeio Final (R$/Cab/dia) FOSBOVI CONF. PRIME 5.0", f"{custeio_final_mol3:.2f}")
 
 
 # Calcular valores para cada molécula
@@ -357,65 +357,65 @@ custo_arroba_col1, custo_arroba_col2, custo_arroba_col3 = st.columns(3)
 
 with custo_arroba_col1:
     custo_arroba_mol1 = (custeio_final_mol1 * dias) / resultados["FOSBOVI CONF. PLUS"]["arrobas"]
-    st.metric("Custo da Arroba Mol 1 (R$/@)", f"{custo_arroba_mol1:.2f}")
+    st.metric("Custo da Arroba FOSBOVI CONF. PLUS (R$/@)", f"{custo_arroba_mol1:.2f}")
 with custo_arroba_col2:
     custo_arroba_mol2 = (custeio_final_mol2 * dias) / resultados["FOSBOVI CONF. PRIME"]["arrobas"]
-    st.metric("Custo da Arroba Mol 2 (R$/@)", f"{custo_arroba_mol2:.2f}")
+    st.metric("Custo da Arroba FOSBOVI CONF. PRIME (R$/@)", f"{custo_arroba_mol2:.2f}")
 with custo_arroba_col3:
     custo_arroba_mol3 = (custeio_final_mol3 * dias) / resultados["FOSBOVI CONF. PRIME 5.0"]["arrobas"]
-    st.metric("Custo da Arroba Mol 3 (R$/@)", f"{custo_arroba_mol3:.2f}")
+    st.metric("Custo da Arroba FOSBOVI CONF. PRIME 5.0 (R$/@)", f"{custo_arroba_mol3:.2f}")
 
 # Custeio no período da arroba produzida
 custeio_periodo_col1, custeio_periodo_col2, custeio_periodo_col3 = st.columns(3)
 
 with custeio_periodo_col1:
     custeio_periodo_mol1 = custeio_final_mol1 * dias
-    st.metric("Custeio no Período Mol 1 (R$/Cab)", f"{custeio_periodo_mol1:.2f}")
+    st.metric("Custeio no Período FOSBOVI CONF. PLUS (R$/Cab)", f"{custeio_periodo_mol1:.2f}")
 with custeio_periodo_col2:
     custeio_periodo_mol2 = custeio_final_mol2 * dias
-    st.metric("Custeio no Período Mol 2 (R$/Cab)", f"{custeio_periodo_mol2:.2f}")
+    st.metric("Custeio no Período FOSBOVI CONF. PRIME (R$/Cab)", f"{custeio_periodo_mol2:.2f}")
 with custeio_periodo_col3:
     custeio_periodo_mol3 = custeio_final_mol3 * dias
-    st.metric("Custeio no Período Mol 3 (R$/Cab)", f"{custeio_periodo_mol3:.2f}")
+    st.metric("Custeio no Período FOSBOVI CONF. PRIME 5.0 (R$/Cab)", f"{custeio_periodo_mol3:.2f}")
 
 # Valor das arrobas produzidas
 valor_arrobas_col1, valor_arrobas_col2, valor_arrobas_col3 = st.columns(3)
 
 with valor_arrobas_col1:
     valor_arrobas_mol1 = valor_venda_arroba * resultados["FOSBOVI CONF. PLUS"]["arrobas"]
-    st.metric("Valor das Arrobas Produzidas Mol 1 (R$/Cab)", f"{valor_arrobas_mol1:.2f}")
+    st.metric("Valor das Arrobas Produzidas FOSBOVI CONF. PLUS (R$/Cab)", f"{valor_arrobas_mol1:.2f}")
 with valor_arrobas_col2:
     valor_arrobas_mol2 = valor_venda_arroba * resultados["FOSBOVI CONF. PRIME"]["arrobas"]
-    st.metric("Valor das Arrobas Produzidas Mol 2 (R$/Cab)", f"{valor_arrobas_mol2:.2f}")
+    st.metric("Valor das Arrobas Produzidas FOSBOVI CONF. PRIME (R$/Cab)", f"{valor_arrobas_mol2:.2f}")
 with valor_arrobas_col3:
     valor_arrobas_mol3 = valor_venda_arroba * resultados["FOSBOVI CONF. PRIME 5.0"]["arrobas"]
-    st.metric("Valor das Arrobas Produzidas Mol 3 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
+    st.metric("Valor das Arrobas Produzidas FOSBOVI CONF. PRIME 5.0 (R$/Cab)", f"{valor_arrobas_mol3:.2f}")
 
 # Resultado (R$/cab)
 resultado_col1, resultado_col2, resultado_col3 = st.columns(3)
 
 with resultado_col1:
     resultado_mol1 = valor_arrobas_mol1 - custeio_periodo_mol1
-    st.metric("Resultado Mol 1 (R$/Cab)", f"{resultado_mol1:.2f}")
+    st.metric("Resultado FOSBOVI CONF. PLUS (R$/Cab)", f"{resultado_mol1:.2f}")
 with resultado_col2:
     resultado_mol2 = valor_arrobas_mol2 - custeio_periodo_mol2
-    st.metric("Resultado Mol 2 (R$/Cab)", f"{resultado_mol2:.2f}")
+    st.metric("Resultado FOSBOVI CONF. PRIME (R$/Cab)", f"{resultado_mol2:.2f}")
 with resultado_col3:
     resultado_mol3 = valor_arrobas_mol3 - custeio_periodo_mol3
-    st.metric("Resultado Mol 3 (R$/Cab)", f"{resultado_mol3:.2f}")
+    st.metric("Resultado FOSBOVI CONF. PRIME 5.0 (R$/Cab)", f"{resultado_mol3:.2f}")
 
 # Resultado com ágio
 resultado_agio_col1, resultado_agio_col2, resultado_agio_col3 = st.columns(3)
 
 with resultado_agio_col1:
     resultado_agio_mol1 = (pv_final * rendimento_carcaca / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol1
-    st.metric("Resultado com Ágio Mol 1 (R$/Cab)", f"{resultado_agio_mol1:.2f}")
+    st.metric("Resultado com Ágio FOSBOVI CONF. PLUS (R$/Cab)", f"{resultado_agio_mol1:.2f}")
 with resultado_agio_col2:
     resultado_agio_mol2 = (pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol2
-    st.metric("Resultado com Ágio Mol 2 (R$/Cab)", f"{resultado_agio_mol2:.2f}")
+    st.metric("Resultado com Ágio FOSBOVI CONF. PRIME (R$/Cab)", f"{resultado_agio_mol2:.2f}")
 with resultado_agio_col3:
     resultado_agio_mol3 = (pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15) * valor_venda_arroba - custo_animal_magro - custeio_periodo_mol3
-    st.metric("Resultado com Ágio Mol 3 (R$/Cab)", f"{resultado_agio_mol3:.2f}")
+    st.metric("Resultado com Ágio FOSBOVI CONF. PRIME 5.0 (R$/Cab)", f"{resultado_agio_mol3:.2f}")
 
 # Rentabilidade no período
 rentabilidade_periodo_col1, rentabilidade_periodo_col2, rentabilidade_periodo_col3 = st.columns(3)
@@ -423,47 +423,47 @@ rentabilidade_periodo_col1, rentabilidade_periodo_col2, rentabilidade_periodo_co
 with rentabilidade_periodo_col1:
     pv_final_arroba_mol1 = pv_final * rendimento_carcaca / 100 / 15
     rentabilidade_periodo_agio_mol1 = resultado_agio_mol1 / (valor_venda_arroba * pv_final_arroba_mol1)
-    st.metric("Rentabilidade no Período Mol 1 (%)", f"{rentabilidade_periodo_agio_mol1 * 100:.2f}%")
+    st.metric("Rentabilidade no Período FOSBOVI CONF. PLUS (%)", f"{rentabilidade_periodo_agio_mol1 * 100:.2f}%")
 with rentabilidade_periodo_col2:
     pv_final_arroba_mol2 = pv_final_mol2 * rendimento_carcaca_mol2 / 100 / 15
     rentabilidade_periodo_agio_mol2 = resultado_agio_mol2 / (valor_venda_arroba * pv_final_arroba_mol2)
-    st.metric("Rentabilidade no Período Mol 2 (%)", f"{rentabilidade_periodo_agio_mol2 * 100:.2f}%")
+    st.metric("Rentabilidade no Período FOSBOVI CONF. PRIME (%)", f"{rentabilidade_periodo_agio_mol2 * 100:.2f}%")
 with rentabilidade_periodo_col3:
     pv_final_arroba_mol3 = pv_final_mol3 * rendimento_carcaca_mol3 / 100 / 15
     rentabilidade_periodo_agio_mol3 = resultado_agio_mol3 / (valor_venda_arroba * pv_final_arroba_mol3)
-    st.metric("Rentabilidade no Período Mol 3 (%)", f"{rentabilidade_periodo_agio_mol3 * 100:.2f}%")
+    st.metric("Rentabilidade no Período FOSBOVI CONF. PRIME 5.0 (%)", f"{rentabilidade_periodo_agio_mol3 * 100:.2f}%")
 
 # Rentabilidade mensal
 rentabilidade_mensal_col1, rentabilidade_mensal_col2, rentabilidade_mensal_col3 = st.columns(3)
 
 with rentabilidade_mensal_col1:
     rentabilidade_mensal_mol1 = ((1 + rentabilidade_periodo_agio_mol1)**(1/(dias/30.4))) - 1
-    st.metric("Rentabilidade Mensal Mol 1 (%)", f"{rentabilidade_mensal_mol1 * 100:.2f}%")
+    st.metric("Rentabilidade Mensal FOSBOVI CONF. PLUS (%)", f"{rentabilidade_mensal_mol1 * 100:.2f}%")
 with rentabilidade_mensal_col2:
     rentabilidade_mensal_mol2 = ((1 + rentabilidade_periodo_agio_mol2)**(1/(dias/30.4))) - 1
-    st.metric("Rentabilidade Mensal Mol 2 (%)", f"{rentabilidade_mensal_mol2 * 100:.2f}%")
+    st.metric("Rentabilidade Mensal FOSBOVI CONF. PRIME (%)", f"{rentabilidade_mensal_mol2 * 100:.2f}%")
 with rentabilidade_mensal_col3:
     rentabilidade_mensal_mol3 = ((1 + rentabilidade_periodo_agio_mol3)**(1/(dias/30.4))) - 1
-    st.metric("Rentabilidade Mensal Mol 3 (%)", f"{rentabilidade_mensal_mol3 * 100:.2f}%")
+    st.metric("Rentabilidade Mensal FOSBOVI CONF. PRIME 5.0 (%)", f"{rentabilidade_mensal_mol3 * 100:.2f}%")
 
 # Insights principais
 insight_col1, insight_col2, insight_col3 = st.columns(3)
 
 with insight_col1:
-    st.metric("GDC Mol 1 (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PLUS']['dias']:.3f}")
-    st.metric("GDC Mol 2 (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME']['dias']:.3f}")
-    st.metric("GDC Mol 3 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME 5.0']['dias']:.3f}")
+    st.metric("GDC FOSBOVI CONF. PLUS (KG/DIA)", f"{(((pv_final * rendimento_carcaca/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PLUS']['dias']:.3f}")
+    st.metric("GDC FOSBOVI CONF. PRIME (KG/DIA)", f"{(((pv_final_mol2 * rendimento_carcaca_mol2/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME']['dias']:.3f}")
+    st.metric("GDC FOSBOVI CONF. PRIME 5.0 (KG/DIA)", f"{(((pv_final_mol3 * rendimento_carcaca_mol3/100)) - (pv_inicial/2))/resultados['FOSBOVI CONF. PRIME 5.0']['dias']:.3f}")
 
 with insight_col2:
-    st.metric("Arrobas Produzidas Mol 1 (@/Cab)", f"{resultados['FOSBOVI CONF. PLUS']['arrobas']:.2f}")
-    st.metric("Arrobas Produzidas Mol 2 (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME']['arrobas']:.2f}")
-    st.metric("Arrobas Produzidas Mol 3 (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas FOSBOVI CONF. PLUS (@/Cab)", f"{resultados['FOSBOVI CONF. PLUS']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas FOSBOVI CONF. PRIME (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME']['arrobas']:.2f}")
+    st.metric("Arrobas Produzidas FOSBOVI CONF. PRIME 5.0 (@/Cab)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['arrobas']:.2f}")
 
 
 with insight_col3:
-    st.metric("Eficiência Biológica Mol 1 (kgMS/@)", f"{resultados['FOSBOVI CONF. PLUS']['eficiencia_biologica']:.2f}")
-    st.metric("Eficiência Biológica Mol 2 (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME']['eficiencia_biologica']:.2f}")
-    st.metric("Eficiência Biológica Mol 3 (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica FOSBOVI CONF. PLUS (kgMS/@)", f"{resultados['FOSBOVI CONF. PLUS']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica FOSBOVI CONF. PRIME (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME']['eficiencia_biologica']:.2f}")
+    st.metric("Eficiência Biológica FOSBOVI CONF. PRIME 5.0 (kgMS/@)", f"{resultados['FOSBOVI CONF. PRIME 5.0']['eficiencia_biologica']:.2f}")
     
 
 # Tab 2 - Resultados
