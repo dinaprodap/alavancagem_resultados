@@ -227,8 +227,8 @@ with tab1:
     }
 
     # Exibir consumo em %PV
-   # with consumo_pv_col1:
-   #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
+    # with consumo_pv_col1:
+    #     st.metric("Consumo (%PV) Mol 1", f"{consumo_pv['Molecula 1']*100:.2f}%")
     with consumo_pv_col2:
         st.metric("Consumo (%PV) Mol 2", f"{consumo_pv['Molecula 2']*100:.2f}%")
     with consumo_pv_col3:
@@ -554,7 +554,7 @@ with tab2:
             ), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("---")
+    st.markdown("---")
 
     # Seção 2: Gráficos
     st.markdown("---")
@@ -600,22 +600,35 @@ with tab2:
         for molecula in moleculas[1:]:
             lucros.append(resultados[molecula]['incremento_lucro_adicional'])
         
+        # Adiciona apenas as barras (remove a linha)
         fig_lucro.add_trace(go.Bar(
             x=moleculas,
             y=lucros,
-            name='Incremento Lucro Adicional'
+            name='Incremento Lucro Adicional',
+            text=[f"R$ {abs(valor):.2f}" if valor != 0 else "" for valor in lucros],  # Valores no topo
+            textposition='outside',  # Posição do texto acima das barras
+            textfont=dict(size=14)
         ))
-        fig_lucro.add_trace(go.Scatter(
-            x=moleculas,
-            y=lucros,
-            mode='lines+markers',
-            name='Variação'
-        ))
+
+        # Adiciona anotações para variação no meio das barras
+        for i, valor in enumerate(lucros):
+            if valor != 0:  # Apenas para valores não zero
+                fig_lucro.add_annotation(
+                    x=moleculas[i],
+                    y=valor/2,  # Posição vertical no meio da barra
+                    text=f"+{abs(valor):.2f}",  # Sempre mostra valor positivo
+                    showarrow=False,
+                    font=dict(size=14, color='white')
+                )
+
         fig_lucro.update_layout(
             title='Incremento Lucro Adicional (R$/cab)',
             yaxis_title='R$/cab',
-            showlegend=True
+            showlegend=False,  # Remove a legenda
+            uniformtext_minsize=8,
+            uniformtext_mode='hide'
         )
+        
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
