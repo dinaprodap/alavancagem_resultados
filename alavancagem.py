@@ -597,23 +597,39 @@ with tab2:
     with col2:
         fig_lucro = go.Figure()
         lucros = [0]  # Molécula 1 é referência
+        incrementos = [0]  # Para armazenar os percentuais
+        
+        # Calcula os incrementos percentuais usando a mesma lógica do gráfico A
+        resultado_base = resultado_agio_mol1
+        if resultado_base < 0:
+            incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * -1 * 100
+            incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * -1 * 100
+        else:
+            incremento_mol2 = (resultado_agio_mol2 / resultado_base - 1) * 100
+            incremento_mol3 = (resultado_agio_mol3 / resultado_base - 1) * 100
+        incrementos.extend([incremento_mol2, incremento_mol3])
+        
+        # Adiciona os valores de incremento em R$
         for molecula in moleculas[1:]:
             lucros.append(resultados[molecula]['incremento_lucro_adicional'])
         
-        # Adiciona apenas as barras (sem texto no topo)
+        # Adiciona as barras com os dois textos
         fig_lucro.add_trace(go.Bar(
             x=moleculas,
             y=lucros,
-            name='Incremento Lucro Adicional'
+            name='Incremento Lucro Adicional',
+            text=[f"{valor:.1f}%" if valor != 0 else "" for valor in incrementos],  # Percentual no topo
+            textposition='outside',  # Texto no topo
+            textfont=dict(size=14)
         ))
 
-        # Adiciona anotações para variação no meio das barras
+        # Adiciona anotações para os valores em R$ no meio das barras
         for i, valor in enumerate(lucros):
             if valor != 0:  # Apenas para valores não zero
                 fig_lucro.add_annotation(
                     x=moleculas[i],
                     y=valor/2,  # Posição vertical no meio da barra
-                    text=f"+R$ {abs(valor):.2f}",  # Mostra valor positivo com R$
+                    text=f"+R$ {abs(valor):.2f}",  # Valor em R$ no meio
                     showarrow=False,
                     font=dict(size=14, color='white')
                 )
