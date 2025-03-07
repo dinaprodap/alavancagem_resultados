@@ -663,75 +663,71 @@ with tab2:
         st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
 
 
-    # d) Variação Percentual: Arrobas Produzidas x Custo da Arroba
+    # d) Performance: Arrobas x Custo
     col1, col2 = st.columns(2)
     with col1:
-        fig_variacoes = go.Figure()
+        fig_performance = go.Figure()
 
         # Preparar dados
-        arrobas = [resultados[mol]['arrobas'] for mol in moleculas]
+        arrobas_base = [resultados[mol]['arrobas'] for mol in moleculas]
+        arrobas_adicionais = [0]  # Mol 1
+        for mol in moleculas[1:]:
+            arrobas_adicionais.append(resultados[mol]['arrobas_adicionais'])
         
         # Calcular custo da arroba adicional
         custos_arroba = [0]  # Molécula 1 é referência
         for mol in moleculas[1:]:
             custo_adicional = resultados[mol]['custo_adicional']
-            arrobas_adicionais = resultados[mol]['arrobas_adicionais']
-            custo_arroba = custo_adicional / arrobas_adicionais if arrobas_adicionais != 0 else 0
+            arrobas_adicionais_mol = resultados[mol]['arrobas_adicionais']
+            custo_arroba = custo_adicional / arrobas_adicionais_mol if arrobas_adicionais_mol != 0 else 0
             custos_arroba.append(custo_arroba)
 
-        # Calcular variações percentuais em relação à Molécula 2
-        var_arrobas = [
-            0,  # Mol 1
-            0,  # Mol 2 (referência)
-            ((arrobas[2] / arrobas[1]) - 1) * 100  # Mol 3
-        ]
-
-        var_custos = [
-            0,  # Mol 1
-            0,  # Mol 2 (referência)
-            ((custos_arroba[2] / custos_arroba[1]) - 1) * 100 if custos_arroba[1] != 0 else 0  # Mol 3
-        ]
-
-        # Barra para Variação de Arrobas Produzidas
-        fig_variacoes.add_trace(go.Bar(
+        # Barra para Arrobas Base
+        fig_performance.add_trace(go.Bar(
             x=moleculas,
-            y=var_arrobas,
-            name='Variação Arrobas',
-            text=[
-                "",  # Mol 1
-                f"{arrobas[1]:.2f} @/cab",  # Mol 2 (valor base)
-                f"{arrobas[2]:.2f} @/cab<br>({var_arrobas[2]:+.1f}%)"  # Mol 3
-            ],
+            y=arrobas_base,
+            name='Arrobas Base (@/cab)',
+            text=[f"{valor:.2f}" for valor in arrobas_base],
             textposition='inside',
             textfont=dict(size=14, color='white'),
-            insidetextanchor='middle'
+            insidetextanchor='middle',
+            marker_color='rgb(71, 135, 198)'  # Azul claro
         ))
 
-        # Barra para Variação do Custo da Arroba
-        fig_variacoes.add_trace(go.Bar(
+        # Barra para Arrobas Adicionais
+        fig_performance.add_trace(go.Bar(
             x=moleculas,
-            y=var_custos,
-            name='Variação Custo/@',
-            text=[
-                "",  # Mol 1
-                f"R$ {custos_arroba[1]:.2f}/@",  # Mol 2 (valor base)
-                f"R$ {custos_arroba[2]:.2f}/@<br>({var_custos[2]:+.1f}%)"  # Mol 3
-            ],
+            y=arrobas_adicionais,
+            name='Arrobas Adicionais (@/cab)',
+            text=[f"{valor:.2f}" if valor > 0 else "" for valor in arrobas_adicionais],
             textposition='inside',
             textfont=dict(size=14, color='white'),
-            insidetextanchor='middle'
+            insidetextanchor='middle',
+            marker_color='rgb(35, 67, 98)'  # Azul escuro
         ))
 
-        fig_variacoes.update_layout(
-            title='Variação: Arrobas Produzidas x Custo da Arroba',
-            yaxis_title='Variação (%)',
+        # Adicionar anotações para o custo
+        for i, custo in enumerate(custos_arroba):
+            if custo > 0:
+                fig_performance.add_annotation(
+                    x=moleculas[i],
+                    y=arrobas_base[i] + arrobas_adicionais[i],
+                    text=f"R${custo:.2f}",
+                    showarrow=False,
+                    yshift=20,
+                    font=dict(size=14),
+                    bgcolor='rgba(255, 255, 255, 0.8)',
+                    bordercolor='rgb(0, 0, 0)',
+                    borderwidth=1,
+                    borderpad=4
+                )
+
+        fig_performance.update_layout(
+            title='Performance: Arrobas Produzidas x Custo',
+            yaxis_title='Arrobas (@/cab)',
             showlegend=True,
-            barmode='group',
-            uniformtext=dict(mode='hide', minsize=10),
-            yaxis=dict(
-                tickformat='+.1f',  # Formato dos ticks do eixo Y
-                ticksuffix='%'  # Sufixo dos ticks do eixo Y
-            )
+            barmode='stack',
+            uniformtext=dict(mode='hide', minsize=10)
         )
 
-        st.plotly_chart(fig_variacoes, use_container_width=True, key="plot_variacoes")
+        st.plotly_chart(fig_performance, use_container_width=True, key="plot_performance")
