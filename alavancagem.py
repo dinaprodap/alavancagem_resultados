@@ -669,7 +669,7 @@ with tab2:
         fig_performance = go.Figure()
 
         # Preparar dados
-        arrobas_base = [resultados[mol]['arrobas'] for mol in moleculas]
+        arrobas_base = [7.49] * 3  # 7.49 para todas as moléculas
         arrobas_adicionais = [0]  # Mol 1
         for mol in moleculas[1:]:
             arrobas_adicionais.append(resultados[mol]['arrobas_adicionais'])
@@ -723,7 +723,7 @@ with tab2:
                 )
 
         fig_performance.update_layout(
-            title='Performance: Arrobas Produzidas x Custo',
+            title='Performance',
             yaxis_title='Arrobas (@/cab)',
             showlegend=True,
             barmode='stack',
