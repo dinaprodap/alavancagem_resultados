@@ -611,30 +611,32 @@ with tab2:
     # c) Custo x Receita Adicional
     with col2:
         fig_custoReceita = go.Figure()
-        
+
         receitas = [0]  # Molécula 1 é referência
         custos = [0]    # Molécula 1 é referência
         for molecula in moleculas[1:]:
             receitas.append(resultados[molecula]['receita_adicional'])
             custos.append(resultados[molecula]['custo_adicional'])
-        
+
+        # Barra para Receita Adicional
         fig_custoReceita.add_trace(go.Bar(
             x=moleculas,
             y=receitas,
             name='Receita Adicional'
         ))
-        fig_custoReceita.add_trace(go.Scatter(
+
+        # Barra para Custo Adicional
+        fig_custoReceita.add_trace(go.Bar(
             x=moleculas,
             y=custos,
-            mode='lines+markers',
-            name='Custo Adicional',
-            line=dict(color='red')
+            name='Custo Adicional'
         ))
-        
+
         fig_custoReceita.update_layout(
             title='Custo x Receita Adicional',
             yaxis_title='R$/cab',
-            showlegend=True
+            showlegend=True,
+            barmode='group'  # Para mostrar as barras lado a lado
         )
-        
+
         st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
