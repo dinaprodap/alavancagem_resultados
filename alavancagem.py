@@ -644,8 +644,8 @@ with tab2:
             name='Custo Adicional',
             text=[
                 "",  # Mol 1
-                f"R$ {abs(custos[1])::.2f}",  # Mol 2
-                f"R$ {abs(custos[2])::.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
+                f"R$ {abs(custos[1]):.2f}",  # Mol 2
+                f"R$ {abs(custos[2]):.2f}<br>({var_custo:.1f}%)"  # Mol 3 com variação
             ],
             textposition='inside',
             textfont=dict(size=14, color='white'),
@@ -675,7 +675,7 @@ with tab2:
             arrobas_adicionais.append(resultados[mol]['arrobas_adicionais'])
         
         # Calcular custo da arroba adicional
-        custos_arroba = [custos_arroba[1]]  # Primeiro valor igual ao da molécula 2
+        custos_arroba = [0]  # Primeiro valor igual ao da molécula 2
         custos_arroba.extend([
             resultados[mol]['custo_adicional'] / resultados[mol]['arrobas_adicionais'] 
             if resultados[mol]['arrobas_adicionais'] != 0 else 0 
