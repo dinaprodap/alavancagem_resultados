@@ -712,11 +712,11 @@ with tab2:
             y=custos_arroba,
             name='Custo @+ (R$/@)',
             mode='lines+markers+text',
-            line=dict(color='black', width=2),
-            marker=dict(size=10, color='black'),
+            line=dict(color='orange', width=2),
+            marker=dict(size=10, color='orange'),
             text=[f"R${custo:.2f}" for custo in custos_arroba],
             textposition='top center',
-            textfont=dict(size=14),
+            textfont=dict(size=14, color='black'),
             yaxis='y2',
             showlegend=False
         ))
