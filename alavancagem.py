@@ -609,68 +609,69 @@ with tab2:
         st.plotly_chart(fig_lucro, use_container_width=True, key="plot_incremento_lucro_adicional")
 
     # c) Custo x Receita Adicional
-    fig_custoReceita = go.Figure()
+    with col2:
+        fig_custoReceita = go.Figure()
 
-    receitas = [0]  # Molécula 1 é referência
-    custos = [0]    # Molécula 1 é referência
-    for molecula in moleculas[1:]:
-        receitas.append(resultados[molecula]['receita_adicional'])
-        custos.append(resultados[molecula]['custo_adicional'])
+        receitas = [0]  # Molécula 1 é referência
+        custos = [0]    # Molécula 1 é referência
+        for molecula in moleculas[1:]:
+            receitas.append(resultados[molecula]['receita_adicional'])
+            custos.append(resultados[molecula]['custo_adicional'])
 
-    # Barra para Receita Adicional
-    fig_custoReceita.add_trace(go.Bar(
-        x=moleculas,
-        y=receitas,
-        name='Receita Adicional'
-    ))
+        # Barra para Receita Adicional
+        fig_custoReceita.add_trace(go.Bar(
+            x=moleculas,
+            y=receitas,
+            name='Receita Adicional'
+        ))
 
-    # Barra para Custo Adicional
-    fig_custoReceita.add_trace(go.Bar(
-        x=moleculas,
-        y=custos,
-        name='Custo Adicional'
-    ))
+        # Barra para Custo Adicional
+        fig_custoReceita.add_trace(go.Bar(
+            x=moleculas,
+            y=custos,
+            name='Custo Adicional'
+        ))
 
-    # Adiciona anotações para os valores no meio das barras
-    for i, (receita, custo) in enumerate(zip(receitas, custos)):
-        if receita != 0:  # Para moléculas 2 e 3
-            # Anotação para Receita
-            fig_custoReceita.add_annotation(
-                x=moleculas[i],
-                y=receita/2,
-                text=f"R$ {abs(receita):.2f}",
-                showarrow=False,
-                font=dict(size=14, color='white'),
-                xshift=-18  # Ajusta posição para barras agrupadas
-            )
-            
-            # Anotação para Custo
-            fig_custoReceita.add_annotation(
-                x=moleculas[i],
-                y=custo/2,
-                text=f"R$ {abs(custo):.2f}",
-                showarrow=False,
-                font=dict(size=14, color='white'),
-                xshift=18  # Ajusta posição para barras agrupadas
-            )
-            
-            # Calcula e adiciona a variação percentual
-            if custo != 0:
-                variacao_percentual = ((receita - custo) / abs(custo)) * 100
+        # Adiciona anotações para os valores no meio das barras
+        for i, (receita, custo) in enumerate(zip(receitas, custos)):
+            if receita != 0:  # Para moléculas 2 e 3
+                # Anotação para Receita
                 fig_custoReceita.add_annotation(
                     x=moleculas[i],
-                    y=max(receita, custo),  # Posiciona acima das barras
-                    text=f"Δ {variacao_percentual:+.1f}%",
+                    y=receita/2,
+                    text=f"R$ {abs(receita):.2f}",
                     showarrow=False,
-                    font=dict(size=14),
-                    yshift=20  # Ajusta distância acima das barras
+                    font=dict(size=14, color='white'),
+                    xshift=-18  # Ajusta posição para barras agrupadas
                 )
+                
+                # Anotação para Custo
+                fig_custoReceita.add_annotation(
+                    x=moleculas[i],
+                    y=custo/2,
+                    text=f"R$ {abs(custo):.2f}",
+                    showarrow=False,
+                    font=dict(size=14, color='white'),
+                    xshift=18  # Ajusta posição para barras agrupadas
+                )
+                
+                # Calcula e adiciona a variação percentual
+                if custo != 0:
+                    variacao_percentual = ((receita - custo) / abs(custo)) * 100
+                    fig_custoReceita.add_annotation(
+                        x=moleculas[i],
+                        y=max(receita, custo),  # Posiciona acima das barras
+                        text=f"Δ {variacao_percentual:+.1f}%",
+                        showarrow=False,
+                        font=dict(size=14),
+                        yshift=20  # Ajusta distância acima das barras
+                    )
 
-    fig_custoReceita.update_layout(
-        title='Custo x Receita Adicional',
-        yaxis_title='R$/cab',
-        showlegend=True,
-        barmode='group'  # Para mostrar as barras lado a lado
-    )
+        fig_custoReceita.update_layout(
+            title='Custo x Receita Adicional',
+            yaxis_title='R$/cab',
+            showlegend=True,
+            barmode='group'  # Para mostrar as barras lado a lado
+        )
 
-    st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
+        st.plotly_chart(fig_custoReceita, use_container_width=True, key="plot_custo_receita")
